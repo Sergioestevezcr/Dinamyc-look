@@ -1,0 +1,10 @@
+.barra-de-marcas{
+	display: flex;
+	height: 40px;
+	justify-content: start;
+	align-items: center;
+	padding: 5px;
+	padding: 2px 10px;
+	background-color: blueviolet;
+}
+
