@@ -1,0 +1,203 @@
+/*letra para el nombre de la empresa*/
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+NZ:wght@100..400&display=swap');
+/*letra general de toda la pagina*/
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playwrite+NZ:wght@100..400&display=swap');
+
+/*propiedades generales*/
+*{
+	margin: 0;
+	padding: 0;
+	font-family: open sans;
+	text-decoration: none;
+}
+/*propiedades del body*/
+body{
+	background-color: rgb(217, 217, 219);
+}
+
+/*2. NAVEGACION*/
+
+/*propiedades del header*/
+.header{
+	background-color: #f2bed1;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 120px;
+	padding: 5px 6%;
+	border: none;
+}
+/*2.1. BARRA DE NAVEGACION*/
+
+/*edita las propiedades de la imagen*/
+.header .logo img{
+	height: 70px;
+	width: auto;
+}
+/*edita las propiedades de contenedor del logo*/
+.logo{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-left: 37vw;
+}
+
+.nombre-empresa{
+	font-family: Playwrite NZ;
+	font-size: 15px;
+	color: rgb(255, 255, 255);
+}
+/*edita las propiedades de contenedor del los iconos */
+.nav-links{
+	display: flex;
+	gap: 0 20px;
+}
+
+/*edita las propiedades de los iconos*/
+.nav-links a{
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	background-color: rgb(255, 255, 255);
+	font-size: 25px;
+	color: rgb(197, 178, 131);
+	border-radius: 50px;
+	height: 40px;
+	padding: 0 9px;
+}
+.nav-links a:hover{
+	background-color: rgb(197, 178, 131);
+	color: rgb(255, 255, 255);
+}
+
+/*2.1. BARRA DE BUSQUEDA*/
+
+/*cambia la posicion del div:barra-de-busqueda*/
+.barra-de-busqueda{
+	display: flex;
+	align-items: center;
+	position: absolute;
+	left: 3vw ;
+	top: 8vh;
+	transform: translate(-0%, -50%);
+	padding: 10px;
+}
+/*cambia las propiedades del input */
+.barra-de-busqueda .buscar{
+	box-sizing: border-box;
+	height: 40px;
+	width: 0;
+	padding: 0 19px ;
+	color: black;
+	border-radius: 50px;
+	font-size: 20px;
+	border: 2px solid rgb(197, 178, 131);
+	transition: all.7s ease;
+}
+/*cambia la posicion del icono de busqueda*/
+.btn{
+	position: absolute;
+	right: 0;
+	top: -7px;
+	width: 60px;
+	height: 0;
+	text-align: center;
+}
+/*cambia las propiedades del icono de busqueda*/
+.btn{
+	font-size: 25px;
+	color: rgb(197, 178, 131);
+	line-height: 80px;
+	transition: all .7s ease;
+}
+/*cambia el tamaño en el que se abre el buscador*/
+.barra-de-busqueda:hover input {
+	width: 25vw;
+}
+
+/* 2.2 BARRA DE MARCAS*/
+/*propiedades de la seccion*/
+.barra-de-marcas{ 
+	display: flex;
+	height: 40px;
+	justify-content: start;
+	align-items: center;
+	gap: 35px;
+}
+/*propiedes del enlaces*/
+.marcas a{
+	display: flex;
+	text-decoration: none;
+	color: black;
+}
+.barra-de-marcas img{
+	height: 35px;
+	width: auto;
+}
+
+/*3. CARRUSEL DE IMAGENES*/
+/*este modifica el tamaño del container el cual muestra las imagenes del carrusel*/
+.container-carrusel{
+	width: 100 vw;
+	height: 600 vh;
+	top: 5px;
+	margin: 0 0 20px;
+	overflow: hidden;
+	border-radius: 0px;
+	position: relative;
+}
+/*establece las propiedades del container que se desplaza en width se pone segun
+la cantidad de imagenes, cada imagen equivale a un 100% mas */
+.carruseles{
+	width: 400%;
+	height: 100%;
+	display: flex;
+	text-align: center;
+}
+/*este modifica el tamaño de cada section, en el width se calcula el tamaño 
+cogiendo el 100% de el .carruseles y dividiendo en la cantidad de imagenes 
+que contiene el carrusel de imagenes */
+.slider-section{
+	width: calc(100%/4);
+	height: 100%;
+}
+/*este modifica el tamaño solo de las imagenes y no del container donde se encuentran 
+se deja al 100% para que el codigo sea adaptable y facil de modificar si se llega a agregar
+o eliminar alguna imagen del carrusel*/
+.slider-section img{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 0px;
+}
+/*este modifica las propiedades que tienen los botones para desplazarze por el 
+carrusel de imagnes*/
+.btn-right,
+.btn-left{
+	display: flex;
+	position: absolute;
+	top: 50%;
+	font-size:1.5rem;
+	background-color: transparent;
+	border-radius: 50%;
+	padding: 5px;
+	font-weight: 600;
+	cursor: pointer;
+	color: rgb(197, 178, 131);
+	transform: translate(0,-50%);
+	transition: .5s ease;
+	user-select: none;
+}
+/*modifica los hover de los botones para desplazarse en el carrusel de imagenes*/
+.btn-left:hover,
+.btn-right:hover{
+	background-color: rgb(197, 178, 131);
+	color: white;
+}
+/*modifica la posicion en la que se encuentran los botones dentro del container*/
+.btn-left{
+	left: 10px;
+}
+.btn-right{
+	right: 10px;
+}
