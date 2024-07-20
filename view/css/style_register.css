@@ -5,18 +5,17 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 80vh;
-	background-image: #;
+	
 }
 
 .container-form{
 	display: flex;
-	height: 500px;
-	max-width: 900px;
+	height: 100%;
+	max-width: 2000px;
 	border-radius: 20px;
 	box-shadow: 0 5px 5px rgba(0, 0, 0, .1) ;
 	transition: all 1s ease;
-	margin: 10px;
+	margin: 20px;
 }
 
 .information{
@@ -102,14 +101,14 @@
 
 .icons i:hover {
 	background-color: #fdcedf;
-	color: #54bab9;
+	color: #d14d72;
 }
 
 .form-crear-cuenta{
 	margin: 30px 0 0 0;
 }
 
-.label-form-crear-cuenta{
+.label-form-crear-cuenta {
 	display: flex;
 	align-items: center;
 	background-color: #fff;
@@ -130,10 +129,34 @@
 }
 
 .label-form-crear-cuenta i{
-	color: #a7a7a7
+	color: #a7a7a7;
 }
 
-.boton-registrarse-iniciar-sesion{
+.genero{
+	display: flex;
+	align-items: center;
+	background-color: #fff;
+	margin-bottom: 15px;
+	border-radius: 20px;
+	padding: 0 10px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+	color: #a7a7a7;
+
+}
+
+.select-genero{
+	width: 100%;
+	padding: 10px;
+	background-color: #fff;
+	border: none;
+	outline: none;
+	border-radius: 20px ;
+	color: gray;
+}
+
+
+
+.boton-registrarse{
 	background-color: #fea1a1;
 	color: #fff;
 	border-radius: 20px;
@@ -143,14 +166,15 @@
 	margin-top: 10px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
 	transition: background-color .3s ease;
+	margin-bottom: 14px;
 }
 
-.boton-registrarse-iniciar-sesion:hover {
+.boton-registrarse:hover {
 	background-color: #d14d72;
 }
 
-/*RESPONSIVE FORM*/
 
+/*RESPONSIVE FORM*/
 @media screen and (max-width:750px) {
 	html{
 		font-size: 12px;
@@ -164,6 +188,7 @@
 	.container-form{
 		height: auto;
 		flex-direction: column;
+		margin-left: 10px;
 	}
 	.information{
 		width: 100%;

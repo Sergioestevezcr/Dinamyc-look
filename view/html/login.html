@@ -5,8 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--css de la pagina de inicio en general -->
 	<link rel="stylesheet" href="../css/style_general.css">
-	<link rel="stylesheet" href="../css/style_register.css">
-	<title>Iniciar sesion</title>
+	<link rel="stylesheet" href="../css/style_login.css">
+	<title>Dinamyc-loock-Iniciar sesion</title>
 	<!--fuente de iconos la use en las flechas del carrusel 
 	 https://boxicons.com/ -->
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -44,7 +44,7 @@
 			<div class="info-childs">
 				<h2 class="titulo-bienvenida">¡Bienvenido nuevamente!</h2>
 				<p class="texto-bienvenida">Si aun no tienes una cuenta registrate aqui</p>
-				<input type="button" value="Regitrarse" class="boton-iniciar-sesion" id="sing-in">
+				<a href="register.html"><input type="button" value="Regitrarse" class="boton-registrarse" id="sing-in"></a>
 			</div>
 		</div>
 <!--2.2 formulario para iniciar sesion-->
@@ -56,20 +56,16 @@
 					<i class='bx bxl-facebook' ></i>
 				</div>
 				<p class="text-crear-cuenta">o usa tu email para iniciar sesion</p>
-				<form class="form-crear-cuenta">
-					<label class="label-form-crear-cuenta">
-						<i class='bx bx-user' ></i>
-						<input type="text" placeholder="Nombre completo"  class="input-form-crear-cuenta">
-					</label>
-					<label class="label-form-crear-cuenta">
+				<form class="form-iniciar-sesion">
+					<label class="label-form-iniciar-sesion">
 						<i class='bx bx-envelope' ></i>
-						<input type="email" placeholder="Correo electonico" class="input-form-crear-cuenta">
+						<input type="email" required placeholder="Correo electonico" class="input-form-crear-cuenta">
 					</label>
-					<label class="label-form-crear-cuenta">
+					<label class="label-form-iniciar-sesion">
 						<i class='bx bx-lock-alt' ></i>
-						<input type="password" placeholder="Contraseña" class="input-form-crear-cuenta">
+						<input type="password" required placeholder="Contraseña" class="input-form-crear-cuenta">
 					</label>
-					<input type="submit" value="Regitrarse" class="boton-registrarse-iniciar-sesion">
+					<input type="submit" value="Regitrarse" class="boton-iniciar-sesion">
 				</form>
 			</div>
 		</div>

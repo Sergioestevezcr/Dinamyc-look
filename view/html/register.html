@@ -6,7 +6,7 @@
 	<!--css de la pagina de inicio en general -->
 	<link rel="stylesheet" href="../css/style_general.css">
 	<link rel="stylesheet" href="../css/style_register.css">
-	<title>registrarse</title>
+	<title>Dinamyc-loock-registrarse</title>
 	<!--fuente de iconos la use en las flechas del carrusel 
 	 https://boxicons.com/ -->
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -43,7 +43,7 @@
 			<div class="info-childs">
 				<h2 class="titulo-bienvenida">Bienvenido</h2>
 				<p class="texto-bienvenida">Para realizar una compra mas sencilla inicia sesion con nosotros</p>
-				<input type="button" value="iniciar sesion" class="boton-iniciar-sesion" id="sing-in">
+				<a href="login.html"><input type="button" value="iniciar sesion" class="boton-iniciar-sesion" id="sing-in"></a>
 			</div>
 		</div>
 		<div class="form-information">
@@ -57,17 +57,42 @@
 				<form class="form-crear-cuenta">
 					<label class="label-form-crear-cuenta">
 						<i class='bx bx-user' ></i>
-						<input type="text" placeholder="Nombre completo"  class="input-form-crear-cuenta">
+						<input required type="text" placeholder="Nombre(s)"  class="input-form-crear-cuenta">
+					</label>
+					<label class="label-form-crear-cuenta">
+						<i class='bx bx-user' ></i>
+						<input required type="text" placeholder="Apellidos" class="input-form-crear-cuenta">
 					</label>
 					<label class="label-form-crear-cuenta">
 						<i class='bx bx-envelope' ></i>
-						<input type="email" placeholder="Correo electonico" class="input-form-crear-cuenta">
+						<input required type="email" placeholder="Correo electronico" class="input-form-crear-cuenta">
+					</label>
+					<label class="label-form-crear-cuenta">
+						<i class='bx bx-envelope' ></i>
+						<input required type="email" placeholder="Confirmar el correo electronico" class="input-form-crear-cuenta">
+					</label>
+					<label class="label-form-crear-cuenta">
+						<i class='bx bx-phone'></i>
+						<input required type="email" placeholder="Numero de telefono" class="input-form-crear-cuenta">
 					</label>
 					<label class="label-form-crear-cuenta">
 						<i class='bx bx-lock-alt' ></i>
-						<input type="password" placeholder="Contraseña" class="input-form-crear-cuenta">
+						<input required type="password" placeholder="Contraseña" class="input-form-crear-cuenta">
 					</label>
-					<input type="submit" value="Regitrarse" class="boton-registrarse-iniciar-sesion">
+					<label class="label-form-crear-cuenta">
+						<i class='bx bx-lock-alt' ></i>
+						<input required type="password" placeholder="Confirme la contraseña" class="input-form-crear-cuenta">
+					</label>
+					<div class="genero">
+						<i class='bx bx-select-multiple'></i>
+						<select class="select-genero">
+						<option disabled selected>Seleccione su genero </option>
+						<option class="option-genero" value="1">Masculino</option>
+						<option class="option-genero" value="2">Femenino</option>
+						<option class="option-genero" value="3">Prefiero no decirlo</option>
+						</select>
+					</div>
+					<input type="submit" value="Regitrarse" class="boton-registrarse">
 				</form>
 			</div>
 		</div>

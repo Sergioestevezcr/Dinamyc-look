@@ -5,7 +5,6 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 80vh;
 	background-image: #;
 }
 
@@ -16,7 +15,7 @@
 	border-radius: 20px;
 	box-shadow: 0 5px 5px rgba(0, 0, 0, .1) ;
 	transition: all 1s ease;
-	margin: 10px;
+	margin: 30px;
 }
 
 .information{
@@ -44,18 +43,19 @@
 	color: #555;
 }
 
-.boton-iniciar-sesion{
+.boton-registrarse{
 	background-color: #fea1a1;
-	outline: none;
-	border: none;
-	border-radius: 20px;
-	padding: 10px 20px;
 	color: white;
+	border-radius: 20px;
+	border: none;
+	padding: 10px 20px;
 	cursor: pointer;
+	margin-top: 10px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
 	transition: background-color .3s ease;
 }
 
-.boton-iniciar-sesion:hover{
+.boton-registrarse:hover{
 	background-color: #d14d72;
 	color: white;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, .1) ;
@@ -105,11 +105,11 @@
 	color: #54bab9;
 }
 
-.form-crear-cuenta{
+.form-iniciar-sesion{
 	margin: 30px 0 0 0;
 }
 
-.label-form-crear-cuenta{
+.label-form-iniciar-sesion{
 	display: flex;
 	align-items: center;
 	background-color: #fff;
@@ -129,13 +129,13 @@
 	color: #333;
 }
 
-.label-form-crear-cuenta i{
+.label-form-iniciar-sesion i{
 	color: #a7a7a7
 }
 
-.boton-registrarse-iniciar-sesion{
+.boton-iniciar-sesion{
 	background-color: #fea1a1;
-	color: #fff;
+	color: white;
 	border-radius: 20px;
 	border: none;
 	padding: 10px 20px;
@@ -145,7 +145,7 @@
 	transition: background-color .3s ease;
 }
 
-.boton-registrarse-iniciar-sesion:hover {
+.boton-iniciar-sesion:hover {
 	background-color: #d14d72;
 }
 
