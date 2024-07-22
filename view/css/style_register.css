@@ -79,6 +79,7 @@
 .crear-cuenta{
 	color: #333;
 	font-size: 2rem;
+	margin-top: 20px;
 }
 
 .text-crear-cuenta{
@@ -107,6 +108,12 @@
 .form-crear-cuenta{
 	margin: 30px 0 0 0;
 }
+
+.names{
+	display: flex;
+	flex-direction: row;
+}
+
 
 .label-form-crear-cuenta {
 	display: flex;

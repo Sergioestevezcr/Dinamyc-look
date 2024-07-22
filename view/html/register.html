@@ -32,7 +32,7 @@
 			<div class="nav-links">
 				<a href="#"><i class='bx bx-cart'></i></a>
 				<a href="login.html"><i class='bx bx-user-circle'></i></a>
-			</div>
+			</div>	
 		</nav>
 	</header>
 
@@ -41,46 +41,60 @@
 	<div class="container-form">
 		<div class="information">
 			<div class="info-childs">
+				<!--Titulo que le da bienvenida a los usuarios nuevos-->
 				<h2 class="titulo-bienvenida">Bienvenido</h2>
-				<p class="texto-bienvenida">Para realizar una compra mas sencilla inicia sesion con nosotros</p>
+				<!--Texto que le informa a los clientes nuevos la importancia de iniciar sesion o registrarse-->
+				<p class="texto-bienvenida">Para realizar una compra más sencilla inicia sesion con nosotros</p>
+				<!--Boton que dirige a la pagina para iniciar sesion si ya esta registrado-->
 				<a href="login.html"><input type="button" value="iniciar sesion" class="boton-iniciar-sesion" id="sing-in"></a>
 			</div>
 		</div>
 		<div class="form-information">
 			<div class="form-information-childs">
+				<!--Titulo de crear cuenta-->
 				<h2 class="crear-cuenta">Crear una cuenta</h2>
 				<div class="icons">
 					<i class='bx bxl-google'></i>
 					<i class='bx bxl-facebook' ></i>
 				</div>
+				<!--parrafo que informa la otra manera de registrarse-->
 				<p class="text-crear-cuenta">o usa tu email para registrarte</p>
 				<form class="form-crear-cuenta">
+				<div class="names">
 					<label class="label-form-crear-cuenta">
 						<i class='bx bx-user' ></i>
+						<!--input que le permite ingresar el nombre para registrarse al usuario-->
 						<input required type="text" placeholder="Nombre(s)"  class="input-form-crear-cuenta">
 					</label>
 					<label class="label-form-crear-cuenta">
 						<i class='bx bx-user' ></i>
+						<!--Input que le permite ingresar los apellidos a el usuario para rregistrarse-->
 						<input required type="text" placeholder="Apellidos" class="input-form-crear-cuenta">
 					</label>
+				</div>
 					<label class="label-form-crear-cuenta">
 						<i class='bx bx-envelope' ></i>
+						<!--Input que permite ingresar el email que quiere registrar el ususario-->
 						<input required type="email" placeholder="Correo electronico" class="input-form-crear-cuenta">
 					</label>
 					<label class="label-form-crear-cuenta">
 						<i class='bx bx-envelope' ></i>
+						<!--Input que permite ingresar la confirmacion del correo electronico-->
 						<input required type="email" placeholder="Confirmar el correo electronico" class="input-form-crear-cuenta">
 					</label>
 					<label class="label-form-crear-cuenta">
 						<i class='bx bx-phone'></i>
-						<input required type="email" placeholder="Numero de telefono" class="input-form-crear-cuenta">
+						<!--input que le permite ingresar el numero de telefono al usuario-->
+						<input required type="tel" placeholder="Numero de telefono" class="input-form-crear-cuenta" maxlength="11" >
 					</label>
 					<label class="label-form-crear-cuenta">
 						<i class='bx bx-lock-alt' ></i>
+						<!--Input que le permite ingresar la contraseña que desea registrar el usuario-->
 						<input required type="password" placeholder="Contraseña" class="input-form-crear-cuenta">
 					</label>
 					<label class="label-form-crear-cuenta">
 						<i class='bx bx-lock-alt' ></i>
+						<!--Input que le permite ingresar la confirmacion de la contraseña que desea registra el usuario-->
 						<input required type="password" placeholder="Confirme la contraseña" class="input-form-crear-cuenta">
 					</label>
 					<div class="genero">

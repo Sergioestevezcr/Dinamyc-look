@@ -1,13 +1,13 @@
 /*letra para el formulario*/
 @import url('https://fonts.googleapis.com/css2?family=Playwrite+NZ:wght@100..400&display=swap');
-
+/*style de la seccion para el formulario de inicio de sesion*/
 .register{
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-image: #;
 }
-
+/*style del div que contiene el formulario de inicio de sesion y la seccion
+que contiene el boton que dirige al formulario de registro*/
 .container-form{
 	display: flex;
 	height: 500px;
@@ -17,7 +17,7 @@
 	transition: all 1s ease;
 	margin: 30px;
 }
-
+/*style del div que contiene el formulario para iniciar sesion */
 .information{
 	width: 40%;
 	display: flex;
@@ -27,22 +27,24 @@
 	border-top-left-radius: 20px;
 	border-bottom-left-radius: 20px ;
 }
-
+/*style contiene la informacion de bienvenida y el boton que lleva hacia
+la pagina de registro */
 .info-childs{
 	width: 100%;
 	padding: 0 30px;
 }
-
+/*style del titulo que da la bienvenida de nuevo a los usuarios registrados*/
 .titulo-bienvenida{
 	font-size: 2.5rem;
 	color: #333;
 }
-
+/*texto que informa a los usuarios que el boton sirve para ir a 
+la pagina de registro*/
 .texto-bienvenida{
 	margin: 15px 0;
 	color: #555;
 }
-
+/*style del boton que lleva a la pagina de registro*/
 .boton-registrarse{
 	background-color: #fea1a1;
 	color: white;
@@ -54,14 +56,13 @@
 	box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
 	transition: background-color .3s ease;
 }
-
 .boton-registrarse:hover{
 	background-color: #d14d72;
 	color: white;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, .1) ;
 	
 }
-
+/*style del div que contiene el formulario para iniciar sesion*/
 .form-information{
 	display: flex;
 	align-items: center;
@@ -72,24 +73,20 @@
 	border-top-right-radius: 20px ;
 	border-bottom-right-radius: 20px;
 }
-
+/*style del div interno del formulario de inicio de sesion*/
 .form-information-childs{
 	padding: 0 30px;
 }
-
-.crear-cuenta{
+/*style del titulo iniciar sesion */
+.iniciar-sesion{
 	color: #333;
 	font-size: 2rem;
 }
-
-.text-crear-cuenta{
-	color: #555;
-}
-
+/*style del div que contiene los iconos de facebook y google*/
 .icons{
 	margin: 15px 0;
 }
-
+/*style de los iconos de facebook y google*/
 .icons i{
 	border-radius: 50%;
 	padding: 15px;
@@ -99,16 +96,19 @@
 	transition: backaground-color .5s ease;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, .1) ;
 }
-
 .icons i:hover {
 	background-color: #fdcedf;
 	color: #54bab9;
 }
-
+/*texto que informa la otra manera para ingresar a la pagina*/
+.text-iniciar-sesion{
+	color: #555;
+}
+/*style del formulario de iniciar sesion*/
 .form-iniciar-sesion{
 	margin: 30px 0 0 0;
 }
-
+/*style de los label del formulario para iniciar sesion*/
 .label-form-iniciar-sesion{
 	display: flex;
 	align-items: center;
@@ -118,8 +118,8 @@
 	padding: 0 10px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, .1) ;
 }
-
-.input-form-crear-cuenta{
+/*style de los inputs del formulario para iniciar sesion */
+.input-form-iniciar-sesion{
 	width: 100%;
 	padding: 10px;
 	background-color: #fff;
@@ -128,11 +128,11 @@
 	border-radius: 20px ;
 	color: #333;
 }
-
+/*style de los label del formulario de inicio de sesion*/
 .label-form-iniciar-sesion i{
 	color: #a7a7a7
 }
-
+/*style del boton para iniciar sesion*/
 .boton-iniciar-sesion{
 	background-color: #fea1a1;
 	color: white;
@@ -150,7 +150,6 @@
 }
 
 /*RESPONSIVE FORM*/
-
 @media screen and (max-width:750px) {
 	html{
 		font-size: 12px;
