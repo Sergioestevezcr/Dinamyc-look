@@ -19,7 +19,7 @@ body{
 
 /*propiedades del header*/
 .header{
-	background-color: #f2bed1;
+	background-color: #FCC8D1;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -49,8 +49,7 @@ body{
 }
 /*edita las propiedades de contenedor del los iconos */
 .nav-links{
-	display: flex;
-	gap: 0 20px;
+	display: inline-flex;	
 }
 
 /*edita las propiedades de los iconos*/
@@ -58,16 +57,22 @@ body{
 	display: flex;
 	align-items: center;
 	text-decoration: none;
-	background-color: rgb(255, 255, 255);
+	background-color: #FEA1A1;
 	font-size: 25px;
-	color: rgb(197, 178, 131);
+	color: #FFFFFF;
 	border-radius: 50px;
 	height: 40px;
 	padding: 0 9px;
 }
 .nav-links a:hover{
-	background-color: rgb(197, 178, 131);
-	color: rgb(255, 255, 255);
+	background-color: #D14D72;
+}
+
+.icon-cart {
+	position: relative;
+	left: 13vw;
+	/*     ^ MEDIDA TEMPORAL, NO PUEDO CALCULARLO BIEN DEBIDO 
+	         A LA BARRA DE MARCAS :)*/
 }
 
 /*2.1. BARRA DE BUSQUEDA*/
@@ -91,7 +96,7 @@ body{
 	color: black;
 	border-radius: 50px;
 	font-size: 20px;
-	border: 2px solid rgb(197, 178, 131);
+	border: 2px solid #FEA1A1;
 	transition: all.7s ease;
 }
 /*cambia la posicion del icono de busqueda*/
@@ -106,13 +111,198 @@ body{
 /*cambia las propiedades del icono de busqueda*/
 .btn{
 	font-size: 25px;
-	color: rgb(197, 178, 131);
+	color: #FEA1A1;
 	line-height: 80px;
 	transition: all .7s ease;
 }
 /*cambia el tamaño en el que se abre el buscador*/
 .barra-de-busqueda:hover input {
 	width: 25vw;
+}
+
+
+/*2.1. BARRA DE BUSQUEDA*/
+
+/*cambia la posicion del div:barra-de-busqueda*/
+.barra-de-busqueda{
+	display: flex;
+	align-items: center;
+	position: absolute;
+	left: 3vw ;
+	top: 65px;
+	transform: translate(-0%, -50%);
+	padding: 10px;
+}
+/*cambia las propiedades del input */
+.barra-de-busqueda .buscar{
+	box-sizing: border-box;
+	height: 40px;
+	width: 0;
+	padding: 0 19px ;
+	color: black;
+	border-radius: 50px;
+	font-size: 20px;
+	border: 2px solid #FFFFFF;
+	transition: all.7s ease;
+}
+/*cambia la posicion del icono de busqueda*/
+.btn button{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 16px;
+	left: 8px;
+	width: 44px;
+	height: 44px;
+	border: 0;
+	border-radius: 50px 50px;
+	background-color: #FEA1A1;
+	font-size: 25px;
+	color: #FFFFFF;;
+	transition: all .7s ease;
+}
+/*cambia el tamaño en el que se abre el buscador*/
+.barra-de-busqueda:hover input {
+	width: 25vw;
+}
+
+.btn button:hover {
+	background-color: #D14D72;
+}
+
+@media screen and (max-width: 750px){
+		/*2. NAVEGACION*/
+
+	/*propiedades del header*/
+	.header{
+		background-color: #FCC8D1;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		height: 180px;
+		padding: 0px 6% 10px 6%;
+		border: none;
+	}
+	/*2.1. BARRA DE NAVEGACION*/
+
+	/*edita las propiedades de la imagen*/
+	.header .logo img{
+		height: 70px;
+		width: auto;
+	}
+	/*edita las propiedades de contenedor del logo*/
+	.logo{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		order: 2;
+		margin-left: 0;
+		padding-bottom: 20px;
+	}
+
+	.nombre-empresa{
+		font-family: Playwrite NZ;
+		font-size: 15px;
+		color: #FFFFFF;
+	}
+	/*edita las propiedades de contenedor del los iconos */
+	.nav-links{
+		display: flex;
+		padding-bottom: 20px;	
+	}
+
+	/*edita las propiedades de los iconos*/
+	.nav-links a{
+		display: flex;
+		align-items: center;
+		text-decoration: none;
+		background-color: #FEA1A1;
+		font-size: 25px;
+		color: #FFFFFF;
+		border-radius: 50px;
+		height: 40px;
+		padding: 0 9px;
+	}
+	.nav-links a:hover{
+		background-color: #D14D72;
+	}
+	.icon-cart {
+		position: relative;
+		left: 0px;
+		order: 1;
+	}
+	.icon-user {
+		order: 3;
+	}
+	/*2.1. BARRA DE BUSQUEDA*/
+
+	/*cambia la posicion del div:barra-de-busqueda*/
+	.barra-de-busqueda{
+		display: flex;
+		justify-content: center;
+		position: absolute;
+		left: -5px;
+		top: 100px;
+		margin-top: 35px;
+		transform: none;
+		
+	}
+	/*cambia las propiedades del input */
+	.barra-de-busqueda .buscar{
+		width: 96.5vw;
+		padding: 10px;
+		border-radius: 5px 0 0 5px;
+		border: 0;
+		font-size: 20px;
+		outline: none;
+		box-sizing: border-box;
+		color: black;
+		transition: none;
+	}
+
+	/*cambia la posicion del icono de busqueda*/
+	.btn button{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: absolute;
+		right: 0;
+		top: 17px;
+		width: 52px;
+		height: 40px;
+		border: 0;
+		border-radius: 0 5px 5px 0;
+		background-color: #FEA1A1;
+		font-size: 25px;
+		color: #FFFFFF;
+		transition: none;
+	}
+
+	/*cambia el tamaño en el que se abre el buscador*/
+	.barra-de-busqueda:hover input {
+		width: 96.5vw;
+	}
+	.btn button:hover {
+		background-color: #D14D72;
+	}
+}
+
+@media screen and (max-width:580px){
+	.barra-de-busqueda .buscar{
+		width: 94vw;
+		padding: 10px;
+		border-radius: 5px 0 0 5px;
+		border: 0;
+		font-size: 20px;
+		outline: none;
+		box-sizing: border-box;
+		color: black;
+		transition: none;
+	}
+	.barra-de-busqueda:hover input {
+		width: 94.5vw;
+	}
 }
 
 /* 2.2 BARRA DE MARCAS*/
@@ -128,8 +318,8 @@ body{
 .marcas a{
 	display: flex;
 	text-decoration: none;
-	color: black;
 }
+
 .barra-de-marcas img{
 	height: 35px;
 	width: auto;
@@ -183,7 +373,7 @@ carrusel de imagnes*/
 	padding: 5px;
 	font-weight: 600;
 	cursor: pointer;
-	color: rgb(197, 178, 131);
+	color: grey;
 	transform: translate(0,-50%);
 	transition: .5s ease;
 	user-select: none;
@@ -191,7 +381,7 @@ carrusel de imagnes*/
 /*modifica los hover de los botones para desplazarse en el carrusel de imagenes*/
 .btn-left:hover,
 .btn-right:hover{
-	background-color: rgb(197, 178, 131);
+	background-color: grey;
 	color: white;
 }
 /*modifica la posicion en la que se encuentran los botones dentro del container*/
