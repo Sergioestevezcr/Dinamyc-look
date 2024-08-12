@@ -5,8 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--css de la pagina de inicio en general -->
 	<link rel="stylesheet" href="../css/style_general.css">
-	<link rel="stylesheet" href="../css/style_register.css">
-	<title>Iniciar sesion</title>
+	<link rel="stylesheet" href="../css/style_login.css">
+	<title>Dinamyc-loock-Iniciar sesion</title>
 	<!--fuente de iconos la use en las flechas del carrusel 
 	 https://boxicons.com/ -->
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -42,34 +42,39 @@
 	<div class="container-form">
 		<div class="information">
 			<div class="info-childs">
+				<!--Titulo que le da la bienvenida a los usuarios antiguos-->
 				<h2 class="titulo-bienvenida">¡Bienvenido nuevamente!</h2>
+				<!--Parrafo que le da la bienvenida a los nuevos usuarios y les da la opcion de ir a la pagina de registro-->
 				<p class="texto-bienvenida">Si aun no tienes una cuenta registrate aqui</p>
-				<input type="button" value="Regitrarse" class="boton-iniciar-sesion" id="sing-in">
+				<!--Boton que lleva a la pagina de registro -->
+				<a href="register.html"><input type="button" value="Regitrarse" class="boton-registrarse" id="sing-in"></a>
 			</div>
 		</div>
 <!--2.2 formulario para iniciar sesion-->
 	<div class="form-information">
 			<div class="form-information-childs">
-				<h2 class="crear-cuenta">Iniciar sesion</h2>
+				<!--Titulo de iniciar sesion-->
+				<h2 class="iniciar-sesion">Iniciar sesion</h2>
+				<!--iconos de google y facebook para iniciar sesion con esas plataformas-->
 				<div class="icons">
 					<i class='bx bxl-google'></i>
 					<i class='bx bxl-facebook' ></i>
 				</div>
-				<p class="text-crear-cuenta">o usa tu email para iniciar sesion</p>
-				<form class="form-crear-cuenta">
-					<label class="label-form-crear-cuenta">
-						<i class='bx bx-user' ></i>
-						<input type="text" placeholder="Nombre completo"  class="input-form-crear-cuenta">
-					</label>
-					<label class="label-form-crear-cuenta">
+				<!--parrafo que informa la otra manera de iniciar sesion-->
+				<p class="text-iniciar-sesion">o usa tu email para iniciar sesion</p>
+				<form class="form-iniciar-sesion">
+					<label class="label-form-iniciar-sesion">
 						<i class='bx bx-envelope' ></i>
-						<input type="email" placeholder="Correo electonico" class="input-form-crear-cuenta">
+						<!--input en el que se ingresa el email registrado anteriormente por el usuario-->
+						<input type="email" required placeholder="Correo electonico" class="input-form-iniciar-sesion">
 					</label>
-					<label class="label-form-crear-cuenta">
+					<label class="label-form-iniciar-sesion">
 						<i class='bx bx-lock-alt' ></i>
-						<input type="password" placeholder="Contraseña" class="input-form-crear-cuenta">
+						<!--input en la que se ingresa la contraseña del usuario-->
+						<input type="password" required placeholder="Contraseña" class="input-form-iniciar-sesion">
 					</label>
-					<input type="submit" value="Regitrarse" class="boton-registrarse-iniciar-sesion">
+					<!--Boton para ingresar al sistema-->
+					<input type="submit" value="Iniciar sesion" class="boton-iniciar-sesion">
 				</form>
 			</div>
 		</div>
