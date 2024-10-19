@@ -103,7 +103,7 @@ body{
 	box-sizing: border-box;
 	height: 40px;
 	width: 0;
-	padding: 0 19px ;
+	padding: 0 19px;
 	color: black;
 	border-radius: 50px;
 	font-size: 20px;
@@ -215,7 +215,7 @@ body{
 	}
 	/*cambia las propiedades del input */
 	.barra-de-busqueda .buscar{
-		width: 90vw;
+		width: 86vw;
 		padding: 10px;
 		margin-left: 4vw;
 		border-radius: 50px 50px;
@@ -233,7 +233,7 @@ body{
 		justify-content: center;
 		align-items: center;
 		position: absolute;
-		left: 90vw;
+		left: 85vw;
 		top: 8px;
 		width: 44px;
 		height: 44px;
