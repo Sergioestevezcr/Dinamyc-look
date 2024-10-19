@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,20 +21,24 @@
 	<meta name="theme-color" content="#ffffff">
 </head>
 <body>
-	<!-- 1. barra de navegacion -->
 	<header class="header">
-
-		<div class="logo">
-			<!-- esta etiqueta modifica el logo -->
-			<a href="index.html"><img src="../imagenes/logos/logo-dinamyc-loock-sin-fondo.png" alt="Logo de la Empresa">
-			<h2 class="nombre-empresa">Dinamyck Loock</h2></a>
-		</div>
-			
-			<!--iconos de navegacion-->
-			<div  class="nav-links icon-cart"><a href="#"><i class='bx bx-cart'></i></a></div>
-			<div class="nav-links icon-user"><a href="login.html"><i class='bx bx-user-circle'></i></a></div>
-				
-	<!-- 1.1 barra de busqueda -->
+		<!-- 1. barra de navegacion -->
+		<nav class="nav-container">
+			<div class="nombre-empresa">
+				<a href="index.html">Dinamyc Loock</a>
+			</div>
+				<ul class="nav-links">
+					<li><a href="#">Sobre Nosotros</a></li>
+					<li><a href="#">Reseñas</a></li>
+					<li><a href="#">Carrito</a></li>
+					<li><a href="login.html">Iniciar Sesión</a></li>
+				</ul>
+		</nav>
+	</header>
+	<section class="container-logo">
+		<div class="logo"><img src="../imagenes/logos/logo-dinamyc-loock-sin-fondo.png" alt="Logo de la Empresa"></div>
+		
+		<!-- 1.1 barra de busqueda -->
 			<div class="barra-de-busqueda">
 					<!-- input de busqueda -->
 				<input class="buscar" type="text" placeholder="Buscar">
@@ -44,20 +48,24 @@
 					<button><i class='bx bx-search'></i width="50px" height="50px"></button>
 				</div>
 			</div>
-	</header>
-
-<!--2. Barra de Marcas-->
-	<section class="barra-de-marcas">
-		<a id="marcas" href="epa-colombia.html">Epa Colombia<img src="" alt=""></a>
-		<a id="marcas" href="anyeluz.html">Anyeluz<img src="" alt=""></a>
-		<a id="marcas" href="milagros.html">Milagros<img src="" alt=""></a>
-		<a id="marcas" href="dluchi.html"><img src="../imagenes/logos/dluchi logo letra cian.png" alt=""></a>
-		<a id="marcas" href="kaba.html"><img src="../imagenes/logos/logoenletraskaba.png" width="auto" height="35px" alt=""></a>
-		<a id="marcas" href="lareceta.html"><img src="../imagenes/logos/la receta logo en verde.png" alt=""></a>
-		<a id="marcas" href="magic-hair.html">Magic Hair<img src="" alt=""></a>
-		<a id="marcas" href="OMG.html"><img src="../imagenes/s/omg logo letra blaca.png"width="auto" height="35px" alt=""></a>
-		<a id="marcas" href="la-pocion.html"><img src="../imagenes/logos/pocion logo en blanco.png"width="auto" height="35px" alt=""></a>
 	</section>
+
+	<!--2. Barra de Marcas-->
+	<section class="barra-de-marcas">
+		<div class="scroll-container">
+			<div class="items-marcas"><a href="epa-colombia.html">Epa Colombia<img src="" alt=""></a></div>
+			<div class="items-marcas"><a href="anyeluz.html">Anyeluz<img src="" alt=""></a></div>
+			<div class="items-marcas"><a href="milagros.html">Milagros<img src="" alt=""></a></div>
+			<div class="items-marcas"><a href="dluchi.html"><img src="../imagenes/logos/dluchi logo letra cian.png" alt=""></a></div>
+			<div class="items-marcas"><a href="kaba.html"><img src="../imagenes/logos/logoenletraskaba.png" width="auto" height="35px" alt=""></a></div>
+			<div class="items-marcas"><a href="lareceta.html"><img src="../imagenes/logos/la receta logo en verde.png" alt=""></a></div>
+			<div class="items-marcas"><a href="magic-hair.html">Magic Hair<img src="" alt=""></a></div>
+			<div class="items-marcas"><a href="OMG.html"><img src="../imagenes/logos/omg logo letra blaca.png"width="auto" height="35px" alt=""></a></div>
+			<div class="items-marcas"><a href="la-pocion.html"><img src="../imagenes/logos/pocion logo en blanco.png"width="auto" height="35px" alt=""></a></div>
+		</div>
+	</section>
+
+
 
 <!--3.carrusel de imagenes-->
 
