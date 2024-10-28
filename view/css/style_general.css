@@ -126,15 +126,6 @@ body {
 	font-size: 25px;
 	color: #FFFFFF;
 }
-/*cambia el tamaño en el que se abre el buscador*/
-.barra-de-busqueda:hover input {
-
-}
-
-.btn button:hover {
-	background-color: #D14D72;
-}
-
 /* 2.2 BARRA DE MARCAS*/
 /*propiedades de la seccion*/
 .barra-de-marcas {
