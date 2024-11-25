@@ -42,10 +42,13 @@ body{
 	margin-left: 37vw;
 }
 
-.nombre-empresa{
-	font-family: Playwrite NZ;
-	font-size: 15px;
-	color: rgb(255, 255, 255);
+/* Estilo para el nombre de la empresa */
+.nombre-empresa a{
+	font-family: "Playwrite NZ", cursive;
+	font-size: 30px;
+	color: #ffffff;
+	text-decoration: none;
+	margin: 0;
 }
 /*edita las propiedades de contenedor del los iconos */
 .nav-links{
