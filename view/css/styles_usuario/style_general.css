@@ -1,0 +1,509 @@
+/*letra para el nombre de la empresa*/
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+/*letra general de toda la pagina*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+/************* Propiedades generales **********/
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box; 
+}
+
+/* Estilo para el body */
+body {
+	background-color: #F7E9E9;
+	font-family: "Montserrat", sans-serif;
+	font-size: 20px;
+}
+
+/************************************ 1. HEADER ***********************************/
+/* Header y navegación */
+.header {
+	background: #F7E9E9;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: fixed;
+	z-index: 999;
+	height: 60px;
+	width: 100vw;
+	left: 0;
+	padding: 15px 35px;
+	box-shadow: 0 10px 20px rgba(193, 78, 119, .3);
+}
+
+
+/* Estilo para el nombre de la empresa */
+.nombre-empresa {
+	width: 45vw;
+}
+.nombre-empresa a{
+	font-family: "Dancing Script", cursive;
+	font-size: 40px;
+	color: #DF7DA6;;
+	text-decoration: none;
+	margin: 0;
+}
+
+/* Estilo para la lista de navegación */
+.nav-links {
+	list-style: none;
+	display: flex; 
+	gap: 20px; 
+}
+
+.nav-links li {
+	font-size: 22px;
+	padding: 10px;
+}
+
+.nav-links a {
+	color: #DF7DA6;;
+	text-decoration: none;
+}
+.navbara:hover {
+	cursor: pointer;
+}
+.nav-links li:hover {
+	background-color: rgba(193, 78, 119, 0.5); 
+	padding: 10px;
+	border-radius: 20px;
+}
+.nav-links a:hover {
+	color: #FFFFFF;
+}
+
+.container-logo {
+	display: flex;
+	justify-content: center;
+	background: #F6C5DA;
+	height: 270px;
+}
+.container-logo img {
+	height: 130px;
+	width: auto;
+	filter: drop-shadow(5px 5px 10px rgba(193, 78, 119, 0.3));
+	margin: 70px 0 0 0;
+}
+
+.abrir-menu, .cerrar-menu  {
+	display: none;
+}
+
+/**** Menu Hamburguesa****/
+@media screen and (max-width: 930px){
+	.nombre-empresa {
+		width: 60vw;
+	}
+
+	.abrir-menu {
+		display: block;
+		border: 0;
+		background-color: transparent;
+		color: #DF7DA6;
+		font-size: 30px;
+		cursor: pointer;
+	}
+
+	.navbar{
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	.cerrar-menu {
+		display: flex;
+		z-index: 999; /*Propiedad que controla el orden de superposición: Aparecerá sobre todo*/
+		position: absolute;
+		right: 35px;
+		top: -46px;
+		border: 0;
+		background-color: transparent;
+		color: #DF7DA6;
+		font-size: 30px;
+		cursor: pointer;
+	}
+
+	.navbar{
+		display: flex;
+		flex-direction: end;
+		align-items: start;
+		gap: 5px;
+		position: absolute;
+		z-index: 998; 
+		top: 60px;
+		right: 0;
+		background-color: #F6C5DA;
+		padding: 30px;
+	}
+
+	.navbar.visible {
+		opacity: 1;
+		visibility: visible;
+		box-shadow: -5px 0px 10px rgba(0, 0, 0, 0.3);
+		background-color: rgba(223, 125, 166, 0.7); /* Fondo semitransparente */
+   	}
+
+	.nav-links {
+		flex-direction: column;
+		align-items: start;
+	}
+
+	.nav-links a {
+		color: #FFFFFF;
+	}
+
+	.nav-links li:hover {
+		background-color: rgba(193, 78, 119, 0.7); 
+		border-radius: 0;
+		width: 100%;
+	}
+}
+@media screen and (max-width: 500px){
+	.nombre-empresa a{
+	font-size: 30px;
+	}
+}
+
+/******************************* 1.1. BARRA DE BUSQUEDA **********************************/
+
+	/*cambia la posicion del div:barra-de-busqueda*/
+	.barra-de-busqueda{
+		display: flex;
+		align-items: center;
+		position: absolute;
+		top: 200px;
+		padding: 10px;
+	}
+	/* para pantallas grantes cambia la posiscion de la barra*/
+
+
+	/*cambia las propiedades del input */
+	.barra-de-busqueda .buscar{
+		box-sizing: border-box;
+		height: 40px;
+		width: 50vw;
+		padding: 0 45px 0 20px;
+		color: black;
+		border-radius: 50px;
+		font-size: 20px;
+		border: 2px solid #FFFFFF;
+	}
+	.buscar:focus {
+		outline: none;
+	}
+	/*cambia la posicion del icono de busqueda*/
+	.btn button{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		width: 40px;
+		height: 40px;
+		border: 0;
+		border-radius: 0 50px 50px 0;
+		background-color: #DF7DA6;
+		font-size: 25px;
+		color: #FFFFFF;
+	}
+
+	.btn button:hover {
+		background-color:  #C14E76;
+	}
+
+/************************************** 2. BARRA DE MARCAS *********************************/
+	/*propiedades de la seccion*/
+	.barra-de-marcas {
+		box-shadow: 0px -10px 20px rgba(193, 78, 119, .3);
+	}
+
+	.barra-de-marcas img{
+		height: 35px;
+		width: auto;
+	}
+
+	 /* Color del carril de fondo */
+	.scroll-container {
+	  	display: flex;
+	  	width: 100%;
+		justify-content: space-between;
+	  	overflow-x: scroll;
+	  	scroll-snap-type: x mandatory;
+	  	scroll-padding: 20px; /* Espacio al borde del contenedor */
+	  	gap: 20px;
+	}
+
+	/* Personalización de la barra de scroll horizontal */
+	.scroll-container::-webkit-scrollbar {
+	    height: 6px; /* Altura de la barra de scroll horizontal */
+	}
+
+	.scroll-container::-webkit-scrollbar-thumb {
+	    background-color: #DF7DA6; /* Color del "dedo" de la barra */
+	    border-radius: 10px;/* Bordes redondeados */
+	}
+
+	.scroll-container::-webkit-scrollbar-thumb:hover {
+	    background-color: #C14E76; /* Color cuando pasas el cursor por encima */
+	}
+
+	.scroll-container::-webkit-scrollbar-track {
+	    background-color: #F6C5DA; /* Color del carril de la barra de desplazamiento */
+	}
+
+	.item {
+	  scroll-snap-align: center; 
+	  height: 300px;
+	  width: 800px;
+	}
+
+
+/***************************************** 3. CARRUSEL DE IMAGENES ***************************/
+
+	/*este modifica el tamaño del container el cual muestra las imagenes del carrusel*/
+	.container-carrusel{
+		width: 100%;
+		height: auto;
+		top: 0;
+		margin: 0;
+		overflow: hidden;
+		border-radius: 0px;
+		position: relative;
+	}
+	/*establece las propiedades del container que se desplaza en width se pone segun
+	la cantidad de imagenes, cada imagen equivale a un 100% mas */
+	.carruseles{
+		width: 400%;
+		height: 100%;
+		display: flex;
+		text-align: center;
+	}
+	/*este modifica el tamaño de cada section, en el width se calcula el tamaño 
+	cogiendo el 100% de el .carruseles y dividiendo en la cantidad de imagenes 
+	que contiene el carrusel de imagenes */
+	.slider-section{
+		width: calc(100%/4);
+		height: 100%;
+	}
+	/*este modifica el tamaño solo de las imagenes y no del container donde se encuentran 
+	se deja al 100% para que el codigo sea adaptable y facil de modificar si se llega a agregar
+	o eliminar alguna imagen del carrusel*/
+	.slider-section img{
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 0px;
+	}
+	/*este modifica las propiedades que tienen los botones para desplazarze por el 
+	carrusel de imagnes*/
+	.btn-right,
+	.btn-left{
+		display: flex;
+		position: absolute;
+		top: 50%;
+		font-size:1.5rem;
+		background-color: transparent;
+		border-radius: 50%;
+		padding: 5px;
+		font-weight: 600;
+		cursor: pointer;
+		color: grey;
+		transform: translate(0,-50%);
+		transition: .5s ease;
+		user-select: none;
+	}
+	/*modifica los hover de los botones para desplazarse en el carrusel de imagenes*/
+	.btn-left:hover,
+	.btn-right:hover{
+		background-color: grey;
+		color: white;
+	}
+	/*modifica la posicion en la que se encuentran los botones dentro del container*/
+	.btn-left{
+		left: 10px;
+	}
+	.btn-right{
+		right: 10px;
+	}
+
+/*********************************** 4. SECCION UNO ***********************************/
+	.t1 {
+		color: #7E1037;
+		background-color: #DF7DA6;
+		text-align: center;
+		padding: 10px 0;
+	}
+	.section1-product {
+		background-color: #DF7DA6;
+		height: auto;
+		border-radius: ;
+	}
+
+	.container-product-cards {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		justify-items: center;
+		gap: 20px;
+		padding: 20px;
+		background-color: #F6C5DA;
+		border-radius: 30px 30px 0 0;
+	}
+
+	.product-card {
+	  background-color: #FFFFFF;
+	  width: 250px;
+	  height: 360px;
+	  border-radius: 8px;
+	  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	  text-align: center;
+	  padding: 16px;
+	  position: relative;
+	  transition: transform 0.2s ease-in-out;
+	}
+
+	.product-card:hover {
+	  transform: scale(1.05);
+	}
+
+	.image-container {
+	  position: relative;
+	}
+
+	.image-container img {
+	  width: 100%;
+	  border-radius: 8px;
+	  cursor: pointer;
+	  height: 240px;
+	}
+
+	.icons-options {
+	  position: absolute;
+	  top: 50%;
+	  left: -10px;
+	  transform: translateY(-50%);
+	  display: flex;
+	  flex-direction: column;
+	  gap: 8px;
+	  opacity: 0;
+	  transition: opacity 0.3s ease;
+	}
+
+	.icons-options span {
+	  display: block;
+	  width: 12px;
+	  height: 12px;
+	  border: 2px solid #c2c2c2;
+	  border-radius: 50%;
+	  background-color: transparent;
+	  cursor: pointer;
+	}
+
+	.icons-options span:hover {
+	  background-color: #c2c2c2;
+	}
+
+	.product-card:hover .icons-options,
+	.image-container:hover .radio-options {
+	  opacity: 1;
+	}
+
+/**************************************** Footer **********************************/
+	.footer {
+	    background-color: #7E1037;
+	    color: #ecf0f1;
+	    padding: 20px 0;
+	    text-align: center;
+	    height: auto;
+	}
+
+	.footer-container {
+	    display: grid;
+	    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	    justify-content: space-around;
+	    padding: 20px;
+	    height: 150px;
+	}
+
+	.footer-section {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	    margin: 10px;
+	    flex: 1;
+	    min-width: 200px;
+	}
+
+	.footer-section h4 {
+	    font-size: 25px;
+	    margin-bottom: 10px;
+	}
+
+	.footer-section p {
+		font-size: 18px;
+	    margin: 0;
+	    padding: 0;
+	}
+
+	.btn-conocenos {
+		border: 1px solid #4B0D23;
+		background-color: #4B0D23;
+		margin: 10px;
+		padding: 10px;
+		border-radius: 30px;
+		box-shadow: 0px 10px 15px rgba(75, 13, 35, .6);
+	}
+
+	.btn-conocenos a{
+		text-decoration: none;
+		color: #FFFFFF;
+	}
+
+	.btn-conocenos:hover {
+		box-shadow: 0px 10px 20px rgba(75, 13, 35, .5);
+		transform: translateY(3px);
+	}
+
+	.footer-bottom {
+	    border-top: 1px solid #4B0D23;
+	    margin-top: 20px;
+	    padding-top: 10px;
+	    font-size: 10px;
+	}
+	.redes {
+		list-style: none;
+		display: flex;
+		margin: 15px;
+		gap: 10px;
+		font-size: 25px;
+	}
+
+	.redes a {
+		color: #FFFFFF;
+	}
+
+	@media screen and (max-width: 850px){
+		.footer-container {
+	    	height: 170px;
+		}
+
+		.footer-section h4 {
+	    	font-size: 19px;
+		}
+
+		.footer-section p {
+			font-size: 12px;
+		}
+
+		.redes {
+			font-size: 19px;
+		}
+
+	@media screen and (max-width: 439px){
+		.footer-container {
+	    	height: 280px;
+		}
+	}
+
+

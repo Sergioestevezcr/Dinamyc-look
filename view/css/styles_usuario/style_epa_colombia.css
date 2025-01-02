@@ -1,0 +1,9 @@
+.barra-de-marcas{
+	display: flex;
+	height: 55px;
+	justify-content: start;
+	align-items: center;
+	padding: 10px;
+	background-color: rgb(42, 185, 104);
+}
+

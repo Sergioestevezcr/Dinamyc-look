@@ -1,0 +1,259 @@
+/*letra para el nombre de la empresa*/
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+/*letra general de toda la pagina*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+/************* Propiedades generales **********/
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box; 
+	}
+
+	/* Estilo para el body */
+	body {
+		background-color: #F7E9E9;
+		font-family: "Montserrat", sans-serif;
+		font-size: 20px;
+	}
+
+	/************************************ 1. HEADER ***********************************/
+	/* Header y navegación */
+	.header {
+		background: #C14E77;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		height: 60px;
+		left: 0;
+		padding: 15px 35px;
+	}
+
+
+	/* Estilo para el nombre de la empresa */
+	.nombre-empresa {
+		width: 45vw;
+	}
+	.nombre-empresa a{
+		font-family: "Dancing Script", cursive;
+		font-size: 40px;
+		color: #FFFFFF;
+		text-decoration: none;
+		margin: 0;
+	}
+
+	/* Estilo para la lista de navegación */
+	.nav-links {
+		list-style: none;
+		display: flex; 
+		gap: 20px; 
+	}
+
+	.nav-links li {
+		font-size: 22px;
+		padding: 10px;
+	}
+
+	.nav-links a {
+		color: #FFFFFF;
+		text-decoration: none;
+	}
+	.navbara:hover {
+		cursor: pointer;
+	}
+	.nav-links li:hover {
+		background-color: rgba(193, 78, 119, 0.5); 
+		padding: 10px;
+		border-radius: 20px;
+	}
+	.nav-links a:hover {
+		color: #FFFFFF;
+	}
+
+	.container-busqueda {
+		display: flex;
+		justify-content: center;
+		height: 200px;
+	}
+	.abrir-menu, .cerrar-menu  {
+		display: none;
+	}
+
+	/**** Menu Hamburguesa****/
+	@media screen and (max-width: 930px){
+		.nombre-empresa {
+			width: 60vw;
+		}
+
+		.abrir-menu {
+			display: block;
+			border: 0;
+			background-color: transparent;
+			color: #FFFFFF;
+			font-size: 30px;
+			cursor: pointer;
+		}
+
+		.navbar{
+			opacity: 0;
+			visibility: hidden;
+		}
+
+		.cerrar-menu {
+			display: flex;
+			z-index: 999; /*Propiedad que controla el orden de superposición: Aparecerá sobre todo*/
+			position: absolute;
+			right: 35px;
+			top: -47.5px;
+			border: 0;
+			background-color: transparent;
+			color: #FFFFFF;
+			font-size: 30px;
+			cursor: pointer;
+		}
+
+		.navbar{
+			display: flex;
+			flex-direction: end;
+			align-items: start;
+			gap: 5px;
+			position: absolute;
+			z-index: 998; 
+			top: 60px;
+			right: 0;
+			background-color: #F6C5DA;
+			padding: 30px;
+		}
+
+		.navbar.visible {
+			opacity: 1;
+			visibility: visible;
+			box-shadow: -5px 0px 10px rgba(0, 0, 0, 0.3);
+			background-color: rgba(223, 125, 166, 0.7); /* Fondo semitransparente */
+	   	}
+
+		.nav-links {
+			flex-direction: column;
+			align-items: start;
+		}
+
+		.nav-links a {
+			color: #FFFFFF;
+		}
+
+		.nav-links li:hover {
+			background-color: rgba(193, 78, 119, 0.7); 
+			border-radius: 0;
+			width: 100%;
+		}
+	}
+	@media screen and (max-width: 500px){
+		.nombre-empresa a{
+		font-size: 30px;
+		}
+	}
+
+	/******************************* 1.1. BARRA DE BUSQUEDA **********************************/
+
+	/*cambia la posicion del div:barra-de-busqueda*/
+	.barra-de-busqueda{
+		display: flex;
+		align-items: center;
+		position: absolute;
+		top: 180px;
+		padding: 10px;
+	}
+	/* para pantallas grantes cambia la posiscion de la barra*/
+
+
+	/*cambia las propiedades del input */
+	.barra-de-busqueda .buscar{
+		box-sizing: border-box;
+		height: 40px;
+		width: 50vw;
+		padding: 0 45px 0 20px;
+		color: black;
+		border-radius: 50px;
+		font-size: 20px;
+		border: 2px solid #FFFFFF;
+	}
+	.buscar:focus {
+		outline: none;
+	}
+	/*cambia la posicion del icono de busqueda*/
+	.btn button{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		width: 40px;
+		height: 40px;
+		border: 0;
+		border-radius: 0 50px 50px 0;
+		background-color: #DF7DA6;
+		font-size: 25px;
+		color: #FFFFFF;
+	}
+
+	.btn button:hover {
+		background-color:  #C14E76;
+	}
+/******************************************************/
+#user {
+	font-size: 100px;
+	color: #7E1037;
+	padding: 20px;
+}
+.container-action {
+	background: #F7E9E9;
+	height: 100%;
+
+}
+.t1 {
+	padding: 20px;
+	text-align: center;
+	color: #7E1037;
+}
+.container-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+    padding: 20px;
+}
+
+.card-category {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    height: 300px;
+    border-radius: 30px;
+    gap: 30px;
+    background-color: rgba(246, 197, 218, .7);
+}
+
+.card-category p {
+    font-size: 30px;
+    font-weight: 600;
+    color: #DF7DA6;
+    text-align: center;
+}
+
+span a{
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+.card-category span {
+    font-size: 20px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.card-category a:hover {
+    color: #C14E77;
+}
+

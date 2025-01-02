@@ -4,13 +4,10 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--css de la pagina de inicio en general -->
-	<link rel="stylesheet" href="../../css/style_general.css">
-	<!--css de la barra de marcas -->
-	<link rel="stylesheet" href="../../css/style_index_admin.css">
-	<!--fuente de iconos la use en las flechas del carrusel 
-	 https://boxicons.com/ -->
-	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-	<title>Dinamyc Loock-admin</title>
+	<link rel="stylesheet" href="../../css/styles_admin/style_index_admin.css">
+	<!--iconos -->
+	<script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
+	<title>Dinamyc Loock admin</title>
 		<!-- favicons de la pagina -->
 	<link rel="apple-touch-icon" sizes="180x180" href="../../imagenes/favicons/apple-touch-icon.ico">
 	<link rel="icon" type="image/png" sizes="32x32" href="../../imagenes/favicons/favicon-32x32.ico">
@@ -21,45 +18,47 @@
 	<meta name="theme-color" content="#ffffff">
 </head>
 <body>
-	<!-- 1. barra de navegacion -->
 	<header class="header">
-		<div class="logo">
-			<!-- esta etiqueta modifica el logo -->
-			<a href="../index.html"><img src="../../imagenes/logos/logo-dinamyc-loock-sin-fondo.png" alt="Logo de la Empresa">
-			<h2 class="nombre-empresa">Dinamyck Loock</h2></a>
+		<!--------------------------------- 1. Barra de navegacion ------------------------------->
+
+		<div class="nombre-empresa">
+				<a href="index-admin.html">Dinamyc Look</a>
 		</div>
-		<nav >
-			<div class="barra-de-busqueda">
-				<!-- input de busqueda -->
-				<input class="buscar" type="text" placeholder="Buscar">>
-					<!-- boton de busqueda -->
-					<div class="btn">
-						<!-- cambia la imagen del boton de busqueda -->
-						<i class='bx bx-search'></i width="50px" height="50px">
-					</div>
-			</div>
-			<!--iconos de navegacion-->
-			<div class="nav-links">
-				<a href="#"><i class='bx bx-package'></i></a>
-				<a href="../login.html"><i class='bx bx-user-circle'></i></a>
-			</div>
+
+		<button class="abrir-menu" id="abrir"><i class="fa-solid fa-bars"></i></i></button>
+
+		<nav class="navbar" id="nav">
+			<button class="cerrar-menu" id="cerrar"><i class='bx bx-menu'></i></button>
+			<ul class="nav-links">
+				<li><a href="usuarios.html">Usuarios</a></li>
+				<li><a href="#">Administradores</a></li>
+				<li><a href="#">Ventas</a></li>
+				<li><a href="#">Catalogos</a></li>
+				<li><a href="#">P</a></li>
+			</ul>
 		</nav>
 	</header>
-
-<!--2. Barra de Marcas-->
-	<section class="barra-de-marcas">
-		<a id="marcas" href="../epa-colombia.html">Epa Colombia<img src="" alt=""></a>
-		<a id="marcas" href="../anyeluz.html">Anyeluz<img src="" alt=""></a>
-		<a id="marcas" href="../milagros.html">Milagros<img src="" alt=""></a>
-		<a id="marcas" href="../dluchi.html"><img src="../../imagenes/logos/dluchi logo letra cian.png" alt=""></a>
-		<a id="marcas" href="../kaba.html"><img src="../../imagenes/logos/logoenletraskaba.png" width="auto" height="35px" alt=""></a>
-		<a id="marcas" href="../lareceta.html"><img src="../../imagenes/logos/la receta logo en verde.png" alt=""></a>
-		<a id="marcas" href="../magic-hair.html">Magic Hair<img src="" alt=""></a>
-		<a id="marcas" href="../OMG.html"><img src="../../imagenes/logos/omg logo letra blaca.png"width="auto" height="35px" alt=""></a>
-		<a id="marcas" href="../la-pocion.html"><img src="../../imagenes/logos/pocion logo en blanco.png"width="auto" height="35px" alt=""></a>
-	</section>
-
-
-	<section>ADMIN</section>
+	<main class="container-action">
+		<h1 class="t1">¡Bienvenido Administrador!<br>¿Que quieres hacer hoy?</h1>
+			<div class="container-categories">
+				<div class="card-category category-usuarios">
+					<p>Gestionar Usuarios</p>
+					<span><a href="usuarios.html">Ver</a></span>
+				</div>
+				<div class="card-category category-admin">
+					<p>Gestionar Administradores</p>
+					<span><a href="">Ver</a></span>
+				</div>
+				<div class="card-category category-catalogos">
+					<p>Catalogos</p>
+					<span><a href="">Ver</a></span>
+				</div>
+				<div class="card-category category-reportes">
+					<p>Consultar Reportes de Ventas</p>
+					<span><a href="">Ver</a></span>
+				</div>
+			</div>
+	</main>
+	<script src="../../js/script_carrusel_de_imagenes.js"></script>
 </body>
 </html>
