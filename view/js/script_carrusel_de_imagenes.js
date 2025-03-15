@@ -1,15 +1,5 @@
-/////////////////////////// 1. NAVEGACION MOVIL ///////////////////////////
-const nav = document.querySelector("#nav");
-const abrir = document.querySelector("#abrir");
-const cerrar = document.querySelector("#cerrar");
-abrir.addEventListener("click", () => {
-    nav.classList.add("visible");
-})
-cerrar.addEventListener("click", () => {
-    nav.classList.remove("visible");
-})
 
-//////////////////////////// 2. CARRUSEL /////////////////////////////////
+//////////////////////////// 1. CARRUSEL /////////////////////////////////
 
 // variables para traer las clases al archivo y poder animarlas
 const btnLeft = document.querySelector(".btn-left")
