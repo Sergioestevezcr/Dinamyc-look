@@ -1,8 +1,47 @@
-.barra-de-marcas{
-	display: flex;
-	height: 55px;
-	justify-content: start;
-	align-items: center;
-	padding: 10px;
-	background-color: rgb(127, 40, 84);
+/* Header y navegación */
+.header {
+	background: #F9EAF1;
 }
+
+.nombre-empresa a {
+	color: #8C285A;
+}
+
+/* Estilo para la lista de navegación */
+
+.nav-links a {
+	color: #8C285A;
+}
+
+.nav-links li:hover {
+	background-color:  rgba(239, 178, 217, 0.8);
+}
+
+.btn button {
+	background-color: #A92D6C;
+}
+
+.btn button:hover {
+	background-color:  #8C285A;
+}
+
+/******************************** BARRA DE MARCAS *******************************/
+.barra-de-marcas{
+	background-color: #75254D;
+	margin-left: -25px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: #A92D6C; /* Color del "dedo" de la barra */
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: #C53D86; /* Color cuando pasas el cursor por encima */
+}
+
+.scroll-container::-webkit-scrollbar-track {
+    background-color: #75254D; /* Color del carril de la barra de desplazamiento */
+}
+
+
+

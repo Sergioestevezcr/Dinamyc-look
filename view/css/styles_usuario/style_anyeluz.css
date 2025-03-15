@@ -1,8 +1,44 @@
+/* Header y navegación */
+.header {
+	background: #F9EAF1;
+}
+
+.nombre-empresa a {
+	color: #DF557D;
+}
+
+/* Estilo para la lista de navegación */
+
+.nav-links a {
+	color: #DF557D;
+}
+
+.nav-links li:hover {
+	background-color:  rgba(243, 174, 197, 0.6);
+}
+
+.btn button {
+	background-color: #DF557D;
+}
+
+.btn button:hover {
+	background-color:  #CD355A;
+}
+
+/******************************** BARRA DE MARCAS *******************************/
 .barra-de-marcas{
-	display: flex;
-	height: 55px;
-	justify-content: start;
-	align-items: center;
-	padding: 10px;;
-	background-color: rgb(232, 213, 119);
+	background-color: #EA7CA0;
+	margin-left: -25px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: #DF557D; /* Color del "dedo" de la barra */
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: #CD355A; /* Color cuando pasas el cursor por encima */
+}
+
+.scroll-container::-webkit-scrollbar-track {
+    background-color: #EA7CA0; /* Color del carril de la barra de desplazamiento */
 }

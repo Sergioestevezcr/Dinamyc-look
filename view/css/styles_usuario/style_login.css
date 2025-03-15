@@ -1,5 +1,21 @@
-/*letra para el formulario*/
-@import url('https://fonts.googleapis.com/css2?family=Playwrite+NZ:wght@100..400&display=swap');
+.header {
+	background: #C1416D;
+}
+
+.btn button{
+	background-color: #A63055;
+	color: #FBF4F7;
+	border: solid 1px #73283E;
+}
+
+.btn button:hover {
+	background-color:  #73283E;
+}
+
+.nav-links li:hover {
+	background-color: rgba(115, 40, 62, 0.6); 
+}
+
 /*style de la seccion para el formulario de inicio de sesion*/
 .register{
 	display: flex;
@@ -15,7 +31,7 @@ que contiene el boton que dirige al formulario de registro*/
 	border-radius: 20px;
 	box-shadow: 0 5px 5px rgba(0, 0, 0, .1) ;
 	transition: all 1s ease;
-	margin: 90px 30px 30px;
+	margin: 30px;
 }
 /*style del div que contiene el formulario para iniciar sesion */
 .information{
