@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Título de la pestaña -->
+    <title>Dinamyc Look - Admin</title>
+
+    <!-- Estilos CSS de la página -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_admin/style_index_admin.css') }}">
+
+    <!-- Fuente de iconos Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Fuente de iconos FontAwesome -->
+    <script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='imagenes/favicons/apple-touch-icon.icO') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='imagenes/favicons/favicon-32x32.ico') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='imagenes/favicons/favicon-16x16.ico') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='imagenes/favicons/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='imagenes/favicons/safari-pinned-tab.svg') }}" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="container">
+
+        <!-- Barra lateral de navegación -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2 class="company-name">Dinamyc Look</h2>
+                <button class="close-btn" id="close_btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index-admin.html"><i class='bx bxs-dashboard'></i><span>Dashboard</span></a></li>
+                    <li><a href="usuarios.html" class="active"><i class="fa-solid fa-user"></i><span>Clientes</span></a></li>
+                    <li><a href="ventas.html"><i class='bx bxs-dollar-circle'></i><span>Ventas</span></a></li>
+                    <li><a href="productos.html"><i class="fa-solid fa-clipboard"></i><span>Productos</span></a></li>
+                    <li><a href="reportes.html"><i class="fa-solid fa-receipt"></i><span>Reportes</span></a></li>
+                    <li><a href="configuracion.html"><i class="fa-solid fa-gear"></i><span>Configuración</span></a></li>
+                    <li><a href="../vista_usuario/login.html"><i class='bx bx-log-out'></i><span>Cerrar sesión</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+
+            <!-- Encabezado principal -->
+            <header class="main-header">
+                <button class="menu-toggle" id="open_btn"><i class='bx bx-menu'></i></button>
+                <h1>Clientes</h1>
+            </header>
+
+            <!-- Barra de búsqueda -->
+            <div class="barra-de-busqueda">
+                <input class="buscar" type="text" placeholder="Buscar">
+                <div class="btn">
+                    <button type="submit"><i class='bx bx-search'></i></button>
+                </div>
+            </div>
+
+            <!-- Sección de pedidos recientes -->
+            <section class="recent-orders">
+                <div class="section-header">
+                    <div class="add-btn">Agregar <i class="fa-regular fa-square-plus"></i></div>
+                    <a href="#" class="view-all">Ver todo</a>
+                </div>
+
+                <!-- Tabla de clientes -->
+                <div class="table-container">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Teléfono</th>
+                                <th>Contraseña</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Ejemplo de fila (debes reemplazar con datos reales) -->
+                        {% for usuario in usuarios %}
+                            <tr>
+                                <td>{{ usuario.1 }} {{ usuario.2 }}</td>
+                                <td>{{ usuario.3 }}</td>
+                                <td>{{ usuario.4 }}</td>
+                                <td>{{ usuario.7 }}</td>
+                                <td class="edit-icon"><i class="fa-solid fa-pen-to-square"></i></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <!-- Modal para agregar nuevo cliente -->
+    <div id="addModal" class="modal-background">
+        <div class="modal-content">
+            <h2 class="modal-header">Agregar Nuevo Cliente</h2>
+            <form id="addForm" action="/add_contact" method="POST">
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="add-nombre" class="input-form" name="Nombre" placeholder="Nombres" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="add-apellido" class="input-form" name="Apellido" placeholder="Apellidos" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="add-correo" class="input-form" name="Correo" placeholder="Correo electrónico" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="tel" id="add-telefono" class="input-form" name="Telefono" placeholder="Número de teléfono" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="add-password" class="input-form" name="Clave" placeholder="Contraseña" required>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-modal cancel-button" id="cancelAddBtn">Cancelar</button>
+                    <button type="submit" class="btn-modal submit-button">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para editar cliente -->
+    <div id="editModal" class="modal-background">
+        <div class="modal-content">
+            <h2 class="modal-header">Editar Cliente</h2>
+            <form id="editForm">
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="edit-nombre" class="input-form" placeholder="Nombre completo" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="edit-correo" class="input-form" placeholder="Correo electrónico" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="tel" id="edit-telefono" class="input-form" placeholder="Número de teléfono" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="edit-password" class="input-form" placeholder="Contraseña" required>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-modal cancel-button" id="cancelEditBtn">Cancelar</button>
+                    <button type="submit" class="btn-modal submit-button">Actualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Pie de página -->
+    <footer class="footer">
+        <p>&copy; 2024 Dinamyc Look | Todos los derechos reservados</p>
+    </footer>
+
+    <!-- Scripts JavaScript -->
+    <script src="{{ url_for('static', filename='js/script_sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_pop-up.js') }}"></script>
+</body>
+</html>
