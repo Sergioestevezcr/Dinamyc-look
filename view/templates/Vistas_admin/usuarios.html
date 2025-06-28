@@ -8,7 +8,7 @@
     <title>Dinamyc Look - Admin</title>
 
     <!-- Estilos CSS de la página -->
-    <link rel="stylesheet" href="../../static/css/styles_admin/style_index_admin.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_admin/style_index_admin.css') }}">
 
     <!-- Fuente de iconos Boxicons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -30,7 +30,11 @@
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-                <p>{{ message }}</p>
+                <div class="alert">
+                    {{ message }}
+                    <button class="alert-close">&times;</button>
+                    <div class="alert-progress"></div>
+                </div>
             {% endfor %}
         {% endif %}
     {% endwith %}
@@ -91,20 +95,38 @@
                                 <th>Nombre</th>
                                 <th>Correo</th>
                                 <th>Teléfono</th>
+                                <th>Dirección</th>
+                                <th>Ciudad</th>
                                 <th>Contraseña</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Ejemplo de fila (debes reemplazar con datos reales) -->
                         {% for usuario in usuarios %}
+                            {% if usuario.8 == 1 %}
                             <tr>
                                 <td>{{ usuario.1 }} {{ usuario.2 }}</td>
                                 <td>{{ usuario.3 }}</td>
                                 <td>{{ usuario.4 }}</td>
+                                <td>{{ usuario.5 }}</td>
+                                <td>{{ usuario.6 }}</td>
                                 <td>{{ usuario.7 }}</td>
-                                <td class="edit-icon"><i class="fa-solid fa-pen-to-square"></i></td>
+                                <td class="edit-icon">
+                                    <a href="#" 
+                                        data-id="{{ usuario.0 }}" 
+                                        data-nombre="{{ usuario.1 }}" 
+                                        data-apellido="{{ usuario.2 }}" 
+                                        data-correo="{{ usuario.3 }}" 
+                                        data-telefono="{{ usuario.4 }}" 
+                                        data-telefono="{{ usuario.5 }}"
+                                        data-telefono="{{ usuario.6 }}"
+                                        data-password="{{ usuario.7 }}"
+                                        class="edit-btn">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                </td>
                             </tr>
+                            {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>
@@ -147,6 +169,20 @@
 
                 <div class="form-group">
                     <div class="label-form">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="text" id="add-direccion" class="input-form" name="Direccion" placeholder="Direccion" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="text" id="add-ciudad" class="input-form" name="Ciudad" placeholder="Ciudad" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form">
                         <i class="fa-solid fa-lock"></i>
                         <input type="password" id="add-password" class="input-form" name="Clave" placeholder="Contraseña" required>
                     </div>
@@ -164,32 +200,53 @@
     <div id="editModal" class="modal-background">
         <div class="modal-content">
             <h2 class="modal-header">Editar Cliente</h2>
-            <form id="editForm">
+            <form id="editForm" method="POST">
                 <div class="form-group">
                     <div class="label-form">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" id="edit-nombre" class="input-form" placeholder="Nombre completo" required>
+                        <input type="text" id="edit-nombre" class="input-form" name="Nombre" placeholder="Nombre" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="edit-apellido" class="input-form" name="Apellido" placeholder="Apellidos" required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="label-form">
                         <i class="fa-solid fa-envelope"></i>
-                        <input type="email" id="edit-correo" class="input-form" placeholder="Correo electrónico" required>
+                        <input type="email" id="edit-correo" class="input-form" name="Correo" placeholder="Correo electrónico" required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="label-form">
                         <i class="fa-solid fa-phone"></i>
-                        <input type="tel" id="edit-telefono" class="input-form" placeholder="Número de teléfono" required>
+                        <input type="tel" id="edit-telefono" class="input-form" name="Telefono" placeholder="Número de teléfono" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="text" id="edit-direccion" class="input-form" name="Direccion" placeholder="Dirección" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="text" id="edit-ciudad" class="input-form" name="Ciudad" placeholder="Ciudad" required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="label-form">
                         <i class="fa-solid fa-lock"></i>
-                        <input type="password" id="edit-password" class="input-form" placeholder="Contraseña" required>
+                        <input type="password" id="edit-password" class="input-form" name="Clave" placeholder="Contraseña" required>
                     </div>
                 </div>
 
@@ -209,5 +266,6 @@
     <!-- Scripts JavaScript -->
     <script src="{{ url_for('static', filename='js/script_sidebar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_pop-up.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
 </body>
 </html>
