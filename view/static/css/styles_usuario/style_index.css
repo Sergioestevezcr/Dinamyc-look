@@ -17,7 +17,7 @@
 
 /************************************** BANNER *********************************/
 	.container-banner {
-		background: url(../../static/imagenes/img7.jpg) no-repeat center center fixed;
+		background: url(../../imagenes/img7.jpg) no-repeat center center fixed;
      	background-size: cover;
 		height: 100vh;
 	}

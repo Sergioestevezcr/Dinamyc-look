@@ -3,23 +3,25 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../../static/css/styles_admin/style_index_admin.css">
 
-    <!-- Fuente de íconos Boxicons (usada, por ejemplo, para las flechas del carrusel) -->
+    <!-- Título de la pestaña -->
+    <title>Dinamyc Look - Admin</title>
+
+    <!-- Estilos CSS de la página -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_admin/style_index_admin.css') }}">
+
+    <!-- Fuente de iconos Boxicons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <!-- Fuente de íconos FontAwesome -->
+    <!-- Fuente de iconos FontAwesome -->
     <script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
 
-    <!-- Título de la pestaña del navegador -->
-    <title>Dinamyc Loock - Admin</title>
-
-    <!-- Favicons de la página -->
-    <link rel="apple-touch-icon" sizes="180x180" href="../../static/imagenes/favicons/apple-touch-icon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="../../static/imagenes/favicons/favicon-32x32.ico">
-    <link rel="icon" type="image/png" sizes="16x16" href="imagenes/favicons/favicon-16x16.ico">
-    <link rel="manifest" href="../../static/imagenes/favicons/site.webmanifest">
-    <link rel="mask-icon" href="../../static/imagenes/favicons/safari-pinned-tab.svg" color="#5bbad5">
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='imagenes/favicons/apple-touch-icon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='imagenes/favicons/favicon-32x32.ico') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='imagenes/favicons/favicon-16x16.ico') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='imagenes/favicons/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='imagenes/favicons/safari-pinned-tab.svg') }}" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 </head>
@@ -28,69 +30,24 @@
     <!-- Contenedor principal -->
     <div class="container">
 
-        <!-- Barra lateral de navegación (sidebar) -->
+        <!-- Barra lateral de navegación -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <!-- Nombre de la empresa -->
                 <h2 class="company-name">Dinamyc Look</h2>
-                <!-- Botón para cerrar el menú en versión móvil -->
                 <button class="close-btn" id="close_btn">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <!-- Navegación dentro del sidebar -->
             <nav class="sidebar-nav">
                 <ul>
-                    <!-- Opción activa del Dashboard -->
-                    <li>
-                        <a href="index-admin.html" class="active">
-                            <i class='bx bxs-dashboard'></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <!-- Enlace a sección de Clientes -->
-                    <li>
-                        <a href="usuarios.html">
-                            <i class="fa-solid fa-user"></i>
-                            <span>Clientes</span>
-                        </a>
-                    </li>
-                    <!-- Enlace a sección de Ventas -->
-                    <li>
-                        <a href="ventas.html">
-                            <i class='bx bxs-dollar-circle' ></i>
-                            <span>Ventas</span>
-                        </a>
-                    </li>
-                    <!-- Enlace a sección de Productos -->
-                    <li>
-                        <a href="productos.html">
-                            <i class="fa-solid fa-clipboard"></i>
-                            <span>Productos</span>
-                        </a>
-                    </li>
-                    <!-- Enlace a sección de Reportes -->
-                    <li>
-                        <a href="reportes.html">
-                            <i class="fa-solid fa-receipt"></i>
-                            <span>Reportes</span>
-                        </a>
-                    </li>
-                    <!-- Enlace a sección de Configuración -->
-                    <li>
-                        <a href="configuracion.html">
-                            <i class="fa-solid fa-gear"></i>
-                            <span>Configuración</span>
-                        </a>
-                    </li>
-                    <!-- Enlace para cerrar sesión -->
-                    <li>
-                        <a href="../vista_usuario/login.html">
-                            <i class='bx bx-log-out'></i>
-                            <span>Cerrar sesión</span>
-                        </a>
-                    </li>
+                    <li><a href="{{ url_for('index') }}" class="active"><i class='bx bxs-dashboard'></i><span>Dashboard</span></a></li>
+                    <li><a href="{{ url_for('usuarios') }}"><i class="fa-solid fa-user"></i><span>Clientes</span></a></li>
+                    <li><a href="{{ url_for('ventas') }}"><i class='bx bxs-dollar-circle'></i><span>Ventas</span></a></li>
+                    <li><a href="{{ url_for('productos') }}"><i class="fas fa-tags"></i><span>Productos</span></a></li>
+                    <li><a href="#"><i class="fa-solid fa-receipt"></i><span>Reportes</span></a></li>
+                    <li><a href="#"><i class="fa-solid fa-gear"></i><span>Configuración</span></a></li>
+                    <li><a href="#"><i class='bx bx-log-out'></i><span>Cerrar sesión</span></a></li>
                 </ul>
             </nav>
         </aside>
@@ -114,7 +71,7 @@
                     </div>
                     <div class="stat-info">
                         <h3>Ventas Totales</h3>
-                        <div class="stat-value">560</div>
+                        <div class="stat-value">{{ ventas }}</div>
                     </div>
                 </div>
 
@@ -125,7 +82,7 @@
                     </div>
                     <div class="stat-info">
                         <h3>Ingresos Totales</h3>
-                        <div class="stat-value">$25,024</div>
+                        <div class="stat-value">${{ "{:,}".format(ingresos).replace(",", ".") }}</div>
                     </div>
                 </div>
 
@@ -139,13 +96,22 @@
                         <div class="stat-value">2500</div>
                     </div>
                 </div>
+
+                <div class="stat-card views">
+                    <div class="stat-icon">
+                        <i class="fa-regular fa-eye"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Productos Vendidos</h3>
+                        <div class="stat-value">{{ productosT }}</div>
+                    </div>
+                </div>
             </section>
 
             <!-- Tabla de órdenes/ventas recientes -->
             <section class="recent-orders">
                 <div class="section-header">
                     <h2>Ventas Más Grandes</h2>
-                    <a href="#" class="view-all">Ver todo</a>
                 </div>
                 
                 <!-- Contenedor de la tabla -->
@@ -154,8 +120,6 @@
                         <thead>
                             <tr>
                                 <th>Nombre Cliente</th>
-                                <th>Productos</th>
-                                <th>Cantidad</th>
                                 <th>Valor</th>
                             </tr>
                         </thead>
@@ -165,24 +129,6 @@
                                 <td>4563</td>
                                 <td>Due</td>
                                 <td>Due</td>
-                            </tr>
-                            <tr>
-                                <td>Mini USB</td>
-                                <td>4563</td>
-                                <td>Due</td>
-                                <td>Due</td>
-                            </tr>
-                            <tr>
-                                <td>Mini USB</td>
-                                <td>4563</td>
-                                <td>Due</td>
-                                <td>Due</td>    
-                            </tr>
-                            <tr>
-                                <td>Mini USB</td>
-                                <td>4563</td>
-                                <td>Due</td>
-                                <td>Due</td>    
                             </tr>
                         </tbody>
                     </table>
@@ -197,6 +143,6 @@
     </footer>
 
     <!-- Script de JavaScript-->
-    <script src="../../js/script_sidebar.js"></script>
+    <script src="{{ url_for('static', filename='js/script_sidebar.js') }}"></script>
 </body>
 </html>
