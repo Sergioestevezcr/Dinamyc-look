@@ -1,0 +1,900 @@
+/* Importa fuente cursiva Dancing Script para el nombre de la empresa */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+
+/* Importa fuente principal Poppins para todo el contenido del sitio */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;...');
+
+/* Reset de estilos para todos los elementos */
+* {
+  margin: 0; 
+  padding: 0;
+  box-sizing: border-box; 
+  font-family: "Poppins", sans-serif; 
+}
+
+/* Color de fondo principal en tono rosa claro */
+body {
+  background-color: #FBF4F7;
+}
+
+/* Contenedor flexible para toda la interfaz */
+.container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+/********************************** SIDEBAR ********************************/
+
+/* Panel lateral de navegación */
+.sidebar {
+  background-color:#A63054;
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 24px 0;
+  box-shadow: 2px 0 10px rgba(69, 18, 33, .4);
+  z-index: 100;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+}
+
+/* Encabezado del panel lateral con logo y botón de cierre */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px 24px;
+  border-bottom: 1px solid #73283E;
+  margin-bottom: 24px;
+}
+
+/* Estilo para el nombre de la empresa con fuente decorativa */
+.company-name {
+  font-family: "Dancing Script", cursive;
+  font-size: 30px;
+  color: #FFFFFF;
+}
+
+/* Botón para cerrar el panel lateral en dispositivos móviles */
+.close-btn {
+  background: transparent;
+  border: none;
+  color: #FFFFFF;
+  font-size: 20px;
+  cursor: pointer;
+  display: none; 
+}
+
+/* Elimina viñetas de la lista de navegación */
+.sidebar-nav ul {
+  list-style: none; 
+}
+
+/* Estilo de los enlaces del menú lateral */
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  padding: 16px 24px;
+  text-decoration: none;
+  color: #FFFFFF;
+  transition: all 0.3s ease;
+}
+
+/* Posiciona el último elemento del menú al fondo del panel */
+.sidebar-nav li:last-child {
+  position: absolute;
+  bottom: 0;
+  width: 260px;
+}
+
+/* Efecto al pasar el cursor sobre los elementos del menú */
+.sidebar-nav a:hover {
+  background-color: rgba(115, 40, 62, .2);
+  margin-left: 0;
+  border-left: 5px solid #73283E;
+} 
+
+/* Resalta visualmente el elemento de menú activo */
+.sidebar-nav a.active {
+  background-color: rgba(115, 40, 62, .6);
+  border-left: 5px solid #73283E;
+}
+
+/* Iconos dentro de los elementos del menú */
+.sidebar-nav a i {
+  font-size: 22px;
+  margin-right: 16px;
+}
+
+/********************************** CONTENT ********************************/
+
+/* Área principal de contenido */
+.main-content {
+  flex: 1;
+  margin-left: 260px;
+  padding: 32px;
+  transition: all 0.3s ease;
+}
+
+/* Barra superior del área de contenido */
+.main-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+/* Botón para mostrar el menú en dispositivos móviles */
+.menu-toggle {
+  background: transparent;
+  border: none;
+  color: #C1416D;
+  font-size: 20px;
+  cursor: pointer;
+  margin-right: 16px;
+  display: none;
+}
+
+/* Cuadrícula para las tarjetas de estadísticas */
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+/* Estilo de cada tarjeta de estadística */
+.stat-card {
+  background-color: rgba(249, 234, 241, 0.8);
+  border-radius: 16px;
+  padding: 32px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 16px 32px rgba(193, 65, 109, 0.5);
+  transition: all 0.3s ease;
+}
+
+/* Efecto al pasar el cursor sobre las tarjetas */
+.stat-card:hover {
+  box-shadow: none;
+  transform: translateY(5px);
+}
+
+/* Círculo con icono para cada tarjeta */
+.stat-icon {
+  background-color: #C1416D;
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 24px;
+}
+
+/* Tamaño del icono dentro del círculo */
+.stat-icon i {
+  font-size: 25px;
+}
+
+/* Contenedor de la información textual en las tarjetas */
+.stat-info {
+  flex: 1;
+}
+
+/* Título de cada tarjeta de estadística */
+.stat-info h3 {
+  font-size: 15px;
+  color: #000000;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+/* Valor numérico destacado en cada tarjeta */
+.stat-value {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+/********************************** TABLAS ********************************/
+
+/* Sección de tabla de pedidos recientes */
+.recent-orders {
+  background-color: white;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+  max-width: 75vw;
+}
+
+/* Encabezado de cada sección con título y controles */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+/* Botón para agregar un nuevo pedido */
+.add-btn {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  color: #A63055;
+}
+
+/* Icono del botón de agregar */
+.add-btn i {
+  font-size: 22px;
+  padding-right: 6px;
+}
+
+/* Icono para la acción de editar */
+.edit-icon a {
+  font-size: 20px;
+  color: #A63055;
+}
+
+/* Contenedor con scroll horizontal para tablas */
+.table-container {
+  overflow-x: auto;
+}
+
+/* Estilo base de la tabla de pedidos */
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Espaciado y alineación de celdas de tabla */
+.orders-table th,
+.orders-table td {
+  padding: 16px;
+  text-align: left;
+}
+
+.correo-desbordado {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 200px;
+}
+
+/* Encabezado de la tabla con fondo rosa suave */
+.orders-table thead {
+  background-color: rgba(237, 180, 205, 0.6);
+}
+
+/* Líneas divisorias entre filas de la tabla */
+.orders-table tbody tr {
+  border-bottom: 1px solid #eee;
+}
+
+/* Efecto al pasar el cursor sobre las filas de la tabla */
+.orders-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.btn-mas {
+  min-width: 150px;
+}
+
+.btn-mas a {
+  background-color: #D4608D;
+  padding: 10px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.btn-mas a:hover {
+  background-color: #C1416D;
+}
+
+/********************************** BARRA BUSQUEDA ********************************/
+
+/* Contenedor de la barra de búsqueda */
+.barra-de-busqueda {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 35px;
+  right: 20px;
+}
+
+/* Campo de entrada para la búsqueda */
+.barra-de-busqueda .buscar {
+  box-sizing: border-box;
+  padding: 0 45px 0 20px;
+  color: black;
+  border-radius: 50px;
+  font-size: 15px;
+  border: 2px solid #FBF4F7;
+  height: 45px;
+  width: 50vw;
+}
+
+/* Elimina el borde de resaltado al enfocar el campo de búsqueda */
+.buscar:focus {
+  outline: none;
+}
+
+/* Botón con icono de lupa para realizar la búsqueda */
+.btn button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  left: -20px;
+  width: 45px;
+  height: 42px;
+  border: 0;
+  border-radius: 0 50px 50px 0;
+  background-color: #DF7DA6;
+  font-size: 25px;
+  color: #FBF4F7;
+}
+
+/* Cambio de color al pasar el cursor sobre el botón de búsqueda */
+.btn button:hover {
+  background-color:  #C1416D;
+}
+/********************************** FACTURA ********************************/
+
+.factura-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.factura-container h1 {
+  text-align: center;
+  font-size: 26px;
+  color: #333333;
+  margin-bottom: 10px;
+}
+
+.factura-container .info-factura {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #555555;
+  line-height: 1.6;
+}
+
+.factura-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.factura-container th,
+.factura-container td {
+  padding: 12px 8px;
+  text-align: left;
+}
+
+.factura-container thead th {
+  background-color: #C1416D;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 2px solid #A63055;
+  text-align: center;
+}
+
+.factura-container thead th:last-child {
+  text-align: left;
+}
+
+.factura-container tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.factura-container tbody td {
+  color: #333333;
+  font-size: 14px;
+  text-align: center;
+}
+
+.factura-container tbody td:last-child {
+  text-align: left;
+}
+
+.factura-container tfoot td {
+  font-weight: bold;
+  font-size: 16px;
+  border-top: 2px solid #C1416D;
+  text-align: right;
+}
+
+.factura-container tfoot td:first-child {
+  text-align: left;
+  padding-left: 25px;
+}
+
+.factura-container tfoot td:last-child {
+  text-align: left;
+}
+
+.btn-atras {
+  background-color: #F4D6E4;
+  padding: 10px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 14px;
+  color: #73283E;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.btn-atras:hover {
+  background-color: #EDB4CD;
+}
+
+/********************************** FOOTER ********************************/
+
+
+.footer {
+  margin-left: 260px;
+  background-color: #892b47;
+  color: #ecf0f1;
+  padding: 20px 0;
+  text-align: center;
+  height: auto;
+  border-top: 1px solid #451221;
+  margin-top: 20px;
+  padding-top: 10px;
+  font-size: 10px;
+  position: relative;
+  bottom: 0;
+  width: auto;
+}
+/********************************** MODAL ********************************/
+/* Fondo semitransparente para ventanas modales */
+.modal-background {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+/* Contenedor principal del modal */
+.modal-content {
+  background-color: white;
+  width: 90%;
+  max-width: 500px;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+#modal-ventas {
+  max-width: 600px;
+}
+
+/* Título del modal */
+.modal-header {
+  color: #333;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Grupo de elementos de formulario */
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Contenedor para etiqueta e input con estilo unificado */
+.label-form {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  margin-bottom: 15px;
+  border-radius: 20px;
+  padding: 0 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Iconos dentro de los campos de formulario */
+.label-form i {
+  color: #a7a7a7;
+  margin-right: 10px;
+}
+
+/* Campos de entrada de datos en formularios */
+.input-form {
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  color: #333;
+}
+
+/* Contenedor para los botones del modal */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+/* Estilo base para los botones del modal */
+.btn-modal {
+  border-radius: 20px;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+}
+
+/* Botón para cancelar acciones */
+.cancel-button {
+  background-color: #fea1a1;
+  color: white;
+}
+
+/* Efecto al pasar el cursor sobre el botón cancelar */
+.cancel-button:hover {
+  background-color: #d14d72;
+}
+
+/* Botón para confirmar acciones */
+.submit-button {
+  background-color: #fea1a1;
+  color: white;
+}
+
+/* Efecto al pasar el cursor sobre el botón confirmar */
+.submit-button:hover {
+  background-color: #d14d72;
+}
+
+.ddos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: -15px;
+}
+
+/* Estilos específicos para el formulario de ventas */
+.productos-section {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    max-height: 250px;
+    overflow-y: scroll; /* permite desplazamiento vertical */
+}
+
+.productos-section::-webkit-scrollbar {
+    width: 4px; /* Altura de la barra de scroll horizontal */
+}
+
+.productos-section::-webkit-scrollbar-thumb {
+    background-color: #a7a7a7;
+    border-radius: 10px;/* Bordes redondeados */
+}
+
+.productos-section::-webkit-scrollbar-thumb:hover {
+    background-color: #C1416D;
+}
+
+.productos-section::-webkit-scrollbar-track {
+    background-color: #F5D5E4;
+}
+
+.productos-section h3 {
+    margin-top: 0;
+    color: #A63055;
+    font-size: 16px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.producto-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 30px; /* 4 columnas iguales para la segunda línea */
+    grid-template-rows: auto auto; /* dos filas: select y botones */
+    gap: 0.5rem; 
+    align-items: end;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+.g1 {
+  grid-column: 1 / -1; /* el select se extiende de la primera a la última columna */
+  width: 100%;
+}
+
+.producto-item .form-group {
+    margin-bottom: 0;
+}
+
+.btn-remove-producto {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    height:30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top: -18px;
+}
+
+.btn-remove-producto:hover {
+    background-color: #c82333;
+}
+
+.btn-add-producto {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.btn-add-producto:hover {
+    background-color: #218838;
+}
+
+.total-section {
+    margin-top: 20px;
+
+    border-radius: 8px;
+}
+
+.total-section .input-form {
+    font-weight: 500;
+    font-size: 14px;
+    color: #A63055;
+    background-color: white;
+}
+
+
+
+
+/* PARA ALERTAS */
+.alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 40px 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    max-width: 300px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    opacity: 1;
+    transform: translateX(0);
+    transition: all 0.3s ease-in-out;
+}
+
+.alert-close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.alert-close:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+
+.alert-hiding {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.alert-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background-color: rgba(255,255,255,0.6);
+    border-radius: 0 0 8px 8px;
+    width: 0%;
+}
+
+/********************************** MEDIA CUERIES ********************************/
+@media screen and (max-width: 1024px) {
+  .stats-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Ajustes responsivos para pantallas hasta 980px */
+@media screen and (max-width: 980px) {
+  .stats-cards {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    width: 80%;
+    z-index: 200;
+    display: block;
+  }
+
+  .active {
+    transform: translateX(0);
+  }
+
+  .close-btn {
+    display: block;
+  }
+
+  #open_btn {
+    display: block;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .sidebar-nav li:last-child {
+    position: relative;
+    width: 100%;
+    margin-top: 140px;
+    bottom: auto;
+  }
+
+  .pagination-container {
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px;
+    }
+    .pagination-info {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    .pagination-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .pagination-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+        min-width: 35px;
+    }
+    #items-per-page {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    .sortable-header {
+        padding-right: 20px !important;
+    }
+    .sort-icon {
+        right: 5px;
+        font-size: 10px;
+    }
+
+  .barra-de-busqueda .buscar {
+    width: 42vw;
+  }
+  .footer {
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    width: 100vw;
+  }
+}
+
+/* Ajustes responsivos para pantallas hasta 580px */
+@media screen and (max-width: 580px){
+  .barra-de-busqueda .buscar {
+    width: 30vw;
+  }
+
+  .modal-content {
+      padding: 20px;
+  }
+  
+  .modal-header {
+      font-size: 1.8rem;
+  }
+  .button-group {
+      flex-direction: column;
+      gap: 10px;
+  }
+  
+  .btn-modal {
+      width: 100%;
+  }
+}
+
+/* Ajustes responsivos para pantallas hasta 430px */
+@media screen and (max-width: 430px){
+  .barra-de-busqueda {
+    position: relative;
+    top: -20px;
+    right: 0;
+  }
+
+  .barra-de-busqueda .buscar {
+    width: 78vw;
+  }
+
+  .section-header h2 {
+    text-align: center;
+    font-size: 16px;
+    padding-right: 50px;
+  }
+
+  .pagination-container {
+        padding: 8px;
+    }
+    .pagination-info {
+        font-size: 12px;
+    }
+    .pagination-btn {
+        padding: 4px 8px;
+        font-size: 11px;
+        min-width: 30px;
+    }
+    #items-per-page {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+
+  .alert {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        top: 10px;
+    }
+}

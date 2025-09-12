@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dinamyc Look - Ventas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_admin/style_index_admin.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='imagenes/favicons/apple-touch-icon.icO') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='imagenes/favicons/favicon-32x32.ico') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='imagenes/favicons/favicon-16x16.ico') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='imagenes/favicons/site.webmanifest') }}">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body>
+    <!-- Bloque para mostrar mensajes flash -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert">
+                    {{ message }}
+                    <button class="alert-close">&times;</button>
+                    <div class="alert-progress"></div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+        
+    <div class="container">
+        <!-- Barra lateral de navegación -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2 class="company-name">Dinamyc Look</h2>
+                <button class="close-btn" id="close_btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('index') }}"><i class='bx bxs-dashboard'></i><span>Dashboard</span></a></li>
+                    <li><a href="{{ url_for('usuarios') }}"><i class="fa-solid fa-user"></i><span>Clientes</span></a></li>
+                    <li><a href="{{ url_for('ventas') }}" class="active"><i class='bx bxs-dollar-circle'></i><span>Ventas</span></a></li>
+                    <li><a href="{{ url_for('productos') }}"><i class="fas fa-tags"></i><span>Productos</span></a></li>
+                    <li><a href="#"><i class="fa-solid fa-receipt"></i><span>Reportes</span></a></li>
+                    <li><a href="#"><i class="fa-solid fa-gear"></i><span>Configuración</span></a></li>
+                    <li><a href="#"><i class='bx bx-log-out'></i><span>Cerrar sesión</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Área principal -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="menu-toggle" id="open_btn"><i class='bx bx-menu'></i></button>
+                <h1>Ventas</h1>
+            </header>
+
+            <!-- Barra de búsqueda -->
+            <div class="barra-de-busqueda">
+                <input class="buscar" type="text" placeholder="Buscar ventas">
+                <div class="btn">
+                    <button type="submit"><i class='bx bx-search'></i></button>
+                </div>
+            </div>
+
+            <!-- Sección de tabla con ventas -->
+            <section class="recent-orders">
+                <div class="section-header">
+                    <div class="add-btn">Nueva Venta <i class="fa-regular fa-square-plus"></i></div>
+                </div>
+
+                <div class="table-container">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>No. Factura</th>
+                                <th>Fecha</th>
+                                <th>Cliente</th>
+                                <th>Total Comprado</th>
+                                <th>Total Productos</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in reportes %}
+                                <tr>
+                                    <td>{{ row[0] }}</td>
+                                    <td>{{ row[1] }}</td>
+                                    <td>{{ row[2] }} {{ row[3] }}</td>
+                                    <td>${{ "{:,}".format(row[4]).replace(",", ".") }}</td>
+                                    <td>{{ row[5] }}</td>
+                                    <td class="btn-mas"><a href="{{ url_for('factura', id_venta=row[0]) }}">Ver Más</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Modal para agregar nueva venta -->
+    <div id="addModal" class="modal-background">
+        <div class="modal-content" id="modal-ventas">
+            <h2 class="modal-header">Registrar Nueva Venta</h2>
+            <form id="addForm" action="/add_venta" method="POST">
+                
+                <!-- Selección de cliente -->
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-user"></i>
+                        <select id="add-usuario" class="input-form" name="ID_Usuario" required>
+                            <option value="">Seleccionar Cliente</option>
+                            {% for usuario in usuarios %}
+                                <option value="{{ usuario[0] }}">{{ usuario[1] }} {{ usuario[2] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sección de productos -->
+                <div class="productos-section">
+                    <h3>Productos de la Venta</h3>
+                    <div id="productos-container">
+                        <div class="producto-item">
+                            <div class="form-group g1">
+                                <div class="label-form">
+                                    <i class="fas fa-box"></i>
+                                    <select class="input-form producto-select" name="productos[]" onchange="updatePrice(this)">
+                                        <option value="">Seleccionar Producto</option>
+                                        {% for producto in productos %}
+                                            <option value="{{ producto[0] }}" data-precio="{{ producto[2] }}">
+                                                {{ producto[1] }} - ${{ "{:,}".format(producto[2]).replace(",", ".") }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="label-form">
+                                    <i class="fas fa-sort-numeric-up"></i>
+                                    <input type="number" class="input-form cantidad-input" name="cantidades[]" 
+                                            placeholder="Cantidad" min="1" onchange="updateSubtotal(this)">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="label-form">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    <input type="text" class="input-form precio-display" placeholder="Precio" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="label-form">
+                                    <i class="fas fa-calculator"></i>
+                                    <input type="text" class="input-form subtotal-display" placeholder="Subtotal" readonly>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-remove-producto" onclick="removeProducto(this)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="add-producto-btn" class="btn-add-producto">
+                        <i class="fas fa-plus"></i> Agregar Producto
+                    </button>
+                </div>
+
+                <!-- Total de la venta -->
+                <div class="total-section">
+                    <div class="form-group">
+                        <div class="label-form">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <input type="text" id="total-venta" class="input-form" placeholder="Total de la Venta" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="button-group">
+                    <button type="button" class="btn-modal cancel-button" id="cancelAddBtn">Cancelar</button>
+                    <button type="submit" class="btn-modal submit-button">Registrar Venta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Dinamyc Look | Todos los derechos reservados</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script_sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_pop-up.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_ventas.js') }}"></script>
+</body>
+</html>
