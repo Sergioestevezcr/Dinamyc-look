@@ -2,6 +2,7 @@ from flask_mysqldb import MySQL
 
 mysql = MySQL()
 
+
 def configure_db(app):
     """
     Configura la conexión a la base de datos MySQL para la aplicación Flask.
@@ -14,6 +15,7 @@ def configure_db(app):
     app.config['MYSQL_PASSWORD'] = ''
     app.config['MYSQL_DB'] = 'dinamyc_look'
     mysql.init_app(app)
+
 
 def get_db():
     """

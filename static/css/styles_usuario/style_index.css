@@ -1,0 +1,127 @@
+.header {
+	background: #73283E;
+}
+
+.btn button {
+	background-color: #D4608D;
+	color: #FBF4F7;
+}
+
+.btn button:hover {
+	background-color: #C1416D;
+}
+
+.nav-links li:hover {
+	background-color: rgba(115, 40, 62, 0.6);
+}
+
+/************************************** BANNER *********************************/
+.container-banner {
+	background: url(../../imagenes/img7.jpg) no-repeat center center fixed;
+	background-size: cover;
+	height: 100vh;
+}
+
+.inf-banner {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: start;
+	margin: 0 0 0 30px;
+	width: 45vw;
+	height: 100vh;
+	padding: 40px 0 0;
+}
+
+.inf-banner h1 {
+	font-size: 40px;
+	font-weight: 750;
+}
+
+.inf-banner span {
+	color: #A63055;
+}
+
+.btn-banner {
+	border: 1px solid #A63055;
+	background-color: #A63055;
+	margin: 10px;
+	padding: 10px;
+	border-radius: 30px;
+	box-shadow: 0px 10px 15px rgba(75, 13, 35, .6);
+}
+
+.btn-banner a {
+	text-decoration: none;
+	color: #FFFFFF;
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.btn-banner:hover {
+	box-shadow: 0px 10px 20px rgba(75, 13, 35, .5);
+	transform: translateY(3px);
+}
+
+/******************************** BARRA DE MACAS *******************************/
+.barra-de-marcas {
+	background-color: #73263E;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+	background-color: #C1416D;
+	/* Color del "dedo" de la barra */
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+	background-color: #A63055;
+	/* Color cuando pasas el cursor por encima */
+}
+
+.scroll-container::-webkit-scrollbar-track {
+	background-color: #73263E;
+	/* Color del carril de la barra de desplazamiento */
+}
+
+@media screen and (max-width: 1350px) {}
+
+@media screen and (max-width: 980px) {}
+
+@media screen and (max-width: 580px) {
+	.inf-banner h1 {
+		font-size: 30px;
+	}
+
+	.inf-banner p {
+		font-size: 15px;
+	}
+}
+
+@media screen and (max-width: 430px) {
+	.container-banner {
+		height: 70vh;
+	}
+
+	.inf-banner {
+		height: 70vh;
+		width: 55vw;
+	}
+
+	.inf-banner h1 {
+		font-size: 30px;
+	}
+
+	.inf-banner p {
+		font-size: 15px;
+	}
+}
+
+@media screen and (max-height: 430px) {
+	.inf-banner h1 {
+		font-size: 30px;
+	}
+
+	.inf-banner p {
+		font-size: 13px;
+	}
+}

@@ -1,5 +1,6 @@
 from model.database import get_db
-from model import product # Necesitamos product para actualizar el stock
+from model import product  # Necesitamos product para actualizar el stock
+
 
 def get_sales_report():
     """
@@ -25,6 +26,7 @@ def get_sales_report():
     cur.close()
     return data
 
+
 def add_new_sale(id_usuario, productos_venta):
     """
     Agrega una nueva venta y sus detalles a la base de datos, y actualiza el stock de productos.
@@ -32,8 +34,8 @@ def add_new_sale(id_usuario, productos_venta):
     Args:
         id_usuario: El ID del usuario que realiza la compra.
         productos_venta: Una lista de diccionarios, donde cada diccionario
-                         representa un producto en la venta con 'id', 'cantidad',
-                         'precio', y 'subtotal'.
+                        representa un producto en la venta con 'id', 'cantidad',
+                        'precio', y 'subtotal'.
 
     Returns:
         El ID de la venta recién creada si tiene éxito, o None si hay un error.
@@ -57,17 +59,20 @@ def add_new_sale(id_usuario, productos_venta):
                         (venta_id, producto['id'], producto['cantidad']))
 
             # Actualizar el stock del producto vendido usando la función del modelo product
-            product.update_product_stock(producto['id'], -producto['cantidad']) # Restamos la cantidad vendida
+            # Restamos la cantidad vendida
+            product.update_product_stock(producto['id'], -producto['cantidad'])
 
         mysql.connection.commit()
         return venta_id
 
     except Exception as e:
         mysql.connection.rollback()
-        print(f"Error en add_new_sale: {e}") # Considerar loggear en lugar de imprimir
+        # Considerar loggear en lugar de imprimir
+        print(f"Error en add_new_sale: {e}")
         return None
     finally:
         cur.close()
+
 
 def get_invoice_data(id_venta):
     """
