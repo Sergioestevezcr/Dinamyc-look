@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Título de la pestaña -->
+	<title>Dinamyc-loock-Iniciar sesion</title>
+
+	<!-- Estilos CSS de la página -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles_usuario/style_general.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles_usuario/style_login.css') }}">
+
+	<!-- Fuente de iconos Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+	<!-- Fuente de iconos FontAwesome -->
+	<script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
+
+	<!-- Favicons -->
+	<link rel="apple-touch-icon" sizes="180x180"
+		href="{{ url_for('static', filename='imagenes/favicons/apple-touch-icon.ico') }}">
+	<link rel="icon" type="image/png" sizes="32x32"
+		href="{{ url_for('static', filename='imagenes/favicons/favicon-32x32.ico') }}">
+	<link rel="icon" type="image/png" sizes="16x16"
+		href="{{ url_for('static', filename='imagenes/favicons/favicon-16x16.ico') }}">
+	<link rel="manifest" href="{{ url_for('static', filename='imagenes/favicons/site.webmanifest') }}">
+	<link rel="mask-icon" href="{{ url_for('static', filename='imagenes/favicons/safari-pinned-tab.svg') }}"
+		color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+	<header class="header">
+		<!-- Bloque para mostrar mensajes flash (notificaciones desde Flask) -->
+		{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+		{% for category, message in messages %}
+		<div class="alert {{ category }}">
+			{{ message }}
+			<button class="alert-close">&times;</button>
+			<div class="alert-progress"></div>
+		</div>
+		{% endfor %}
+		{% endif %}
+		{% endwith %}
+
+		<!--------------------------------- 1. Barra de navegacion ------------------------------->
+
+		<div class="nombre-empresa">
+			<a href="{{ url_for('client_bp.index_cliente') }}">Dinamyc Look</a>
+		</div>
+
+		<nav class="navbar" id="nav">
+			<ul class="nav-links">
+				<li class="house" title="Inicio"><a href="{{ url_for('client_bp.index_cliente') }}"><i
+							class="fa-solid fa-house-chimney"></i></a></li>
+				<li title="Iniciar Sección"><a href="{{ url_for('auth_bp.login') }}"><i class='bx bx-log-in'></i></a>
+				</li>
+			</ul>
+		</nav>
+
+	</header>
+
+	<!--2. formularios de  registro  -->
+	<!-- 2.1 ingreso al formulario para registrarse -->
+	<section class="register">
+		<div class="container-form">
+			<div class="information">
+				<div class="info-childs">
+					<!--Titulo que le da la bienvenida a los usuarios antiguos-->
+					<h2 class="titulo-bienvenida">¡Bienvenido nuevamente!</h2>
+					<!--Parrafo que le da la bienvenida a los nuevos usuarios y les da la opcion de ir a la pagina de registro-->
+					<p class="texto-bienvenida">Si aun no tienes una cuenta registrate aqui</p>
+					<!--Boton que lleva a la pagina de registro -->
+					<a href="{{ url_for('auth_bp.registro') }}"><input type="button" value="Registrarse"
+							class="boton-registrarse" id="sing-in"></a>
+				</div>
+			</div>
+			<!--2.2 formulario para iniciar sesion-->
+			<div class="form-information">
+				<div class="form-information-childs">
+					<!--Titulo de iniciar sesion-->
+					<h2 class="iniciar-sesion">Iniciar sesion</h2>
+
+					<!--parrafo que informa la otra manera de iniciar sesion-->
+					<p class="text-iniciar-sesion">o usa tu email para iniciar sesion</p>
+
+					<!-- Formulario de login actualizado -->
+					<form class="form-iniciar-sesion" method="POST" action="{{ url_for('auth_bp.login') }}">
+						<label class="label-form-iniciar-sesion">
+							<i class='bx bx-envelope'></i>
+							<!--input en el que se ingresa el email registrado anteriormente por el usuario-->
+							<input type="email" name="correo" required placeholder="Correo electrónico"
+								class="input-form-iniciar-sesion">
+						</label>
+						<label class="label-form-iniciar-sesion">
+							<i class='bx bx-lock-alt'></i>
+							<!--input en la que se ingresa la contraseña del usuario-->
+							<input type="password" name="clave" required placeholder="Contraseña"
+								class="input-form-iniciar-sesion">
+						</label>
+						<!--Boton para ingresar al sistema-->
+						<input type="submit" value="Iniciar sesion" class="boton-iniciar-sesion">
+					</form>
+
+					<!-- Enlaces adicionales -->
+					<div class="login-links" style="margin-top: 15px; text-align: center;">
+						<p><a href="{{ url_for('auth_bp.forgot_password') }}"
+								style="color: #C1416D; text-decoration: none; font-size: 12px; font-weight: 600;">¿Olvidaste
+								tu contraseña?</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!------------------------------------- Footer -------------------------------------->
+	<footer class="footer">
+		<div class="footer-container">
+			<div class="footer-section">
+				<h4>Sobre Nosotros</h4>
+				<p>Somos tu aliado para un cabello radiante, con soluciones perfectas y deslumbrantes.</p>
+				<button class="btn-conocenos"><a href="conocenos.html">Conoce más</a></button>
+			</div>
+			<div class="footer-section">
+				<h4>Contáctanos</h4>
+				<p>Email: dinamycloock@gmail.com</p>
+				<p>Teléfono: +57 3009528943</p>
+				<ul class="redes">
+					<a href="">
+						<li><i class='bx bxl-facebook-circle'></i></li>
+					</a>
+					<a href="">
+						<li><i class='bx bxl-tiktok'></i></li>
+					</a>
+					<a href="">
+						<li><i class='bx bxl-instagram'></i></li>
+					</a>
+					<a href="">
+						<li><i class='bx bxl-whatsapp'></i></li>
+					</a>
+				</ul>
+			</div>
+		</div>
+		<div class="footer-bottom">
+			<p>&copy; 2024 DinamycLook | Todos los derechos reservados</p>
+		</div>
+	</footer>
+	<!--java del carrusel de imagenes-->
+	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
+
+</body>
+
+</html>

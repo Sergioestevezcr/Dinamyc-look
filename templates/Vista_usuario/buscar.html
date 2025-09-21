@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Búsqueda - Dinamy Look</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_usuario/style_general.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_usuario/style_perfil.css') }}">
+
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
+
+    <link rel="apple-touch-icon" sizes="180x180"
+        href="{{ url_for('static', filename='imagenes/favicons/apple-touch-icon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="{{ url_for('static', filename='imagenes/favicons/favicon-32x32.ico') }}">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="{{ url_for('static', filename='imagenes/favicons/favicon-16x16.ico') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='imagenes/favicons/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='imagenes/favicons/safari-pinned-tab.svg') }}"
+        color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert {{ category }}">
+        {{ message }}
+        <button class="alert-close">&times;</button>
+        <div class="alert-progress"></div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <header class="header">
+        <div class="nombre-empresa">
+            <a href="{{ url_for('client_bp.index_cliente') }}">Dinamy Look</a>
+        </div>
+
+        <div class="barra-de-busqueda">
+            <form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
+                <input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
+                <div class="btn-serch">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+        </div>
+
+        <nav class="navbar" id="nav">
+            <ul class="nav-links">
+                <li class="house" title="Inicio"><a href="{{ url_for('client_bp.index_cliente') }}"><i
+                            class="fa-solid fa-house-chimney"></i></a></li>
+                <li title="Carrito"><a href="#"><i class='bx bxs-shopping-bags'></i></a></li>
+                {% if user %}
+                <li class="usuario-menu">
+                    <a href="#"><i class="fa-solid fa-user"></i></a>
+                    <div class="usuario-dropdown">
+                        <a href="{{ url_for('client_bp.favoritos') }}"><i class='bx bxs-star'></i><span>
+                                Favoritos</span></a>
+                        <a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
+                                Compras</span></a>
+                        <a href="admin_bp.configuracion" class="active"><i class='bx bxs-user'></i><span>
+                                Perfil</span></a>
+                        <a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
+                            sesión</a>
+                    </div>
+                </li>
+                {% else %}
+                <li title="Iniciar Sesión"><a href="{{ url_for('auth_bp.login') }}"><i class='bx bx-log-in'></i></a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <section class="barra-de-marcas">
+        <div class="scroll-container">
+            <div class="items-marcas"><a href="{{ url_for('client_bp.epa_colombia') }}"><img
+                        src="{{ url_for('static', filename='imagenes/logos/epa colombia logo letra blanca.png') }}"
+                        alt="Epa Colombia"></a></div>
+            <div class="items-marcas"><a href="{{ url_for('client_bp.anyeluz') }}"><img
+                        src="{{ url_for('static', filename='imagenes/logos/anyeluz logo letra blanca.png') }}"
+                        alt="Anyeluz"></a></div>
+            <div class="items-marcas"><a href="{{ url_for('client_bp.milagros') }}"><img
+                        src="{{ url_for('static', filename='imagenes/logos/milagros logo letra blanca.png') }}"
+                        alt="Milagros"></a></div>
+            <div class="items-marcas"><a href="{{ url_for('client_bp.dluchi') }}"><img
+                        src="{{ url_for('static', filename='imagenes/logos/dluchi logo letra blanca.png') }}"
+                        alt="D'Luchi"></a></div>
+            <div class="items-marcas"><a href="{{ url_for('client_bp.kaba') }}"><img
+                        src="{{ url_for('static', filename='imagenes/logos/kaba logo letra blanca.png') }}"
+                        alt="Kaba"></a></div>
+            <div class="items-marcas"><a href="{{ url_for('client_bp.la_receta') }}"><img
+                        src="{{ url_for('static', filename='imagenes/logos/la receta logo letra blanca.png') }}"
+                        alt="La Receta"></a></div>
+            <div class="items-marcas"><a href="{{ url_for('client_bp.magic_hair') }}"><img
+                        src="{{ url_for('static', filename='imagenes/logos/magic hair logo letra blanca.png') }}"
+                        alt="Magic Hair"></a></div>
+            <div class="items-marcas"><a href="{{ url_for('client_bp.OMG') }}"><img
+                        src="{{ url_for('static', filename='imagenes/logos/omg logo letra blaca.png') }}" alt="OMG"></a>
+            </div>
+            <div class="items-marcas"><a href="{{ url_for('client_bp.la_pocion') }}"><img
+                        src="{{ url_for('static', filename='imagenes/logos/pocion logo letra blanca.png') }}"
+                        alt="La Poción"></a></div>
+        </div>
+    </section>
+
+    <!-- Formulario de búsqueda avanzada -->
+    <section class="form-busqueda">
+        <form method="get" action="{{ url_for('client_bp.buscar') }}">
+            <div class="form-busqueda-grid">
+                <div class="form-group">
+                    <label for="q">Buscar producto:</label>
+                    <input type="text" id="q" name="q" placeholder="Nombre del producto..." value="{{ query }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="categoria">Categoría:</label>
+                    <select name="categoria" id="categoria">
+                        <option value="">Todas</option>
+                        <option value="Cuidado capilar" {% if categoria=="Cuidado capilar" %}selected{% endif %}>Cuidado
+                            capilar</option>
+                        <option value="Cuidado de la piel" {% if categoria=="Cuidado de la piel" %}selected{% endif %}>
+                            Cuidado de la piel</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="subcategoria">Subcategoría:</label>
+                    <select name="subcategoria" id="subcategoria">
+                        <option value="">Todas</option>
+                        {% if subcategoria %}
+                        <option value="{{ subcategoria }}" selected>{{ subcategoria|replace('_', ' ')|title }}</option>
+                        {% endif %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="precio_min">Precio mín:</label>
+                    <input type="number" id="precio_min" name="precio_min" placeholder="$0"
+                        value="{{ precio_min if precio_min }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="precio_max">Precio máx:</label>
+                    <input type="number" id="precio_max" name="precio_max" placeholder="$999999"
+                        value="{{ precio_max if precio_max }}">
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn-buscar">
+                        <i class='bx bx-search'></i> Buscar
+                    </button>
+                    <button type="button" class="btn-limpiar" onclick="limpiarFiltros()">Limpiar</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Mostrar filtros activos -->
+        {% if query or categoria or subcategoria or precio_min or precio_max %}
+        <div class="filtros-activos">
+            <strong>Filtros activos:</strong>
+            {% if query %}
+            <span class="filtro-tag">
+                Búsqueda: "{{ query }}"
+                <span class="remove" onclick="removeFilter('q')">&times;</span>
+            </span>
+            {% endif %}
+            {% if categoria %}
+            <span class="filtro-tag">
+                Categoría: {{ categoria }}
+                <span class="remove" onclick="removeFilter('categoria')">&times;</span>
+            </span>
+            {% endif %}
+            {% if subcategoria %}
+            <span class="filtro-tag">
+                Subcategoría: {{ subcategoria|replace('_', ' ')|title }}
+                <span class="remove" onclick="removeFilter('subcategoria')">&times;</span>
+            </span>
+            {% endif %}
+            {% if precio_min %}
+            <span class="filtro-tag">
+                Precio mín: ${{ "{:,}".format(precio_min).replace(",", ".") }}
+                <span class="remove" onclick="removeFilter('precio_min')">&times;</span>
+            </span>
+            {% endif %}
+            {% if precio_max %}
+            <span class="filtro-tag">
+                Precio máx: ${{ "{:,}".format(precio_max).replace(",", ".") }}
+                <span class="remove" onclick="removeFilter('precio_max')">&times;</span>
+            </span>
+            {% endif %}
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- Información de resultados -->
+    {% if resultado_mensaje %}
+    <div class="resultado-info">
+        <div class="resultado-contador">
+            <span id="resultado-texto">{{ resultado_mensaje }}</span>
+            <span id="pagina-info"></span>
+        </div>
+        {% if total_productos > 0 %}
+        <div class="productos-por-pagina">
+            <label>Mostrar:</label>
+            <select id="items-por-pagina">
+                <option value="12">12</option>
+                <option value="24" selected>24</option>
+                <option value="48">48</option>
+                <option value="96">96</option>
+            </select>
+            <span>productos por página</span>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Resultados -->
+    <section class="resultados">
+        {% if resultados %}
+        <div class="section1-product">
+            <h1 id="t1">Resultados de búsqueda</h1>
+            <div class="container-product-cards" id="productos-container">
+                {% for p in resultados %}
+                <div class="product-card" data-id="{{ p[0] }}">
+                    <a href="{{ url_for('detallesproducto', id=p[0]) }}">
+                        <div class="image-container">
+                            <button class="btn-fav" data-id="{{ p[0] }}">
+                                {% if p[0] in productobusf %}
+                                <i class="bx bxs-star fav-relleno"></i>
+                                {% else %}
+                                <i class="bx bx-star"></i>
+                                {% endif %}
+                            </button>
+                            <img src="{{ url_for('static', filename='imagenes/' ~ p[3]) }}" alt="{{ p[1] }}"
+                                loading="lazy">
+                        </div>
+                        <div class="text-card">
+                            <h3>{{ p[1] }}</h3>
+                            <p id="text-marca">{{ p[4] }}</p>
+                            <p class="text-precio" id="text-precio">${{ "{:,}".format(p[2]).replace(",", ".") }}</p>
+                            <button class="btn-add" id="btn-add" type="button">Agregar <i
+                                    class='bx bx-shopping-bag'></i></button>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Paginación con JavaScript -->
+            {% if total_productos > 24 %}
+            <div class="paginacion" id="paginacion">
+                <!-- Se genera dinámicamente con JavaScript -->
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="no-resultados" style="text-align: center; padding: 40px; color: #666;">
+            <i class='bx bx-search-alt-2' style="font-size: 48px; margin-bottom: 20px;"></i>
+            <h3>No se encontraron productos</h3>
+            <p>Intenta modificar los filtros de búsqueda o usa términos más generales.</p>
+            <button class="btn-buscar" onclick="limpiarFiltros()" style="margin-top: 20px;">
+                Limpiar filtros
+            </button>
+        </div>
+        {% endif %}
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Sobre Nosotros</h4>
+                <p>Somos tu aliado para un cabello radiante, con soluciones perfectas y deslumbrantes.</p>
+                <button class="btn-conocenos"><a href="{{ url_for('client_bp.conocenos') }}">Conoce más</a></button>
+            </div>
+            <div class="footer-section">
+                <h4>Contáctanos</h4>
+                <p>Email: info@dinamylook.com</p>
+                <p>Teléfono: +57 123 456 7890</p>
+                <ul class="redes">
+                    <a href="">
+                        <li><i class='bx bxl-facebook-circle'></i></li>
+                    </a>
+                    <a href="">
+                        <li><i class='bx bxl-tiktok'></i></li>
+                    </a>
+                    <a href="">
+                        <li><i class='bx bxl-instagram'></i></li>
+                    </a>
+                    <a href="">
+                        <li><i class='bx bxl-whatsapp'></i></li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 DinamyLook | Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/script_carusel_producto.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_carrito.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
+    <script>
+        window.TOTAL_PRODUCTOS = {{ total_productos | tojson }};
+        window.SEARCH_URL = {{ url_for('client_bp.buscar') | tojson }};
+    </script>
+
+    <script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
+
+</body>
+
+</html>

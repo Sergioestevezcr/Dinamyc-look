@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Título de la pestaña -->
+    <title>Dinamyc Look - Admin</title>
+
+    <!-- Estilos CSS de la página principal -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_admin/style_index_admin.css') }}">
+
+    <!-- Fuente de iconos Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Fuente de iconos FontAwesome -->
+    <script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180"
+        href="{{ url_for('static', filename='imagenes/favicons/apple-touch-icon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="{{ url_for('static', filename='imagenes/favicons/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="{{ url_for('static', filename='imagenes/favicons/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='imagenes/favicons/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='imagenes/favicons/safari-pinned-tab.svg') }}"
+        color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+    <!-- Bloque para mostrar mensajes flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert {{ category }}">
+        {{ message }}
+        <button class="alert-close">&times;</button>
+        <div class="alert-progress"></div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        <!-- Barra lateral -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2 class="company-name">Dinamyc Look</h2>
+                <button class="close-btn" id="close_btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('admin_bp.index') }}"><i
+                                class='bx bxs-dashboard'></i><span>Dashboard</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
+                                class="fa-solid fa-user"></i><span>Clientes</span></a>
+                    </li>
+                    <li><a href="{{ url_for('admin_bp.ventas') }}"><i
+                                class='bx bxs-dollar-circle'></i><span>Ventas</span></a>
+                    </li>
+                    <li><a href="{{ url_for('admin_bp.productos') }}"><i
+                                class="fas fa-tags"></i><span>Productos</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.promociones') }}"><i
+                                class="fas fa-percent"></i><span>Promociones</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.reportes') }}"><i
+                                class="fa-solid fa-receipt"></i><span>Reportes</span></a>
+                    </li>
+                    <li><a href="{{ url_for('admin_bp.configuracion') }}" class="active"><i
+                                class="fa-solid fa-gear"></i><span>Configuración</span></a></li>
+                    <li><a href="{{ url_for('auth_bp.logout') }}"><i class='bx bx-log-out'></i><span>Cerrar
+                                sesión</span></a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <!-- Encabezado superior de la página -->
+            <header class="main-header">
+                <!-- Botón para abrir/cerrar el menú lateral -->
+                <button class="menu-toggle" id="open_btn"><i class='bx bx-menu'></i></button>
+                <h1>Configuraciones</h1>
+            </header>
+            <form action="{{ url_for('admin_bp.actualizar_usuario', id=usuario.id_usuario) }}" method="POST">
+                <div class="container-config">
+                    <div class="form-group ddos1">
+                        <div class="label-form-config">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="edit-nombre" class="input-form" name="nombre" placeholder="Nombre"
+                                value="{{ usuario.nombre }}" required>
+                        </div>
+                        <div class="label-form-config">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="edit-apellido" class="input-form" name="apellido"
+                                placeholder="Apellidos" value="{{ usuario.apellido }}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="label-form-config">
+                            <i class="fa-solid fa-envelope"></i>
+                            <input type="email" id="edit-correo" class="input-form" name="correo"
+                                placeholder="Correo electrónico" value="{{ usuario.correo }}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="label-form-config">
+                            <i class="fa-solid fa-phone"></i>
+                            <input type="tel" id="edit-telefono" class="input-form" name="telefono"
+                                placeholder="Número de teléfono" value="{{ usuario.telefono }}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group ddos1">
+                        <div class="label-form-config">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <input type="text" id="edit-direccion" class="input-form" name="direccion"
+                                placeholder="Dirección" value="{{ usuario.direccion }}" required>
+                        </div>
+
+                        <div class="label-form-config">
+                            <i class="fa-solid fa-city"></i>
+                            <input type="text" id="edit-ciudad" class="input-form" name="ciudad" placeholder="Ciudad"
+                                value="{{ usuario.ciudad }}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="label-form-config">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" id="edit-password" class="input-form" name="clave"
+                                placeholder="Contraseña" value="">
+                        </div>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="button-group">
+                        <button type="submit" class="btn-modal submit-button">Actualizar</button>
+                    </div>
+                </div>
+            </form>
+        </main>
+    </div>
+    <!-- Script de JavaScript-->
+    <script src="{{ url_for('static', filename='js/script_sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
+
+</html>

@@ -1,42 +1,49 @@
-// Espera a que el contenido del DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', function() {
 
-    // Referencias a elementos del DOM que se utilizan en el formulario
-    const addBtn = document.querySelector('.add-btn'); // Botón para abrir el modal de agregar
-    const addModal = document.getElementById('addModal'); // Modal para agregar nuevos datos
-    const editModal = document.getElementById('editModal'); // Modal para editar datos existentes
-    const cancelAddBtn = document.getElementById('cancelAddBtn'); // Botón para cancelar el formulario de agregar
-    const cancelEditBtn = document.getElementById('cancelEditBtn'); // Botón para cancelar el formulario de editar
-    const addForm = document.getElementById('addForm'); // Formulario de agregar
-    const editForm = document.getElementById('editForm'); // Formulario de edición
+    // --- REFERENCIAS A BOTONES Y MODALES ---
+    const addBtn = document.querySelector('.add-btn'); // primer botón "Agregar"
+    const addModal = document.getElementById('addModal'); // modal para agregar
+    const editModal = document.getElementById('editModal'); // modal para editar
+    const asigModal = document.getElementById('asigModal'); // modal para asignar productos/promociones
 
-    // FUNCIÓN PARA OBTENER TODOS LOS CAMPOS DE UN FORMULARIO
+    // Botones cancelar
+    const cancelAddBtn = document.getElementById('cancelAddBtn');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+
+    // Formularios
+    const addForm = document.getElementById('addForm');
+    const editForm = document.getElementById('editForm');
+    const promoForm = document.getElementById('promoForm'); // nuevo form de asignar
+
+    // Segundo botón de la página: "Seleccionar producto"
+    const selectProdBtn = document.querySelectorAll('.add-btn')[1]; 
+
+
+    // --- FUNCIONES COMUNES ---
+
+    // Extrae los campos de un formulario en un objeto
     function getFormFields(form) {
         const fields = {};
         const inputs = form.querySelectorAll('input, select, textarea');
-        
+
         inputs.forEach(input => {
-            // Excluye botones y solo procesa campos válidos
             if (input.type !== 'submit' && input.type !== 'button') {
-                // Quita los prefijos 'add-' o 'edit-' del id para obtener el nombre del campo
                 const fieldName = input.id.replace(/^(add-|edit-)/, '');
-                fields[fieldName] = input; // Guarda el input en el objeto con clave simple
+                fields[fieldName] = input;
             }
         });
 
-        return fields; // Devuelve un objeto con todos los campos del formulario
+        return fields;
     }
 
-    // FUNCIÓN DE VALIDACIÓN DE FORMULARIOS
+    // Valida campos obligatorios y correos electrónicos
     function validateForm(form, requiredFields = []) {
-        const fields = getFormFields(form); // Obtiene todos los campos del formulario
+        const fields = getFormFields(form);
 
-        // Si no se especificaron campos requeridos, se consideran todos como requeridos
         if (requiredFields.length === 0) {
             requiredFields = Object.keys(fields);
         }
 
-        // Revisa que los campos requeridos no estén vacíos
         for (const fieldName of requiredFields) {
             const field = fields[fieldName];
             if (field && !field.value.trim()) {
@@ -46,8 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Verifica los campos que parecen ser correos electrónicos
-        const emailFields = Object.keys(fields).filter(name => 
+        const emailFields = Object.keys(fields).filter(name =>
             name.includes('correo') || name.includes('email')
         );
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -61,104 +67,174 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        return true; // Si pasa todas las validaciones, retorna verdadero
+        return true;
     }
 
-    // EVENTO PARA ABRIR EL MODAL DE EDICIÓN AL HACER CLIC EN UN BOTÓN CON LA CLASE .edit-btn
+    // Previsualización de imágenes en inputs tipo "file"
+    function previewImage(input, previewId) {
+        const preview = document.getElementById(previewId);
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = "block";
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+    // --- ABRIR MODAL EDITAR ---
     document.addEventListener('click', function(event) {
         if (event.target.closest('.edit-btn')) {
-            event.preventDefault(); // Evita el comportamiento por defecto del enlace o botón
-            
-            const editBtn = event.target.closest('.edit-btn');
-            const editFields = getFormFields(editForm); // Obtiene campos del formulario de edición
+            event.preventDefault();
 
-            // Llena los campos del formulario con los valores desde los atributos data-
+            const editBtn = event.target.closest('.edit-btn');
+            const editFields = getFormFields(editForm);
+
             Object.keys(editFields).forEach(fieldName => {
                 const field = editFields[fieldName];
-                const dataValue = editBtn.dataset[fieldName]; // Lee valor desde data-fieldname
-
-                if (field && dataValue !== undefined) {
-                    field.value = dataValue || ''; // Asigna valor al campo
+                const dataValue = editBtn.dataset[fieldName];
+                if (field) {
+                    if (field.type === "file") {
+                        const preview = document.getElementById(`preview-edit-${fieldName}`);
+                        if (preview && dataValue) {
+                            preview.src = dataValue;
+                            preview.style.display = "block";
+                        }
+                    } else {
+                        field.value = dataValue || '';
+                    }
                 }
             });
 
-            // Define dinámicamente la acción del formulario usando el ID y tipo de entidad
             const id = editBtn.dataset.id;
-            const baseAction = editForm.dataset.baseAction || '/update'; // Acción base
-            const entityType = editForm.dataset.entityType || 'contact'; // Tipo de entidad (por defecto)
-
-            editForm.action = `${baseAction}_${entityType}/${id}`; // Ej: /update_contact/5
-
-            console.log('ID a actualizar:', id);
-            console.log('Acción del formulario:', editForm.action);
-
-            editModal.style.display = 'flex'; // Muestra el modal de edición
+            const baseAction = editForm.dataset.baseAction || '/update';
+            editForm.action = `${baseAction}/${id}`;
+            editModal.style.display = 'flex';
         }
     });
 
-    // ABRE EL MODAL DE AGREGAR AL HACER CLIC EN EL BOTÓN DE AGREGAR
+
+    // --- ABRIR OTROS MODALES ---
     if (addBtn) {
         addBtn.addEventListener('click', function() {
-            addModal.style.display = 'flex'; // Muestra el modal
+            addModal.style.display = 'flex';
         });
     }
 
-    // CIERRA EL MODAL DE AGREGAR Y LIMPIA EL FORMULARIO
-    if (cancelAddBtn) {
-        cancelAddBtn.addEventListener('click', function() {
-            addModal.style.display = 'none'; // Oculta el modal
-            addForm.reset(); // Limpia todos los campos del formulario
+    if (selectProdBtn) {
+        selectProdBtn.addEventListener('click', function() {
+            asigModal.style.display = 'flex';
         });
     }
 
-    // CIERRA EL MODAL DE EDICIÓN Y LIMPIA EL FORMULARIO
-    if (cancelEditBtn) {
-        cancelEditBtn.addEventListener('click', function() {
-            editModal.style.display = 'none';
-            editForm.reset();
-        });
+
+    // --- CERRAR MODALES ---
+    function closeModal(modal, form) {
+        if (modal) modal.style.display = 'none';
+        if (form) {
+            form.reset();
+            form.querySelectorAll("img.preview").forEach(img => img.style.display = "none");
+        }
     }
 
-    // CIERRA LOS MODALES AL HACER CLIC FUERA DEL CONTENIDO DEL MODAL
+    if (cancelAddBtn) cancelAddBtn.addEventListener('click', () => closeModal(addModal, addForm));
+    if (cancelEditBtn) cancelEditBtn.addEventListener('click', () => closeModal(editModal, editForm));
+
     window.addEventListener('click', function(event) {
-        if (addModal && event.target === addModal) {
-            addModal.style.display = 'none';
-            addForm.reset();
-        }
-        if (editModal && event.target === editModal) {
-            editModal.style.display = 'none';
-            editForm.reset();
-        }
+        if (event.target === addModal) closeModal(addModal, addForm);
+        if (event.target === editModal) closeModal(editModal, editForm);
+        if (event.target === asigModal) closeModal(asigModal, promoForm);
     });
 
-    // VALIDACIÓN Y ENVÍO DEL FORMULARIO DE AGREGAR
+
+    // --- SUBMIT FORMS (validaciones) ---
     if (addForm) {
         addForm.addEventListener('submit', function(event) {
-            // Obtiene campos requeridos desde un atributo data en el HTML
             const requiredFields = JSON.parse(addForm.dataset.requiredFields || '[]');
-
             if (!validateForm(addForm, requiredFields)) {
-                event.preventDefault(); // Evita envío si hay errores
-                return;
+                event.preventDefault();
             }
-
-            addModal.style.display = 'none'; // Oculta el modal si todo está correcto
         });
     }
 
-    // VALIDACIÓN Y ENVÍO DEL FORMULARIO DE EDICIÓN
     if (editForm) {
         editForm.addEventListener('submit', function(event) {
             const requiredFields = JSON.parse(editForm.dataset.requiredFields || '[]');
-
             if (!validateForm(editForm, requiredFields)) {
-                event.preventDefault(); // Evita el envío si falla la validación
+                event.preventDefault();
+            }
+        });
+    }
+
+
+    // --- FORMULARIO DE ASIGNAR (promoForm) ---
+    if (promoForm) {
+        promoForm.addEventListener('submit', function(event) {
+            const promocion = document.getElementById('edit-promocion').value;
+
+            const productosIds = Array.from(document.querySelectorAll('.producto-id'))
+                .map(input => input.value)
+                .filter(val => val.trim() !== '');
+
+            if (productosIds.length === 0) {
+                alert("Debes seleccionar al menos un producto válido.");
+                event.preventDefault();
                 return;
             }
 
-            console.log('Enviando formulario de edición...');
-            editModal.style.display = 'none'; // Oculta el modal después del envío
+            if (!promocion) {
+                if (!confirm("No has seleccionado ninguna promoción. ¿Deseas continuar sin asignar promoción?")) {
+                    event.preventDefault();
+                    return;
+                }
+            }
+        });
+
+        // ✅ Corregido: id correcto del botón "Agregar Producto"
+        document.getElementById('add-producto-btn').addEventListener('click', function() {
+            const container = document.getElementById('productos-container');
+            const item = container.querySelector('.producto-item');
+            const clone = item.cloneNode(true);
+
+            clone.querySelector('.producto-select').value = '';
+            clone.querySelector('.producto-id').value = '';
+
+            container.appendChild(clone);
+        });
+
+        // ✅ Corregido: usar la clase real del botón eliminar
+        document.getElementById('productos-container').addEventListener('click', function(e) {
+            if (e.target.closest('.btn-remove-producto')) {
+                const items = document.querySelectorAll('.producto-item');
+                if (items.length > 1) {
+                    e.target.closest('.producto-item').remove();
+                } else {
+                    alert("Debe haber al menos un producto.");
+                }
+            }
+        });
+
+        // Sincronizar input visible con input hidden
+        document.getElementById('productos-container').addEventListener('input', function(e) {
+            if (e.target.classList.contains('producto-select')) {
+                const input = e.target;
+                const option = Array.from(document.getElementById('productos-list').options)
+                    .find(opt => opt.value === input.value);
+                const hidden = input.closest('.producto-item').querySelector('.producto-id');
+                hidden.value = option ? option.dataset.id : '';
+            }
         });
     }
+
+
+    // --- PREVISUALIZAR ARCHIVOS ---
+    document.querySelectorAll("input[type='file']").forEach(input => {
+        input.addEventListener("change", function() {
+            const previewId = `preview-${this.id}`;
+            previewImage(this, previewId);
+        });
+    });
 
 });

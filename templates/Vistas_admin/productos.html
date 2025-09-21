@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Título de la pestaña -->
+    <title>Dinamyc Look - Admin</title>
+
+    <!-- Estilos CSS de la página principal -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_admin/style_index_admin.css') }}">
+
+    <!-- Fuente de iconos Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Fuente de iconos FontAwesome -->
+    <script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
+
+    <!-- Favicons para distintos dispositivos -->
+    <link rel="apple-touch-icon" sizes="180x180"
+        href="{{ url_for('static', filename='imagenes/favicons/apple-touch-icon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="{{ url_for('static', filename='imagenes/favicons/favicon-32x32.ico') }}">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="{{ url_for('static', filename='imagenes/favicons/favicon-16x16.ico') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='imagenes/favicons/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='imagenes/favicons/safari-pinned-tab.svg') }}"
+        color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+    <!-- Bloque para mostrar mensajes flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert {{ category }}">
+        {{ message }}
+        <button class="alert-close">&times;</button>
+        <div class="alert-progress"></div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        <!-- Barra lateral -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2 class="company-name">Dinamyc Look</h2>
+                <button class="close-btn" id="close_btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('admin_bp.index') }}"><i
+                                class='bx bxs-dashboard'></i><span>Dashboard</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
+                                class="fa-solid fa-user"></i><span>Clientes</span></a>
+                    </li>
+                    <li><a href="{{ url_for('admin_bp.ventas') }}"><i
+                                class='bx bxs-dollar-circle'></i><span>Ventas</span></a>
+                    </li>
+                    <li><a href="{{ url_for('admin_bp.productos') }}" class="active"><i
+                                class="fas fa-tags"></i><span>Productos</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.promociones') }}"><i
+                                class="fas fa-percent"></i><span>Promociones</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.reportes') }}"><i
+                                class="fa-solid fa-receipt"></i><span>Reportes</span></a>
+                    </li>
+                    <li><a href="{{ url_for('admin_bp.configuracion') }}"><i
+                                class="fa-solid fa-gear"></i><span>Configuración</span></a></li>
+                    <li><a href="{{ url_for('auth_bp.logout') }}"><i class='bx bx-log-out'></i><span>Cerrar
+                                sesión</span></a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+
+            <!-- Encabezado -->
+            <header class="main-header">
+                <button class="menu-toggle" id="open_btn"><i class='bx bx-menu'></i></button>
+                <h1>Productos</h1>
+            </header>
+
+            <!-- Barra de búsqueda -->
+            <div class="barra-de-busqueda">
+                <input class="buscar" type="text" placeholder="Buscar">
+                <div class="btn"><button type="submit"><i class='bx bx-search'></i></button></div>
+            </div>
+
+            <!-- Sección productos -->
+            <section class="recent-orders">
+                <div class="section-header">
+                    <div class="add-btn">Agregar<i class="fa-regular fa-square-plus"></i></div>
+                </div>
+
+                <div class="table-container">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Marca</th>
+                                <th>Stock</th>
+                                <th>Valor</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for producto in productos %}
+                            <tr>
+                                <td>
+                                    <div class="image-container">
+                                        {% if producto[3] %}
+                                        <img src="{{ url_for('static', filename='imagenes/' + producto[3]) }}"
+                                            alt="Producto">
+                                        {% else %}
+                                        <span>Sin imagen</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>{{ producto[1] }}</td>
+                                <td>{{ producto[2] }}</td>
+                                <td>{{ producto[6] }}</td>
+                                <td>{{ producto[5] }}</td>
+                                <td>
+                                    {% if producto[10] %} {# precio_final existe #}
+                                    <span class="precio-original">
+                                        ${{ "{:,}".format(producto[4]).replace(",", ".") }}
+                                    </span><br>
+                                    <span class="precio-descuento">
+                                        ${{ "{:,}".format(producto[10]|int).replace(",", ".") }}
+                                    </span>
+                                    {% else %}
+                                    ${{ "{:,}".format(producto[4]).replace(",", ".") }}
+                                    {% endif %}
+                                </td>
+                                <td class="edit-icon">
+                                    <a href="#" data-id="{{ producto[0] }}" data-nombre="{{ producto[1] }}"
+                                        data-descripcion="{{ producto[2] }}" data-precio="{{ producto[4] }}"
+                                        data-stock="{{ producto[5] }}" data-marca="{{ producto[6] }}"
+                                        data-promocion="{{ producto[8] }}" class="edit-btn">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal Agregar Producto -->
+    <div id="addModal" class="modal-background">
+        <div class="modal-content">
+            <h2 class="modal-header">Agregar Nuevo Producto</h2>
+            <form id="addForm" action="/add_producto" method="POST" enctype="multipart/form-data">
+
+                <!-- Nombre -->
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-tag"></i>
+                        <input type="text" name="Nombre" class="input-form" placeholder="Nombre del producto" required>
+                    </div>
+                </div>
+
+                <!-- Descripción -->
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-align-left"></i>
+                        <textarea name="Descripcion" placeholder="Escribe la descripción"></textarea>
+                    </div>
+                </div>
+
+                <!-- Marca -->
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-trademark"></i>
+                        <input type="text" name="Marca" class="input-form" placeholder="Marca" required>
+                    </div>
+                </div>
+
+                <!-- Precio -->
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-dollar-sign"></i>
+                        <input type="number" name="Precio" class="input-form" placeholder="Precio" step="1" required>
+                    </div>
+                </div>
+
+                <!-- Stock -->
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-boxes"></i>
+                        <input type="number" name="Stock" class="input-form" placeholder="Stock disponible" required>
+                    </div>
+                </div>
+
+                <!-- Imagen -->
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-image"></i>
+                        <input type="file" name="Imagen" accept="image/*">
+                    </div>
+                </div>
+
+                <!-- Promoción -->
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-percent"></i>
+                        <select name="ID_PromocionFK" class="input-form">
+                            <option value="">-- Sin Promoción --</option>
+                            {% for promo in promociones %}
+                            <option value="{{ promo[0] }}">
+                                {{ promo[1] }}% ({{ promo[2] }} - {{ promo[3] }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-modal cancel-button" id="cancelAddBtn">Cancelar</button>
+                    <button type="submit" class="btn-modal submit-button">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Producto -->
+    <div id="editModal" class="modal-background">
+        <div class="modal-content">
+            <h2 class="modal-header">Editar Producto</h2>
+            <form id="editForm" method="POST" enctype="multipart/form-data" data-base-action="/update_producto"
+                data-entity-type="producto" data-required-fields='["Nombre","Descripcion","Precio","Marca","Stock"]'>
+
+
+                <!-- Nombre -->
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-tag"></i>
+                        <input type="text" id="edit-nombre" name="Nombre" class="input-form" required>
+                    </div>
+                </div>
+
+                <!-- Descripción -->
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-align-left"></i>
+                        <textarea id="edit-descripcion" name="Descripcion" class="input-form" required></textarea>
+                    </div>
+                </div>
+
+                <!-- Marca -->
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-trademark"></i>
+                        <input type="text" id="edit-marca" name="Marca" class="input-form" required>
+                    </div>
+                </div>
+
+                <!-- Precio y Stock -->
+                <div class="ddos">
+                    <div class="form-group">
+                        <div class="label-form"><i class="fa-solid fa-dollar-sign"></i>
+                            <input type="number" id="edit-precio" name="Precio" class="input-form" step="1" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="label-form"><i class="fa-solid fa-boxes"></i>
+                            <input type="number" id="edit-stock" name="Stock" class="input-form" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Imagen -->
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-image"></i>
+                        <input type="file" id="edit-imagen" name="Imagen" accept="image/*">
+                    </div>
+                </div>
+
+                <!-- Promoción -->
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-percent"></i>
+                        <select id="edit-promocion" name="ID_PromocionFK" class="input-form">
+                            <option value="">-- Sin Promoción --</option>
+                            {% for promo in promociones %}
+                            <option value="{{ promo[0] }}">{{ promo[1] }}% ({{ promo[2] }} - {{ promo[3] }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-modal cancel-button" id="cancelEditBtn">Cancelar</button>
+                    <button type="submit" class="btn-modal submit-button">Actualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Pie -->
+    <footer class="footer">
+        <p>&copy; 2024 DinamycLook | Todos los derechos reservados</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/script_sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_pop-up.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_paginacion_tabla.js') }}"></script>
+</body>
+
+</html>

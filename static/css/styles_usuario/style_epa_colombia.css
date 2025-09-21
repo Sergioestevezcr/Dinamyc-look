@@ -19,13 +19,47 @@
 	background-color: rgba(67, 174, 57, 0.5); 
 }
 
-.btn button {
+.btn-serch button {
 	background-color: #2A7124;
 }
 
-.btn button:hover {
+.btn-serch button:hover {
 	background-color:  #255A21;
 }
+
+/*********************************** CARRITO *****************************/
+
+#carrito-header {
+    color: #255A21;
+}
+
+#carrito-header button {
+    color: #1F4A1D;
+}
+
+.carrito-item h4 {
+    color: #1F4A1D;
+}
+
+.carrito-item p {
+    color: rgba(31, 74, 29, 0.8);
+}
+
+.carrito-item button {
+    color: #1F4A1D ;
+}
+
+#carrito-footer button {
+    background: #1f4A1D;
+    color: #fff;
+}
+
+/* Badge del carrito */
+.carrito-badge {
+    background: #43AE39;
+    color: #FFFFFF;
+}
+
 
 /******************************** BARRA DE MARCAS *******************************/
 .barra-de-marcas{
@@ -124,7 +158,6 @@
     background-color: #E3F8E0;
 }
 
-
 .product-card4 {
     background-color: #FFFFFF;
     box-shadow: 0 5px 15px rgba(12, 40, 11, 0.3);
@@ -136,13 +169,21 @@
 
 
 .text-card4 {
-    background-color: #1F4A1D;
+    background-color: #FAFAFA;
     color: #FBFAF7;
 }
 
+.text-card4 h3 {
+    color: #0C280B;
+}
 
-.text-card4 p {
-    color: #FBFAF7;
+#text-precio {
+    color: #1F4A1D;
+    background-color: rgba(156, 224, 149, 0.4);
+}
+
+#text-marca {
+    color: rgba(31, 74, 29, 0.6);
 }
 
   /* Botón de agregar al carrito */
@@ -210,8 +251,13 @@
     color: #FBFAF7;
 }
 
-.text-card p { 
-    color: #FBFAF7; 
+#text-precio2 {
+    color: #1F4A1D;
+    background-color: rgba(227, 248, 224, 0.8);
+}
+
+#text-marca2 {
+    color: rgba(227, 248, 224, 0.6);
 }
 
 #btn-add {
@@ -264,18 +310,12 @@
 }
 
 .text-card2 {
-    background-color: #1F4A1D;
+    background-color: #FAFAFA;
     color: #FBFAF7;
 }
 
 .text-card2 h3 {
-    font-size: 20px; 
-    font-weight: 500;
-    margin-bottom: 5px;
-}
-
-.text-card2 p { 
-    color: #FBFAF7;
+    color: #0C280B;
 }
 
 #btn-add2 {
@@ -287,4 +327,73 @@
 #btn-add2:hover {
     background-color: #2A7124;
     box-shadow: 0 4px 8px rgba(12, 40, 11, 0.3);
+}
+
+button.btn-fav i.bx.bxs-star,
+.btn-fav i.bxs-star {
+    color: #255A21 !important;
+}
+
+/*********************************** DETALLES ***********************************/
+/* Contenedor principal detalle */
+.detalle-container {
+    background: #FBFAF7;
+    box-shadow: 0 4px 10px rgba(12, 40, 11, 0.2);
+}
+
+.detalle-info h1 {
+    color: #1F4A1D;
+}
+
+.descripcion {
+    color: rgba(12, 40, 11, 0.8);
+}
+
+.precio {
+    color: #255A21;
+}
+
+.text-cantidad {
+    color: #1F4A1D;
+}
+
+.btn-principal {
+    background: #2A7124;
+    color: white;
+}
+
+.btn-principal:hover {
+    background: #255A21;
+}
+
+.titulo-relacionados {
+    color: #255A21;
+    border-top: 1px solid #1F4A1D;
+}
+
+.card-rel a {
+    background: #e7e5e0;
+    box-shadow: 0 2px 6px rgba(12, 40, 11,0.1);
+}
+
+.card-rel h3 {
+    color: #1F4A1D;
+}
+
+.price {
+    color: #2A7124;
+}
+
+#btn-add-rel {
+    background: #255A21;
+    color: white;
+}
+
+.swiper-container-externo .swiper-pagination-bullet {
+    background-color: rgba(31, 74, 29, 0.4);
+
+}
+
+.swiper-container-externo .swiper-pagination-bullet-active {
+    background-color: #2A7124;
 }

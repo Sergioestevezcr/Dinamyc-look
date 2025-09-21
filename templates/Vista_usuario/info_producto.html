@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Título de la pestaña -->
+	<title>Dinamyc look- {{ productodetalles[1] }}</title>
+
+	<!-- Swiper CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+	<!-- Estilos CSS de la página -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles_usuario/style_general.css') }}">
+	<link rel="stylesheet"
+		href="{{ url_for('static', filename='css/styles_usuario/style_' ~ productodetalles[5]|replace(' ', '_') ~ '.css') }}">
+
+	<!-- Fuente de iconos Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+	<!-- Fuente de iconos FontAwesome -->
+	<script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
+
+	<!-- Favicons -->
+	<link rel="apple-touch-icon" sizes="180x180"
+		href="{{ url_for('static', filename='imagenes/favicons/apple-touch-icon.ico') }}">
+	<link rel="icon" type="image/png" sizes="32x32"
+		href="{{ url_for('static', filename='imagenes/favicons/favicon-32x32.ico') }}">
+	<link rel="icon" type="image/png" sizes="16x16"
+		href="{{ url_for('static', filename='imagenes/favicons/favicon-16x16.ico') }}">
+	<link rel="manifest" href="{{ url_for('static', filename='imagenes/favicons/site.webmanifest') }}">
+	<link rel="mask-icon" href="{{ url_for('static', filename='imagenes/favicons/safari-pinned-tab.svg') }}"
+		color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+	<!-- Bloque para mostrar mensajes flash (notificaciones desde Flask) -->
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+	{% for category, message in messages %}
+	<div class="alert {{ category }}">
+		{{ message }}
+		<button class="alert-close">&times;</button>
+		<div class="alert-progress"></div>
+	</div>
+	{% endfor %}
+	{% endif %}
+	{% endwith %}
+	<header class="header">
+		<!--------------------------------- 1. Barra de navegacion ------------------------------->
+
+		<div class="nombre-empresa">
+			<a href="{{ url_for('client_bp.index_cliente') }}">Dinamyc Look</a>
+		</div>
+
+		<!----------------------------------- 1.1 Barra de busqueda ------------------------------------>
+		<div class="barra-de-busqueda">
+			<form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
+				<input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
+				<div class="btn-serch">
+					<button type="submit"><i class="fas fa-search"></i></button>
+				</div>
+			</form>
+		</div>
+
+		<nav class="navbar" id="nav">
+			<ul class="nav-links">
+				<li class="house" title="Inicio"><a href="{{ url_for('client_bp.index_cliente') }}"><i
+							class="fa-solid fa-house-chimney"></i></a></li>
+				<li title="Carrito"><a href="#"><i class='bx bxs-shopping-bags'></i></a></li>
+				{% if user %}
+				<!-- Icono de usuario cuando ha iniciado sesión -->
+				<li class="usuario-menu">
+					<a href="#"><i class="fa-solid fa-user"></i></a>
+					<div class="usuario-dropdown">
+						<a href="{{ url_for('client_bp.favoritos') }}"><i class='bx bxs-star'></i><span>
+								Favoritos</span></a>
+						<a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
+								Compras</span></a>
+						<a href="admin_bp.configuracion" class="active"><i class='bx bxs-user'></i><span>
+								Perfil</span></a>
+						<a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
+							sesión</a>
+					</div>
+				</li>
+
+				{% else %}
+				<li title="Iniciar Sesión"><a href="{{ url_for('auth_bp.login') }}"><i class='bx bx-log-in'></i></a>
+				</li>
+				{% endif %}
+			</ul>
+		</nav>
+	</header>
+
+	<!----------------------------------------- 2. Barra de Marcas------------------------------>
+	<section class="barra-de-marcas">
+		<div class="scroll-container">
+			<div class="items-marcas"><a href="{{ url_for('client_bp.epa_colombia') }}"><img
+						src="{{ url_for('static', filename= 'imagenes/logos/epa colombia logo letra blanca.png') }}"
+						alt=""></a></div>
+			<div class="items-marcas"><a href="{{ url_for('client_bp.anyeluz') }}"><img
+						src="{{ url_for('static', filename= 'imagenes/logos/anyeluz logo letra blanca.png') }}"
+						alt=""></a></div>
+			<div class="items-marcas"><a href="{{ url_for('client_bp.milagros') }}"><img
+						src="{{ url_for('static', filename= 'imagenes/logos/milagros logo letra blanca.png') }}"
+						alt=""></a></div>
+			<div class="items-marcas"><a href="{{ url_for('client_bp.dluchi') }}"><img
+						src="{{ url_for('static', filename= 'imagenes/logos/dluchi logo letra blanca.png') }}"
+						alt=""></a></div>
+			<div class="items-marcas"><a href="{{ url_for('client_bp.kaba') }}"><img
+						src="{{ url_for('static', filename= 'imagenes/logos/kaba logo letra blanca.png') }}"
+						width="auto" alt=""></a></div>
+			<div class="items-marcas"><a href="{{ url_for('client_bp.la_receta') }}"><img
+						src="{{ url_for('static', filename= 'imagenes/logos/la receta logo letra blanca.png') }}"
+						alt=""></a></div>
+			<div class="items-marcas"><a href="{{ url_for('client_bp.magic_hair') }}"><img
+						src="{{ url_for('static', filename= 'imagenes/logos/magic hair logo letra blanca.png') }}"
+						alt=""></a></div>
+			<div class="items-marcas"><a href="{{ url_for('client_bp.OMG') }}"><img
+						src="{{ url_for('static', filename= 'imagenes/logos/omg logo letra blaca.png') }}" width="auto"
+						alt=""></a></div>
+			<div class="items-marcas"><a href="{{ url_for('client_bp.la_pocion') }}"><img
+						src="{{ url_for('static', filename= 'imagenes/logos/pocion logo letra blanca.png') }}"
+						width="auto" alt=""></a></div>
+		</div>
+	</section>
+
+	<section class="detalle-container">
+		<!-- Imagen principal -->
+		<div class="detalle-imagen">
+			<img src="{{ url_for('static', filename='imagenes/' ~ productodetalles[4]) }}"
+				alt="{{ productodetalles[1] }}">
+		</div>
+
+		<div class="detalle-columna">
+			<!-- Info del producto -->
+			<div class="detalle-info">
+				<h1>{{ productodetalles[1] }}</h1>
+				<p class="descripcion">{{ productodetalles[2] }}</p>
+				<span class="precio">${{ "{:,}".format(productodetalles[3]).replace(",", ".") }}</span>
+				<div class="acciones">
+					<label class="text-cantidad" for="cantidad">Cantidad</label>
+					<div class="cantidad">
+						<button><i class='bx bx-minus'></i></button>
+						<input type="number" id="cantidad" value="1" min="1">
+						<button id="cantidad-inv"><i class='bx bx-plus'></i></button>
+					</div>
+					<button class="btn-principal" type="button">Agregar <i class='bx bx-shopping-bag'></i></button>
+				</div>
+			</div>
+			<!-- Productos relacionados -->
+			<h2 class="titulo-relacionados">Complementa tu compra</h2>
+
+			<div class="swiper-container-externo">
+				<div class="swiper relacionados-swiper">
+					<div class="swiper-wrapper">
+						{% for r in relacionados %}
+						<div class="swiper-slide">
+							<div class="card-rel">
+								<a href="{{ url_for('detallesproducto', id=r[0]) }}">
+									<img src="{{ url_for('static', filename='imagenes/' ~ r[3]) }}" alt="{{ r[1] }}">
+									<div class="rel-inf">
+										<h3>{{ r[1] }}</h3>
+										<span class="price">${{ "{:,}".format(r[2]).replace(",", ".") }}</span>
+									</div>
+									<button class="btn-add" id="btn-add-rel"><i class='bx bx-shopping-bag'></i></button>
+								</a>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+
+				<!-- Contenedor de puntos con ancho del swiper -->
+				<div class="swiper-pagination-container">
+					<div class="swiper-pagination"></div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="section4-product">
+		<h1 id="t4">Conoce con emoción</h1>
+		<p id="p4">Encuentra tu opción</p>
+		<div class="carousel-prd-container">
+			<button class="btn-left-prd"><i class='bx bx-left-arrow-alt'></i></button>
+			<button class="btn-right-prd"><i class='bx bx-right-arrow-alt'></i></button>
+
+			<div class="carousel-product4">
+				{% for c in caruseldetalles %}
+				<div class="product-card4">
+					<a href="{{ url_for('detallesproducto', id=c[0]) }}">
+						<div class="image-container">
+							<!-- Botón favoritos -->
+							<button class="btn-fav" data-id="{{ c[0] }}">
+								{% if c[0] in favoritos %}
+								<i class="bx bxs-star fav-relleno"></i> <!-- RELLENA si ya es favorito -->
+								{% else %}
+								<i class="bx bx-star"></i> <!-- VACÍA si no -->
+								{% endif %}
+							</button>
+							<img src="{{ url_for('static', filename='imagenes/' ~ c[3]) }}" alt="Producto">
+						</div>
+						<div class="text-card4">
+							<h3>{{ c[1] }}</h3>
+							<p id="text-marca">{{ c[4] }}</p>
+							<p class="text-precio" id="text-precio">${{ "{:,}".format(c[2]).replace(",", ".") }}</p>
+							<button class="btn-add" id="btn-add4" type="button">Agregar <i
+									class='bx bx-shopping-bag'></i></button>
+						</div>
+					</a>
+				</div>
+				{% endfor %}
+			</div>
+			<div class="carousel-dots"></div>
+		</div>
+	</section>
+
+	<!-- Swiper JS -->
+	<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+	<script src="{{ url_for('static', filename='js/script_carusel_producto.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_carrito.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
+
+	<script>
+		const swiperRelacionados = new Swiper('.relacionados-swiper', {
+			slidesPerView: 2,
+			spaceBetween: 20,
+			loop: true,
+			navigation: {
+				nextEl: '.swiper-button-next', // tus botones externos
+				prevEl: '.swiper-button-prev',
+			},
+			pagination: {
+				el: '.swiper-pagination',      // mantienes los puntos originales
+				clickable: true,
+			},
+		});
+	</script>
+</body>
+
+</html>

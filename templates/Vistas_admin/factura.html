@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Título de la pestaña -->
+    <title>Dinamyc Look - Admin</title>
+
+    <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_admin/style_index_admin.css') }}">
+
+    <!-- Fuente de iconos Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Fuente de iconos FontAwesome -->
+    <script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
+
+    <!-- Favicons para diferentes dispositivos y navegadores -->
+    <link rel="apple-touch-icon" sizes="180x180"
+        href="{{ url_for('static', filename='imagenes/favicons/apple-touch-icon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="{{ url_for('static', filename='imagenes/favicons/favicon-32x32.ico') }}">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="{{ url_for('static', filename='imagenes/favicons/favicon-16x16.ico') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='imagenes/favicons/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='imagenes/favicons/safari-pinned-tab.svg') }}"
+        color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+
+    <!-- Contenedor principal -->
+    <div class="container">
+
+        <!-- Barra lateral -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2 class="company-name">Dinamyc Look</h2>
+                <!-- Botón para cerrar la barra lateral en pantallas pequeñas -->
+                <button class="close-btn" id="close_btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Navegación lateral con enlaces a distintas secciones -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('admin_bp.index') }}"><i
+                                class='bx bxs-dashboard'></i><span>Dashboard</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
+                                class="fa-solid fa-user"></i><span>Clientes</span></a>
+                    </li>
+                    <li><a href="{{ url_for('admin_bp.ventas') }}" class="active"><i
+                                class='bx bxs-dollar-circle'></i><span>Ventas</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.productos') }}"><i
+                                class="fas fa-tags"></i><span>Productos</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.promociones') }}"><i
+                                class="fas fa-percent"></i><span>Promociones</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.reportes') }}"><i
+                                class="fa-solid fa-receipt"></i><span>Reportes</span></a>
+                    </li>
+                    <li><a href="{{ url_for('admin_bp.configuracion') }}"><i
+                                class="fa-solid fa-gear"></i><span>Configuración</span></a></li>
+                    <li><a href="{{ url_for('auth_bp.logout') }}"><i class='bx bx-log-out'></i><span>Cerrar
+                                sesión</span></a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Área principal -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="menu-toggle" id="open_btn"><i class='bx bx-menu'></i></button>
+                <a href="{{ url_for('admin_bp.ventas') }}" class="btn-atras">
+                    < Volver</a>
+            </header>
+
+            <section class="admin_bp.factura-container">
+                <h1>admin_bp.factura #{{ id_venta }}</h1>
+                <div class="info-admin_bp.factura">
+                    <p>Cliente: {{ nombre }} {{ apellido }}</p>
+                    <p>Fecha: {{ fecha }}</p>
+                </div>
+                <div class="table-container">
+                    <table class="items_tabla">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio Original</th>
+                                <th>Descuento</th>
+                                <th>Precio Final</th>
+                                <th>Cant.</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in admin_bp.factura %}
+                            <tr>
+                                <td>{{ row[4] }}</td> <!-- Producto -->
+                                <td>${{ "{:,}".format(row[5]).replace(",", ".") }}</td> <!-- Precio_Original -->
+                                <td>{{ row[6] }}%</td> <!-- Descuento -->
+                                <td>${{ "{:,}".format(row[7]).replace(",", ".") }}</td> <!-- Precio_Final -->
+                                <td>{{ row[8] }}</td> <!-- Cantidad_p -->
+                                <td>${{ "{:,}".format(row[9]).replace(",", ".") }}</td> <!-- subtotal_final -->
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5"><strong>Total:</strong></td>
+                                <td><strong>${{ "{:,}".format(total).replace(",", ".") }}</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+
+    <!-- Pie de página -->
+    <footer class="footer">
+        <p>&copy; 2024 Dinamyc Look | Todos los derechos reservados</p>
+    </footer>
+
+    <!-- Scripts para funcionalidades: barra lateral, popups, alertas y formularios -->
+    <script src="{{ url_for('static', filename='js/script_sidebar.js') }}"></script>
+</body>
+
+</html>

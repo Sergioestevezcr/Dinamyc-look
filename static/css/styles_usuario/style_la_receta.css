@@ -4,64 +4,89 @@
 }
 
 .nombre-empresa a {
-	color: #015343;
+	color: #5A7040;
 }
 
 /* Estilo para la lista de navegación */
 
 .nav-links a {
-	color: #015343;
+	color: #485935;
 }
 
 .nav-links li:hover {
-	background-color:  rgba(102, 239, 194, 0.4);
+	background-color:  rgba(59, 71, 45, 0.4);
 }
 
-.btn button {
-	background-color: #006751;
+.btn-serch button {
+	background-color: #485935;
 }
 
-.btn button:hover {
-	background-color: #015343;
+.btn-serch button:hover {
+	background-color: #3B472D;
 }
+
+/*********************************** CARRITO *****************************/
+
+#carrito-header {
+    color: #3B472D;
+}
+
+#carrito-header button {
+    color: #192013;
+}
+
+.carrito-item h4 {
+    color: #3B472D;
+}
+
+.carrito-item p {
+    color: rgba(59, 71, 45, 0.8);
+}
+
+.carrito-item button {
+    color: #333E29 ;
+}
+
+#carrito-footer button {
+    background: #5A7040;
+    color: #fff;
+}
+
+/* Badge del carrito */
+.carrito-badge {
+    background: #92AA71;
+    color: #FFFFFF;
+}
+
 
 /******************************** BARRA DE MARCAS *******************************/
 .barra-de-marcas{
-	background-color: #015343;
+	background-color: #485935;
 	margin-left: -25px;
 }
 
 .scroll-container::-webkit-scrollbar-thumb {
-    background-color: #006751; /* Color del "dedo" de la barra */
+    background-color: #3B472D; /* Color del "dedo" de la barra */
 }
 
 .scroll-container::-webkit-scrollbar-thumb:hover {
-    background-color: #008063; /* Color cuando pasas el cursor por encima */
+    background-color: #192013; /* Color cuando pasas el cursor por encima */
 }
 
 .scroll-container::-webkit-scrollbar-track {
-    background-color: #015343; /* Color del carril de la barra de desplazamiento */
+    background-color: #485935; /* Color del carril de la barra de desplazamiento */
 }
 
-/*********************************** SECCION UNO y CUATRO (2) ***********************************/
+/*********************************** SECCION UNO (2) ***********************************/
 
 .cp-container {
-    background: linear-gradient(to bottom, #EBFEF6, #EBFEF6);
-    box-shadow: inset 0 0px 0px rgba(0, 47, 38, 0.2); 
-}
-
-.cp-container2 {
-    display: flex;
-    width: 100%;
-    overflow: hidden;
-    padding: 30px;
-    background: linear-gradient(to bottom, #FBFAF7, #FBFAF7); 
-    box-shadow: inset 0 0px 0px rgba(69, 18, 33, 0.2);
+    background: #E5EBDC;
+    box-shadow: inset 0 0px 0px rgba(25, 32, 19, 0.2); 
 }
 
 #t2 {
-    color: #008063;
-    text-shadow: 1px 1px 3px rgba(0, 47, 38, 0.3); 
+    color: #3B472D;
+    text-shadow: 1px 1px 3px rgba(25, 32, 19, 0.3); 
 }
 
 /* Personalización de la barra de scroll horizontal */
@@ -70,20 +95,20 @@
 }
 
 .carousel-product::-webkit-scrollbar-thumb {
-    background-color: #00A078;
+    background-color: #758E54;
 }
 
 .carousel-product::-webkit-scrollbar-thumb:hover {
-    background-color: #008063;
+    background-color: #5A7040;
 }
 
 .carousel-product::-webkit-scrollbar-track {
-    background-color: rgba(117, 37, 77, .3);
+    background-color: rgba(117, 142, 84, .3);
 }
 
 .product-card2 {
     background-color: #FFFFFF;
-    box-shadow: 0 5px 15px rgba(0, 47, 38, 0.3);
+    box-shadow: 0 5px 15px rgba(25, 32, 19, 0.3);
 }
 
 .product-card2:hover {
@@ -91,45 +116,54 @@
 }
 
 .text-card2 {
-    background-color: #017343;
+    background-color: #FAFAFA;
     color: #FBFAF7;
 }
 
-.text-card2 p { 
-    color: #FBFAF7;
+.text-card2 h3 {
+    color: #333E29;
+}
+
+#text-precio {
+    color: #1F4A1D;
+    background-color: rgba(146, 170, 113, 0.4);
+}
+
+#text-marca {
+    color: rgba(51, 62, 41, 0.6);
 }
 
 #btn-add2 {
-    background-color: #00A078;
+    background-color: #485935;
     color: #FBFAF7;
-    box-shadow: 0 2px 5px rgba(0, 47, 38, 0.2); 
+    box-shadow: 0 2px 5px rgba(25, 32, 19, 0.2); 
 }
 
 #btn-add2:hover {
-    background-color: #008063;
-    box-shadow: 0 4px 8px rgba(0, 47, 38, 0.3);
+    background-color: #3B472D;
+    box-shadow: 0 4px 8px rgba(25, 32, 19, 0.3);
 }
 
 
 
 /*************************** SECCION DOS (3) *****************************/
 #t3 {
-    color: #008063;
-    background-color: #EBFEF6; 
-    text-shadow: 1px 1px 2px rgba(117, 37, 77, .3); 
+    color: #485935;
+    background-color: #CFDABC; 
+    text-shadow: 1px 1px 2px rgba(51, 62, 41, .3); 
 }
 
 /* Añadir línea decorativa debajo del título */
 #t3::after {
-    background-color: #00A078;
+    background-color: #5A7040;
 }
 
 #p3 {
-    color: #00A078;
+    color: #5A7040;
 }
 
 .product-card3 {
-    background-color: #66DFC2;
+    background-color: #92AA71;
     box-shadow: rgba(42, 113, 36, .4);}
 
 .product-card3:hover { 
@@ -137,98 +171,172 @@
 }
 
 .text-card3 h3 {
-    color: #017343; 
+    color: #F4F6EF; 
+}
+
+.text-card3 p {
+    color: #F4F6EF;
 }
 
 .image-container3 img{
-    box-shadow: 0 4px 8px rgba(0, 47, 38, 0.2); 
+    box-shadow: 0 4px 8px rgba(25, 32, 19, 0.2); 
 }
 
 .image-container3 img:hover {
-    box-shadow: 0 6px 12px rgba(0, 47, 38, 0.3); 
+    box-shadow: 0 6px 12px rgba(25, 32, 19, 0.3); 
 }
 
 #btn-add3 {
-    background-color: #00A078;
+    background-color: #485935;
     color: #FFFFFF;
-    box-shadow: 0 2px 5px rgba(0, 47, 38, 0.2); 
+    box-shadow: 0 2px 5px rgba(25, 32, 19, 0.2); 
 }
 
 #btn-add3:hover {
-    background-color: #008063;
-    box-shadow: 0 4px 8px rgba(0, 47, 38, 0.3); 
+    background-color: #333E29;
+    box-shadow: 0 4px 8px rgba(25, 32, 19, 0.3); 
 }
 
-/*********************************** SECCION TRES (4) ***********************************/
+/*********************************** SECCION CUATRO (4) ***********************************/
 .section4-product {
-    background-color: #EBFEF6;
+    background-color: #E5EBDC;
 }
 #t4 {
-    color: #008063;
-    background-color: #EBFEF6; 
-    text-shadow: 1px 1px 2px rgba(0, 47, 38, 0.1);
+    color: #3B472D;
+    background-color: #E5EBDC; 
+    text-shadow: 1px 1px 2px rgba(25, 32, 19, 0.1);
 }
 
 /* Añadir línea decorativa debajo del título */
 #t4::after {
-    background-color: #00A078;
+    background-color: #3B472D;
 }
 
     /* Subtitulo */
 #p4 {
-    color: #00A078;
+    color: #5A7040;
 }
 
 .carousel-prd-container {
-    background-color: #EBFEF6;
+    background-color: #E5EBDC;
 }
-
 
 .product-card4 {
     background-color: #FFFFFF;
-    box-shadow: 0 5px 15px rgba(0, 47, 38, 0.3);
+    box-shadow: 0 5px 15px rgba(25, 32, 19, 0.3);
 }
 
 .product-card4:hover {
     box-shadow: 0 8px 20px rgba(42, 113, 36, 0.5);
 }
 
-
 .text-card4 {
-    background-color: #017343;
+    background-color: #FAFAFA;
     color: #FBFAF7;
 }
 
+.text-card4 h3 {
+    color: #333E29;
+}
 
-.text-card4 p {
-    color: #FBFAF7;
+#text-precio2 {
+    color: #1F4A1D;
+    background-color: rgba(229, 235, 220, 0.8);
+}
+
+#text-marca2 {
+    color: rgba(229, 235, 220, 0.8);
 }
 
   /* Botón de agregar al carrito */
 #btn-add4 {
-    background-color: #00A078;
+    background-color: #485935;
     color: #FBFAF7;
-    box-shadow: 0 2px 5px rgba(0, 47, 38, 0.2); 
+    box-shadow: 0 2px 5px rgba(25, 32, 19, 0.2); 
 }
 
 #btn-add4:hover {
-    background-color: #008063;
-    box-shadow: 0 4px 8px rgba(0, 47, 38, 0.3);
+    background-color: #3B472D;
+    box-shadow: 0 4px 8px rgba(25, 32, 19, 0.3);
 }
 
 .btn-right-prd, .btn-left-prd {
-    background-color: #008063;
-    box-shadow: 0 3px 10px rgba(0, 47, 38, 0.3);
+    background-color: #485935;
+    box-shadow: 0 3px 10px rgba(25, 32, 19, 0.3);
 }
 
 .btn-right-prd:hover, .btn-left-prd:hover {
-    background-color: #017343;
+    background-color: #333E29;
 }
 
 .carousel-dot {
-    background-color: #00A078;
+    background-color: #758E54;
 }
 
 .carousel-dot.active {
-    background-color: #008063;
+    background-color: #192013;
+}
+
+/*********************************** DETALLES ***********************************/
+/* Contenedor principal detalle */
+.detalle-container {
+    background: #FBFAF7;
+    box-shadow: 0 4px 10px rgba(25, 32, 19,0.2);
+}
+
+.detalle-info h1 {
+    color: #333E29;
+}
+
+.descripcion {
+    color: rgba(25, 32, 19, 0.8);
+}
+
+.precio {
+    color: #3B472D;
+}
+
+.btn-principal {
+    background: #485935;
+    color: white;
+}
+
+.btn-principal:hover {
+    background: #3B472D;
+}
+
+.titulo-relacionados {
+    color: #192013;
+    border-top: 1px solid #192013;
+}
+
+.card-rel a {
+    background: #e7e5e0;
+    box-shadow: 0 2px 6px rgba(25, 32, 19,0.1);
+}
+
+.card-rel h3 {
+    color: #3B472D;
+}
+
+.text-cantidad {
+    color: #3B472D;
+}
+
+.price {
+    color: #5A7040;
+}
+
+#btn-add-rel {
+    background: #333E29;
+    color: white;
+}
+
+.swiper-container-externo .swiper-pagination-bullet {
+    background-color: rgba(51, 62, 41, 0.4);
+
+}
+
+.swiper-container-externo .swiper-pagination-bullet-active {
+    background-color: #3B472D;
 }

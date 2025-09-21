@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Título de la pestaña -->
+    <title>Dinamyc Look - Admin</title>
+
+    <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_admin/style_index_admin.css') }}">
+
+    <!-- Fuente de iconos Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Fuente de iconos FontAwesome -->
+    <script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180"
+        href="{{ url_for('static', filename='imagenes/favicons/apple-touch-icon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="{{ url_for('static', filename='imagenes/favicons/favicon-32x32.ico') }}">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="{{ url_for('static', filename='imagenes/favicons/favicon-16x16.ico') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='imagenes/favicons/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='imagenes/favicons/safari-pinned-tab.svg') }}"
+        color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+    <!-- Mensajes flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert {{ category }}">
+        {{ message }}
+        <button class="alert-close">&times;</button>
+        <div class="alert-progress"></div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        <!-- Barra lateral -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2 class="company-name">Dinamyc Look</h2>
+                <button class="close-btn" id="close_btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('admin_bp.index') }}"><i
+                                class='bx bxs-dashboard'></i><span>Dashboard</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
+                                class="fa-solid fa-user"></i><span>Clientes</span></a>
+                    </li>
+                    <li><a href="{{ url_for('admin_bp.ventas') }}"><i
+                                class='bx bxs-dollar-circle'></i><span>Ventas</span></a>
+                    </li>
+                    <li><a href="{{ url_for('admin_bp.productos') }}"><i
+                                class="fas fa-tags"></i><span>Productos</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.promociones') }}" class="active"><i
+                                class="fas fa-percent"></i><span>Promociones</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.reportes') }}"><i
+                                class="fa-solid fa-receipt"></i><span>Reportes</span></a>
+                    </li>
+                    <li><a href="{{ url_for('admin_bp.configuracion') }}"><i
+                                class="fa-solid fa-gear"></i><span>Configuración</span></a></li>
+                    <li><a href="{{ url_for('auth_bp.logout') }}"><i class='bx bx-log-out'></i><span>Cerrar
+                                sesión</span></a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <button class="menu-toggle" id="open_btn"><i class='bx bx-menu'></i></button>
+                <h1>Promociones</h1>
+            </header>
+
+            <div class="barra-de-busqueda">
+                <input class="buscar" type="text" placeholder="Buscar promoción">
+                <div class="btn">
+                    <button type="submit"><i class='bx bx-search'></i></button>
+                </div>
+            </div>
+
+            <section class="recent-orders">
+                <div class="section-header">
+                    <div class="add-btn">Agregar <i class="fa-regular fa-square-plus"></i></div>
+                    <div class="add-btn">Seleccionar producto<i class="fa-solid fa-square-check"></i></div>
+                </div>
+
+                <div class="table-container">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Descuento (%)</th>
+                                <th>Fecha Inicial</th>
+                                <th>Fecha Final</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for promo in promocionesp %}
+                            <tr>
+                                <td>{{ promo[1] }}%</td>
+                                <td>{{ promo[2] }}</td>
+                                <td>{{ promo[3] }}</td>
+                                <td class="edit-icon">
+                                    <a href="#" data-id="{{ promo[0] }}" data-descuento="{{ promo[1] }}"
+                                        data-fecha-inicial="{{ promo[2] }}" data-fecha-final="{{ promo[3] }}"
+                                        class="edit-btn">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal agregar promoción -->
+    <div id="addModal" class="modal-background">
+        <div class="modal-content">
+            <h2 class="modal-header">Agregar Nueva Promoción</h2>
+            <form id="addForm" action="/add_promocion" method="POST"
+                data-required-fields='["descuento", "fecha_inicial", "fecha_final"]'>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fas fa-percent"></i>
+                        <input type="number" id="add-descuento" class="input-form" name="Descuento"
+                            placeholder="Descuento (%)" min="0" max="100" required>
+                    </div>
+                </div>
+
+                <div class="ddos">
+                    <div class="form-group">
+                        <div class="label-form">
+                            <i class="fa-solid fa-calendar"></i>
+                            <input type="date" id="add-fecha-inicial" class="input-form" name="Fecha_Inicial" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="label-form">
+                            <i class="fa-solid fa-calendar"></i>
+                            <input type="date" id="add-fecha-final" class="input-form" name="Fecha_Final" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-modal cancel-button" id="cancelAddBtn">Cancelar</button>
+                    <button type="submit" class="btn-modal submit-button">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal editar promoción -->
+    <div id="editModal" class="modal-background">
+        <div class="modal-content">
+            <h2 class="modal-header">Editar Promoción</h2>
+            <form id="editForm" method="POST" data-base-action="/update_promocion" data-entity-type="promocion"
+                data-required-fields='["descuento", "fecha_inicial", "fecha_final"]'>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fas fa-percent"></i>
+                        <input type="number" id="edit-descuento" class="input-form" name="Descuento"
+                            placeholder="Descuento (%)" min="0" max="100" required>
+                    </div>
+                </div>
+
+                <div class="ddos">
+                    <div class="form-group">
+                        <div class="label-form">
+                            <i class="fa-solid fa-calendar"></i>
+                            <input type="date" id="edit-fecha-inicial" class="input-form" name="Fecha_Inicial" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="label-form">
+                            <i class="fa-solid fa-calendar"></i>
+                            <input type="date" id="edit-fecha-final" class="input-form" name="Fecha_Final" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-modal cancel-button" id="cancelEditBtn">Cancelar</button>
+                    <button type="submit" class="btn-modal submit-button">Actualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal editar promoción -->
+    <div id="asigModal" class="modal-background">
+        <div class="modal-content">
+            <h2 class="modal-header">Asignar Promoción</h2>
+            <form action="/asignar_promocion" method="POST" id="promoForm">
+                <!-- Selección de promoción -->
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-percent"></i>
+                        <select id="edit-promocion" name="ID_PromocionFK" class="input-form">
+                            <option value="">-- Sin Promoción --</option>
+                            {% for promo in promocionesf %}
+                            <option value="{{ promo[0] }}">{{ promo[1] }}% ({{ promo[2] }} - {{ promo[3] }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sección de productos -->
+                <div class="productos-section">
+                    <h3>Productos de la Venta</h3>
+                    <div id="productos-container">
+                        <div class="producto-item" id="trash-promo">
+                            <div class="form-group g1">
+                                <div class="label-form">
+                                    <i class="fas fa-box"></i>
+                                    <input list="productos-list" class="input-form producto-select"
+                                        placeholder="Producto">
+                                    <!-- hidden donde guardo el ID real -->
+                                    <input type="hidden" name="productos[]" class="producto-id">
+                                    <datalist id="productos-list">
+                                        {% for producto in productospromo %}
+                                        <option value="{{ producto[1] }}" data-id="{{ producto[0] }}"></option>
+                                        {% endfor %}
+                                    </datalist>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-remove-producto" onclick="removeProducto(this)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" id="add-producto-btn" class="btn-add-producto">
+                        <i class="fas fa-plus"></i> Agregar Producto
+                    </button>
+                </div>
+                <!-- Botones de acción -->
+                <div class="button-group">
+                    <button type="button" class="btn-modal cancel-button" id="cancelAddBtn">Cancelar</button>
+                    <button type="submit" class="btn-modal submit-button">Asignar Promo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Dinamyc Look | Todos los derechos reservados</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/script_sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_pop-up.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_paginacion_tabla.js') }}"></script>
+</body>
+
+</html>

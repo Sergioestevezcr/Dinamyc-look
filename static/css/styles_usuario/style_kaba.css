@@ -17,13 +17,47 @@
 	background-color:  rgba(239, 178, 217, 0.8);
 }
 
-.btn button {
+.btn-serch button {
 	background-color: #A92D6C;
 }
 
-.btn button:hover {
+.btn-serch button:hover {
 	background-color:  #8C285A;
 }
+
+/*********************************** CARRITO *****************************/
+
+#carrito-header {
+    color: #8C285A;
+}
+
+#carrito-header button {
+    color: #75254D;
+}
+
+.carrito-item h4 {
+    color: #75254D;
+}
+
+.carrito-item p {
+    color: rgba(117, 37, 77, 0.8);
+}
+
+.carrito-item button {
+    color: #75254D ;
+}
+
+#carrito-footer button {
+    background: #8C285A;
+    color: #fff;
+}
+
+/* Badge del carrito */
+.carrito-badge {
+    background: #C53D86;
+    color: #FFFFFF;
+}
+
 
 /******************************** BARRA DE MARCAS *******************************/
 .barra-de-marcas{
@@ -75,33 +109,35 @@
 }
 
 .text-card {
-    background-color: #C53D86;
+    background-color: #75254D;
     color: #FBFAF7;
 }
 
+#text-precio {
+    color: #8C285A;
+    background-color: rgba(246, 212, 234, 0.9);
+}
 
-.text-card p {
-    color: #FBFAF7;
+#text-marca {
+    color: rgba(249, 234, 244, 0.8);
 }
 
   /* Botón de agregar al carrito */
 #btn-add {
-    background-color: #F6D4EA;
-    color: #8C285A;
+    background-color: #D85CA5;
+    color: #F9EAF4;
     box-shadow: 0 2px 5px rgba(71, 16, 43, 0.2); 
 }
 
 #btn-add:hover {
-    background-color: #EFB2D9;
+    background-color: #C53D86;
     box-shadow: 0 4px 8px rgba(71, 16, 43, 0.3);
 }
 /*********************************** SECCION DOS y CUATRO (4) ***********************************/
-.section4-product{
+.section4-product, .section4-product2{
     background-color: #FAE9F0;
 }
-.section4-product2 {
-	background-color: #FBFAF7;
-}
+
 #t4 {
     color: #A92D6C;
     background-color: #FAE9F0; 
@@ -122,7 +158,6 @@
     background-color: #FAE9F0;
 }
 
-
 .product-card4, .product-card4-2 {
     background-color: #FFFFFF;
     box-shadow: 0 5px 15px rgba(71, 16, 43, 0.3);
@@ -132,21 +167,28 @@
     box-shadow: 0 8px 20px rgba(205, 53, 90, 0.5);
 }
 
-
 .text-card4 {
-    background-color: #C53D86;
+    background-color: #FAFAFA;
     color: #FBFAF7;
 }
 
+.text-card4 h3 {
+    color: #75254D;
+}
 
-.text-card4 p {
-    color: #FBFAF7;
+#text-precio2 {
+    color: #8C285A;
+    background-color: rgba(216, 92, 165, 0.4);
+}
+
+#text-marca2 {
+    color: rgba(117, 37, 77, 0.6);
 }
 
   /* Botón de agregar al carrito */
 #btn-add4 {
-    background-color: #F6D4EA;
-    color: #8C285A;
+    background-color: #A92D6C;
+    color: #F9EAF4;
     box-shadow: 0 2px 5px rgba(71, 16, 43, 0.2); 
 }
 
@@ -210,26 +252,87 @@
 }
 
 .text-card2 {
-    background-color: #C53D86;
-    color: #FBFAF7;
-}
-
-
-.text-card2 p {
+    background-color: #75254D;
     color: #FBFAF7;
 }
 
   /* Botón de agregar al carrito */
 #btn-add2 {
-    background-color: #F6D4EA;
-    color: #8C285A;
+    background-color: #D85CA5;
+    color: #F9EAF4;
     box-shadow: 0 2px 5px rgba(71, 16, 43, 0.2); 
 }
 
 #btn-add2:hover {
-    background-color: #EFB2D9;
+    background-color: #C53D86;
     box-shadow: 0 4px 8px rgba(71, 16, 43, 0.3);
 }
 
+button.btn-fav i.bx.bxs-star,
+.btn-fav i.bxs-star {
+    color: #8C285A !important;
+}
 
+/*********************************** DETALLES ***********************************/
+/* Contenedor principal detalle */
+.detalle-container {
+    background: #FBFAF7;
+    box-shadow: 0 4px 10px rgba(71, 16, 43, 0.2);
+}
 
+.detalle-info h1 {
+    color: #75254D;
+}
+
+.descripcion {
+    color: rgba(71, 16, 43, 0.8);
+}
+
+.precio {
+    color: #8C285A;
+}
+
+.text-cantidad {
+    color: #75254D;
+}
+
+.btn-principal {
+    background: #A92D6C;
+    color: white;
+}
+
+.btn-principal:hover {
+    background: #8C285A;
+}
+
+.titulo-relacionados {
+    color: #75254D;
+    border-top: 1px solid #75254D;
+}
+
+.card-rel a {
+    background: #e7e5e0;
+    box-shadow: 0 2px 6px rgba(71, 16, 43,0.1);
+}
+
+.card-rel h3 {
+    color: #8C285A;
+}
+
+.price {
+    color: #C53D86;
+}
+
+#btn-add-rel {
+    background: #75254D;
+    color: white;
+}
+
+.swiper-container-externo .swiper-pagination-bullet {
+    background-color: rgba(117, 37, 77, 0.4);
+
+}
+
+.swiper-container-externo .swiper-pagination-bullet-active {
+    background-color: #C53D86;
+}

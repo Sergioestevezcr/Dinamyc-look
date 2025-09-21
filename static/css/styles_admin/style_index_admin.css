@@ -138,33 +138,79 @@ body {
   display: none;
 }
 
-/* Cuadrícula para las tarjetas de estadísticas */
+/* contenedor de gráfica */
+.chart-section {
+  background-color: transparent;
+  padding: 0 0 40px 0;
+  margin-bottom: 10px;
+}
+
+.charts-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+}
+
+.chart-box {
+  background: linear-gradient(145deg, #fce5ef, #fbeaf1);
+  border-radius: 20px;
+  padding: 10px 15px;
+  flex: 1 1 45%;
+  max-width: 550px;
+  min-width: 300px;
+  box-shadow: 0 8px 20px rgba(193, 65, 109, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.chart-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(193, 65, 109, 0.25);
+}
+
+.chart-box h3 {
+  text-align: center;
+  font-size: 18px;
+  padding: 10px 0 12px;
+  color: #000;
+  font-weight: 600;
+  background-color: #fffafc;
+  border-radius: 16px 16px  0 0;
+}
+
+.chart-box canvas {
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 0 0 16px 16px;
+  background-color: #fffafc;
+  padding: 12px;
+}
+
+/* Tarjetas en grid adaptable */
 .stats-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-  margin-bottom: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
 }
 
-/* Estilo de cada tarjeta de estadística */
+/* Tarjetas */
 .stat-card {
-  background-color: rgba(249, 234, 241, 0.8);
+  background-color: rgba(245, 213, 228, 0.5);
   border-radius: 16px;
-  padding: 32px;
-  height: 130px;
+  padding: 24px;
   display: flex;
   align-items: center;
-  box-shadow: 0 16px 32px rgba(193, 65, 109, 0.5);
+  box-shadow: 0 8px 20px rgba(193, 65, 109, 0.3);
   transition: all 0.3s ease;
+  height: 130px;
 }
 
-/* Efecto al pasar el cursor sobre las tarjetas */
 .stat-card:hover {
   box-shadow: none;
   transform: translateY(5px);
 }
 
-/* Círculo con icono para cada tarjeta */
 .stat-icon {
   background-color: #C1416D;
   color: white;
@@ -174,38 +220,29 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 24px;
+  margin-right: 20px;
 }
 
-/* Tamaño del icono dentro del círculo */
 .stat-icon i {
-  font-size: 25px;
+  font-size: 22px;
 }
 
-/* Contenedor de la información textual en las tarjetas */
-.stat-info {
-  flex: 1;
-}
-
-/* Título de cada tarjeta de estadística */
 .stat-info h3 {
   font-size: 15px;
-  color: #000000;
-  font-weight: 500;
-  margin-bottom: 8px;
+  color: #000;
+  margin-bottom: 5px;
 }
 
-/* Valor numérico destacado en cada tarjeta */
 .stat-value {
-  font-size: 30px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 /********************************** TABLAS ********************************/
 
 /* Sección de tabla de pedidos recientes */
 .recent-orders {
-  background-color: white;
+  background-color: #ffffff;
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
@@ -264,7 +301,6 @@ body {
   white-space: normal;
   word-break: break-word;
   overflow-wrap: break-word;
-  max-width: 200px;
 }
 
 /* Encabezado de la tabla con fondo rosa suave */
@@ -298,6 +334,58 @@ body {
 
 .btn-mas a:hover {
   background-color: #C1416D;
+}
+
+.tablas-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.image-container {
+  height: 70px;
+  width: 70px;
+}
+
+.image-container img{
+    width: 100%;
+    cursor: pointer;
+    height: 100%;
+    border-radius: 50px;
+    object-fit: cover; /* Asegurar que las imágenes se recorten adecuadamente */
+}
+
+.acciones-rep {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.acciones-rep a {
+  background-color: #D4608D;
+  padding: 10px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.acciones-rep a:hover {
+  background-color: #C1416D;
+}
+
+.precio-original {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 14px;
+}
+
+.precio-descuento {
+    color: #d32f2f;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 /********************************** BARRA BUSQUEDA ********************************/
@@ -457,7 +545,7 @@ body {
   padding-top: 10px;
   font-size: 10px;
   position: relative;
-  bottom: 0;
+  bottom: auto;
   width: auto;
 }
 /********************************** MODAL ********************************/
@@ -502,6 +590,17 @@ body {
 /* Grupo de elementos de formulario */
 .form-group {
   margin-bottom: 15px;
+}
+
+.form-group textarea {
+  border: 0;
+  width: 100%;
+  height: 50px;
+}
+
+.form-group .month {
+  border: 0;
+  width: 100%;
 }
 
 /* Contenedor para etiqueta e input con estilo unificado */
@@ -627,6 +726,11 @@ body {
     border: 1px solid #ddd;
 }
 
+#trash-promo {
+  display: flex;
+  justify-content: end;
+}
+
 .g1 {
   grid-column: 1 / -1; /* el select se extiende de la primera a la última columna */
   width: 100%;
@@ -676,7 +780,6 @@ body {
 
 .total-section {
     margin-top: 20px;
-
     border-radius: 8px;
 }
 
@@ -687,15 +790,40 @@ body {
     background-color: white;
 }
 
+.container-config {
+	background-color: #FFFFFF;
+  border-radius: 20px;
+	padding: 30px;
+}
 
+.label-form-config {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  margin: 15px;
+  border-radius: 20px;
+  padding: 0 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
+/* Iconos dentro de los campos de formulario */
+.label-form-config i {
+  color: #a7a7a7;
+  margin-right: 10px;
+}
+
+.ddos1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: -15px 0;
+}
 
 /* PARA ALERTAS */
 .alert {
     position: fixed;
     top: 20px;
     right: 20px;
-    background-color: #4CAF50;
     color: white;
     padding: 15px 40px 15px 20px;
     border-radius: 8px;
@@ -708,6 +836,22 @@ body {
     opacity: 1;
     transform: translateX(0);
     transition: all 0.3s ease-in-out;
+}
+
+.alert.success {
+    background-color: #6EC141;
+}
+
+.alert.error {
+    background-color: #B61B1B;
+}
+
+.alert.warning {
+    background-color: #C19441;
+}
+
+.alert.info {
+    background-color: #9E3359;
 }
 
 .alert-close {

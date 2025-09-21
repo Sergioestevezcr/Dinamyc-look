@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Título de la pestaña -->
+    <title>Recuperara Contraseña- Dinamyc Look</title>
+
+    <!-- Estilos CSS de la página -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_usuario/style_general.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_usuario/style_login.css') }}">
+
+    <!-- Fuente de iconos Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Fuente de iconos FontAwesome -->
+    <script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180"
+        href="{{ url_for('static', filename='imagenes/favicons/apple-touch-icon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="{{ url_for('static', filename='imagenes/favicons/favicon-32x32.ico') }}">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="{{ url_for('static', filename='imagenes/favicons/favicon-16x16.ico') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='imagenes/favicons/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='imagenes/favicons/safari-pinned-tab.svg') }}"
+        color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+    <header class="header">
+        <div class="nombre-empresa">
+            <a href="index.html">Dinamyc Look</a>
+        </div>
+        <nav class="navbar" id="nav">
+            <ul class="nav-links">
+                <li class="house" title="Inicio"><a href="{{ url_for('client_bp.index_cliente') }}"><i
+                            class="fa-solid fa-house-chimney"></i></a></li>
+                <li title="Iniciar Sesión"><a href="{{ url_for('auth_bp.login') }}"><i class='bx bx-log-in'></i></a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="register">
+        <div class="container-form">
+            <div class="information">
+                <div class="info-childs">
+                    <h2 class="titulo-bienvenida">¿Recordaste tu contraseña?</h2>
+                    <p class="texto-bienvenida">Si ya la recordaste, puedes iniciar sesión aquí</p>
+                    <a href="{{ url_for('auth_bp.login') }}">
+                        <input type="button" value="Iniciar Sesión" class="boton-registrarse">
+                    </a>
+                </div>
+            </div>
+
+            <div class="form-information">
+                <div class="form-information-childs">
+                    <h2 class="iniciar-sesion">Recuperar Contraseña</h2>
+
+                    <!-- Mensajes flash -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert {{ category }}">
+                        {{ message }}
+                        <button class="alert-close">&times;</button>
+                        <div class="alert-progress"></div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+
+                    <div class="icons">
+                        <i class='bx bx-envelope'></i>
+                    </div>
+
+                    <p class="text-iniciar-sesion">Ingresa tu correo electrónico y te enviaremos un enlace para
+                        recuperar tu contraseña</p>
+
+                    <form class="form-iniciar-sesion" method="POST" action="{{ url_for('forgot_password') }}">
+                        <label class="label-form-iniciar-sesion">
+                            <i class='bx bx-envelope'></i>
+                            <input type="email" name="email" required placeholder="Correo electrónico registrado"
+                                class="input-form-iniciar-sesion">
+                        </label>
+
+                        <input type="submit" value="Enviar enlace de recuperación" class="boton-iniciar-sesion">
+                    </form>
+
+                    <div class="login-links" style="margin-top: 15px; text-align: center;">
+                        <p><a href="{{ url_for('auth_bp.login') }}"
+                                style="color: #007bff; text-decoration: none; font-size: 11px;">Volver al inicio de
+                                sesión</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Sobre Nosotros</h4>
+                <p>Somos tu aliado para un cabello radiante, con soluciones perfectas y deslumbrantes.</p>
+                <button class="btn-conocenos"><a href="conocenos.html">Conoce más</a></button>
+            </div>
+            <div class="footer-section">
+                <h4>Contáctanos</h4>
+                <p>Email: dinamycloock@gmail.com</p>
+                <p>Teléfono: +57 3009528943</p>
+                <ul class="redes">
+                    <a href="">
+                        <li><i class='bx bxl-facebook-circle'></i></li>
+                    </a>
+                    <a href="">
+                        <li><i class='bx bxl-tiktok'></i></li>
+                    </a>
+                    <a href="">
+                        <li><i class='bx bxl-instagram'></i></li>
+                    </a>
+                    <a href="">
+                        <li><i class='bx bxl-whatsapp'></i></li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 DinamycLook | Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
+</body>
+
+</html>

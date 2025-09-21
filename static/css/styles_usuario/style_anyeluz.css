@@ -17,12 +17,45 @@
 	background-color:  rgba(243, 174, 197, 0.6);
 }
 
-.btn button {
+.btn-serch button {
 	background-color: #DF557D;
 }
 
-.btn button:hover {
+.btn-serch button:hover {
 	background-color:  #CD355A;
+}
+
+/*********************************** CARRITO *****************************/
+
+#carrito-header {
+    color: #CD355A;
+}
+
+#carrito-header button {
+    color: #932138;
+}
+
+.carrito-item h4 {
+    color: #932138;
+}
+
+.carrito-item p {
+    color: rgba(205, 53, 90, 0.8);
+}
+
+.carrito-item button {
+    color: #4A0D19 ;
+}
+
+#carrito-footer button {
+    background: #DF557D;
+    color: #fff;
+}
+
+/* Badge del carrito */
+.carrito-badge {
+    background: #932138;
+    color: #FFFFFF;
 }
 
 /******************************** BARRA DE MARCAS *******************************/
@@ -68,36 +101,13 @@
 
 #t4-2 {
     color: #A63055;
-    background-color: transparent;
-    text-align: center;
-    padding: 30px 0;
-    font-size: 40px;
-    font-weight: 700; 
+    background-color: #FBFAF7;
     text-shadow: 1px 1px 2px rgba(69, 18, 33, 0.1); 
-    position: relative;
 }
 
 /* Añadir línea decorativa debajo del título */
 #t4-2::after {
-    content: "";
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 3px;
     background-color: #C1416D;
-    border-radius: 3px;
-}
-
-  /* Contenedor del carrusel */
-.carousel-prd-container2 {
-    background-color: transparent;
-    border-radius: 30px 30px 0 0;
-    padding: 10px 50px;
-    position: relative;
-    margin-top: -20px;
-    overflow: hidden;
 }
 
 .carousel-product4-2 {
@@ -108,6 +118,9 @@
     background-color: #FAE9F0;
 }
 
+.carousel-prd-container2 {
+    background-color: #FBFAF7;
+}
 
 .product-card4, .product-card4-2 {
     background-color: #FFFFFF;
@@ -118,26 +131,40 @@
     box-shadow: 0 8px 20px rgba(205, 53, 90, 0.5);
 }
 
-
 .text-card4 {
-    background-color: #DF557D;
+    background-color: #FAFAFA;
     color: #FBFAF7;
 }
 
-
-.text-card4 p {
-    color: #FBFAF7;
+.carousel-prd-container2 .text-card4 {
+    background-color: #932138;
 }
 
-  /* Botón de agregar al carrito */
-#btn-add4 {
-    background-color: #F9DBE6;
+.carousel-prd-container2 .text-card4 h3 {
+    color: #FFFFFF;
+}
+
+.text-card4 h3 {
     color: #932138;
+}
+
+#text-precio {
+    color: #932138;
+    background-color: rgba(223, 85, 125, 0.4);
+}
+
+#text-marca {
+    color: rgba(123, 32, 51, 0.6);
+}
+
+#btn-add4 {
+    background-color: #CD355A;
+    color: #F9DBE6;
     box-shadow: 0 2px 5px rgba(74, 13, 25, 0.2); 
 }
 
 #btn-add4:hover {
-    background-color: #F3AEC5;
+    background-color: #932138;;
     box-shadow: 0 4px 8px rgba(74, 13, 25, 0.3);
 }
 
@@ -191,24 +218,28 @@
 }
 
 .text-card {
-    background-color: #DF557D;
+    background-color: #932138;
     color: #FBFAF7;
 }
 
+#text-precio2 {
+    color: #932138;
+    background-color: rgba(248, 210, 227, 0.9);
+}
 
-.text-card p {
-    color: #FBFAF7;
+#text-marca2 {
+    color: rgba(248, 210, 227, 0.8);
 }
 
   /* Botón de agregar al carrito */
 #btn-add {
-    background-color: #F9DBE6;
-    color: #932138;
+    background-color: #DF557D;
+    color: #fbe8f0;
     box-shadow: 0 2px 5px rgba(74, 13, 25, 0.2); 
 }
 
 #btn-add:hover {
-    background-color: #F3AEC5;
+    background-color: #CD355A;
     box-shadow: 0 4px 8px rgba(74, 13, 25, 0.3);
 }
 /*********************************** SECCION TRES (2) ***********************************/
@@ -250,23 +281,87 @@
 }
 
 .text-card2 {
-    background-color: #DF557D;
-    color: #FBFAF7;
-}
-
-
-.text-card2 p {
-    color: #FBFAF7;
+    background-color: #FAFAFA;
+    color: #932138
 }
 
   /* Botón de agregar al carrito */
 #btn-add2 {
-    background-color: #F9DBE6;
-    color: #932138;
+    background-color: #CD355A;
+    color: #F9DBE6;
     box-shadow: 0 2px 5px rgba(74, 13, 25, 0.2); 
 }
 
 #btn-add2:hover {
-    background-color: #F3AEC5;
+    background-color: #932138;
     box-shadow: 0 4px 8px rgba(74, 13, 25, 0.3);
+}
+
+button.btn-fav i.bx.bxs-star,
+.btn-fav i.bxs-star {
+    color: #EA7CA0 !important;
+}
+
+/*********************************** DETALLES ***********************************/
+/* Contenedor principal detalle */
+.detalle-container {
+    background: #FBFAF7;
+    box-shadow: 0 4px 10px rgba(74, 13, 25, 0.2);
+}
+
+.detalle-info h1 {
+    color: #7B2033;
+}
+
+.descripcion {
+    color: rgba(74, 13, 25, 0.8);
+}
+
+.precio {
+    color: #CD355A;
+}
+
+.text-cantidad {
+    color: #932138;
+}
+
+.btn-principal {
+    background: #DF557D;
+    color: white;
+}
+
+.btn-principal:hover {
+    background: #CD355A;
+}
+
+.titulo-relacionados {
+    color: #932138;
+    border-top: 1px solid #7B2033;
+}
+
+.card-rel a {
+    background: #e7e5e0;
+    box-shadow: 0 2px 6px rgba(74, 13, 25,0.1);
+}
+
+.card-rel h3 {
+    color: #932138;
+}
+
+.price {
+    color: #CD355A;
+}
+
+#btn-add-rel {
+    background: #932138;
+    color: white;
+}
+
+.swiper-container-externo .swiper-pagination-bullet {
+    background-color: rgba(123, 32, 51, 0.4);
+
+}
+
+.swiper-container-externo .swiper-pagination-bullet-active {
+    background-color: #932138;
 }
