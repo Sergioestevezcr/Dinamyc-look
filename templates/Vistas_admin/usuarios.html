@@ -124,23 +124,48 @@
                         </thead>
                         <tbody>
                             {% for usuario in usuarios %}
-                            {% if usuario.8 == "Cliente" %}
+                            {% if usuario.9 == "Cliente" %}
                             <tr>
                                 <!-- Se muestran los campos de la base de datos -->
                                 <td>{{ usuario.1 }} {{ usuario.2 }}</td>
-                                <td class="correo-desbordado">{{ usuario.3|replace("@",
+                                <td>{{ usuario.3 }}</td>
+                                <td class="correo-desbordado">{{ usuario.4|replace("@",
                                     "<wbr>@<wbr>")|replace(".", ".<wbr>")|safe }}</td>
-                                <td>{{ usuario.4 }}</td>
                                 <td>{{ usuario.5 }}</td>
                                 <td>{{ usuario.6 }}</td>
+                                <td>{{ usuario.7 }}</td>
+                                <td>{{ usuario[10] }}</td>
                                 <td class="edit-icon">
+                                    {% if usuario[10] == "Activo" %}
                                     <!-- Botón para abrir el modal de edición con datos prellenados -->
                                     <a href="#" data-id="{{ usuario.0 }}" data-nombre="{{ usuario.1 }}"
-                                        data-apellido="{{ usuario.2 }}" data-correo="{{ usuario.3 }}"
-                                        data-telefono="{{ usuario.4 }}" data-direccion="{{ usuario.5 }}"
-                                        data-ciudad="{{ usuario.6 }}" data-password="{{ usuario.7 }}" class="edit-btn">
+                                        data-apellido="{{ usuario.2 }}" data-documento="{{ usuario.3 }}"
+                                        data-correo="{{ usuario.4 }}" data-telefono="{{ usuario.5 }}"
+                                        data-direccion="{{ usuario.6 }}" data-ciudad="{{ usuario.7 }}"
+                                        data-password="{{ usuario.8 }}" class="edit-btn">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
+                                    {% else %}
+                                    <!-- Si ya está inactivo, se muestra un icono deshabilitado -->
+                                    <button class="btn-delete disabled" disabled>
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if usuario[10] == "Activo" %}
+                                    <form action="{{ url_for('admin_bp.delete_usuario', id=usuario[0]) }}" method="POST"
+                                        onsubmit="return confirm('¿Estás seguro de que deseas inactivar este usuario? Esta acción no se puede deshacer.');">
+                                        <button type="submit" class="btn-delete">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                    <!-- Si ya está inactivo, se muestra un icono deshabilitado -->
+                                    <button class="btn-delete disabled" disabled>
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endif %}
@@ -158,7 +183,7 @@
             <h2 class="modal-header">Agregar Nuevo Cliente</h2>
             <!-- Formulario de agregado -->
             <form id="addForm" action="/add_usuario" method="POST"
-                data-required-fields='["nombre", "apellido", "correo", "telefono", "direccion", "ciudad", "password"]'>
+                data-required-fields='["nombre", "apellido", "documento", "correo", "telefono", "direccion", "ciudad", "password"]'>
 
                 <div class="ddos">
                     <div class="form-group">
@@ -175,6 +200,14 @@
                             <input type="text" id="add-apellido" class="input-form" name="Apellido"
                                 placeholder="Apellidos" required>
                         </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="add-documento" class="input-form" name="Documento"
+                            placeholder="Documento" required>
                     </div>
                 </div>
 
@@ -234,8 +267,8 @@
         <div class="modal-content">
             <h2 class="modal-header">Editar Cliente</h2>
             <!-- Formulario de edición -->
-            <form id="editForm" method="POST" data-base-action="/update" data-entity-type="usuario"
-                data-required-fields='["nombre", "apellido", "correo", "telefono", "direccion", "ciudad", "password"]'>
+            <form id="editForm" method="POST" data-base-action="/update_usuario" data-entity-type="usuario"
+                data-required-fields='["nombre", "apellido", "documento", "correo", "telefono", "direccion", "ciudad", "password"]'>
 
                 <div class="ddos">
                     <div class="form-group">
@@ -252,6 +285,14 @@
                             <input type="text" id="edit-apellido" class="input-form" name="Apellido"
                                 placeholder="Apellidos" required>
                         </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="edit-documento" class="input-form" name="Documento"
+                            placeholder="Documento" required>
                     </div>
                 </div>
 
@@ -305,7 +346,6 @@
             </form>
         </div>
     </div>
-
     <!-- Pie de página -->
     <footer class="footer">
         <p>&copy; 2024 Dinamyc Look | Todos los derechos reservados</p>

@@ -145,7 +145,29 @@
 						<div class="text-card">
 							<h3>{{ producto[1] }}</h3>
 							<p id="text-marca">{{ producto[4] }}</p>
-							<p class="text-precio" id="text-precio">${{ "{:,}".format(producto[2]).replace(",", ".") }}
+							<p class="text-precio" id="text-precio">
+								{% if producto[5] %} {# precio_final existe #}
+								<span class="precio-original">
+									${{ "{:,}".format(producto[2]).replace(",", ".") }}
+								</span><br>
+								<span class="precio-descuento">
+									${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
+								</span>
+								{% else %}
+								${{ "{:,}".format(producto[2]).replace(",", ".") }}
+								{% endif %}
+							</p>
+							<p class="text-precio" id="text-precio">
+								{% if producto[5] %} {# precio_final existe #}
+								<span class="precio-original">
+									${{ "{:,}".format(producto[2]).replace(",", ".") }}
+								</span><br>
+								<span class="precio-descuento">
+									${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
+								</span>
+								{% else %}
+								${{ "{:,}".format(producto[2]).replace(",", ".") }}
+								{% endif %}
 							</p>
 							<button class="btn-add" id="btn-add" type="button">Agregar <i
 									class='bx bx-shopping-bag'></i></button>
@@ -178,8 +200,30 @@
 							<div class="text-card2">
 								<h3>{{ producto[1] }}</h3>
 								<p id="text-marca">{{ producto[4] }}</p>
-								<p class="text-precio" id="text-precio">${{ "{:,}".format(producto[2]).replace(",", ".")
-									}}</p>
+								<p class="text-precio" id="text-precio">
+									{% if producto[5] %} {# precio_final existe #}
+									<span class="precio-original">
+										${{ "{:,}".format(producto[2]).replace(",", ".") }}
+									</span><br>
+									<span class="precio-descuento">
+										${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
+									</span>
+									{% else %}
+									${{ "{:,}".format(producto[2]).replace(",", ".") }}
+									{% endif %}
+								</p>
+								<p class="text-precio" id="text-precio">
+									{% if producto[5] %} {# precio_final existe #}
+									<span class="precio-original">
+										${{ "{:,}".format(producto[2]).replace(",", ".") }}
+									</span><br>
+									<span class="precio-descuento">
+										${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
+									</span>
+									{% else %}
+									${{ "{:,}".format(producto[2]).replace(",", ".") }}
+									{% endif %}
+								</p>
 								<button class="btn-add" id="btn-add2" type="button">Agregar <i
 										class='bx bx-shopping-bag'></i></button>
 							</div>
@@ -302,7 +346,7 @@
 			</div>
 		</div>
 		<div class="footer-bottom">
-			<p>&copy; 2024 DinamycLook | Todos los derechos reservados </p>
+			<p>&copy; 2024 DinamycLook® | Todos los derechos reservados | BY: Laura vargas , Sergio Soriano. </p>
 		</div>
 	</footer>
 

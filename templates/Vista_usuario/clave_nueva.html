@@ -83,7 +83,7 @@
                     <p class="text-iniciar-sesion">Ingresa tu nueva contraseña</p>
 
                     <form class="form-iniciar-sesion" method="POST"
-                        action="{{ url_for('reset_password', token=token) }}">
+                        action="{{ url_for('auth_bp.reset_password', token=token) }}">
                         <label class="label-form-iniciar-sesion">
                             <i class='bx bx-lock-alt'></i>
                             <input type="password" name="password" required placeholder="Nueva contraseña"
@@ -115,7 +115,7 @@
             <div class="footer-section">
                 <h4>Sobre Nosotros</h4>
                 <p>Somos tu aliado para un cabello radiante, con soluciones perfectas y deslumbrantes.</p>
-                <button class="btn-conocenos"><a href="conocenos.html">Conoce más</a></button>
+                <button class="btn-conocenos"><a href="{{ url_for('client_bp.conocenos') }}">Conoce más</a></button>
             </div>
             <div class="footer-section">
                 <h4>Contáctanos</h4>
@@ -128,7 +128,7 @@
                     <a href="">
                         <li><i class='bx bxl-tiktok'></i></li>
                     </a>
-                    <a href="">
+                    <a href="https://www.instagram.com/dinamyc_look/">
                         <li><i class='bx bxl-instagram'></i></li>
                     </a>
                     <a href="">
@@ -138,7 +138,9 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 DinamycLook | Todos los derechos reservados</p>
+            <p>&copy; 2024 DinamycLook® | Todos los derechos reservados | BY: Laura vargas , Sergio Soriano. </p>vargas
+            ,
+            Sergio Soriano </p>
         </div>
     </footer>
 

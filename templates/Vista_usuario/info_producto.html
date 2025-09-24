@@ -80,7 +80,7 @@
 								Favoritos</span></a>
 						<a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
 								Compras</span></a>
-						<a href="admin_bp.configuracion" class="active"><i class='bx bxs-user'></i><span>
+						<a href="{{url_for('admin_bp.configuracion')}}" class="active"><i class='bx bxs-user'></i><span>
 								Perfil</span></a>
 						<a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
 							sesión</a>
@@ -160,7 +160,7 @@
 						{% for r in relacionados %}
 						<div class="swiper-slide">
 							<div class="card-rel">
-								<a href="{{ url_for('detallesproducto', id=r[0]) }}">
+								<a href="{{ url_for('client_bp.detallesproducto', id=r[0]) }}">
 									<img src="{{ url_for('static', filename='imagenes/' ~ r[3]) }}" alt="{{ r[1] }}">
 									<div class="rel-inf">
 										<h3>{{ r[1] }}</h3>
@@ -192,7 +192,7 @@
 			<div class="carousel-product4">
 				{% for c in caruseldetalles %}
 				<div class="product-card4">
-					<a href="{{ url_for('detallesproducto', id=c[0]) }}">
+					<a href="{{ url_for('client_bp.detallesproducto', id=c[0]) }}">
 						<div class="image-container">
 							<!-- Botón favoritos -->
 							<button class="btn-fav" data-id="{{ c[0] }}">
@@ -207,7 +207,30 @@
 						<div class="text-card4">
 							<h3>{{ c[1] }}</h3>
 							<p id="text-marca">{{ c[4] }}</p>
-							<p class="text-precio" id="text-precio">${{ "{:,}".format(c[2]).replace(",", ".") }}</p>
+							<p class="text-precio" id="text-precio">
+								{% if producto[5] %} {# precio_final existe #}
+								<span class="precio-original">
+									${{ "{:,}".format(producto[2]).replace(",", ".") }}
+								</span><br>
+								<span class="precio-descuento">
+									${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
+								</span>
+								{% else %}
+								${{ "{:,}".format(producto[2]).replace(",", ".") }}
+								{% endif %}
+							</p>
+							<p class="text-precio" id="text-precio">
+								{% if producto[5] %} {# precio_final existe #}
+								<span class="precio-original">
+									${{ "{:,}".format(producto[2]).replace(",", ".") }}
+								</span><br>
+								<span class="precio-descuento">
+									${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
+								</span>
+								{% else %}
+								${{ "{:,}".format(producto[2]).replace(",", ".") }}
+								{% endif %}
+							</p>
 							<button class="btn-add" id="btn-add4" type="button">Agregar <i
 									class='bx bx-shopping-bag'></i></button>
 						</div>

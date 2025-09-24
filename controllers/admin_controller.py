@@ -416,68 +416,65 @@ def usuarios():
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM usuarios ORDER BY ID_usuario DESC')
     data = cur.fetchall()
-    cur.close()
 
+    # Pasar datos ya modificados a la plantilla
     return render_template('Vistas_admin/usuarios.html', usuarios=data)
 
 
 @admin_bp.route('/add_usuario', methods=['POST'])
-@admin_required
 def add_usuario():
     if request.method == 'POST':
         nombre = request.form['Nombre']
         apellido = request.form['Apellido']
+        documento = request.form['Documento']
         correo = request.form['Correo']
         telefono = request.form['Telefono']
         direccion = request.form['Direccion']
         ciudad = request.form['Ciudad']
         clave = request.form['Clave']
-        rol = "Cliente"   # se asigna Cliente por defecto
+        rol = "Cliente"
+        estado = "Activo"
 
-        # Hashear la contraseña
+        #  Hashear la contraseña
         clave_hash = generate_password_hash(clave)
 
         cur = mysql.connection.cursor()
-        cur.execute('''INSERT INTO usuarios 
-                        (Nombre, Apellido, Correo, Telefono, Direccion, Ciudad, Clave, Rol) 
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)''',
-                    (nombre, apellido, correo, telefono, direccion, ciudad, clave_hash, rol))
+        cur.execute(' CALL insertarusuario(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                    (nombre, apellido, documento, correo, telefono, direccion, ciudad, clave_hash, rol, estado))
 
         mysql.connection.commit()
         cur.close()
         flash('Usuario agregado correctamente', "success")
-        return redirect(url_for('admin_bp.usuarios'))
+        return redirect(url_for('usuarios'))
 
 
 @admin_bp.route('/edit_usuario/<id>')
-@admin_required
 def edit_usuario(id):
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM usuarios WHERE id_usuario = %s', (id,))
     data = cur.fetchone()
-    cur.close()
-
     if data:
         user_data = {
             'id': data[0],
             'nombre': data[1],
             'apellido': data[2],
-            'correo': data[3],
-            'telefono': data[4],
-            'direccion': data[5],
-            'ciudad': data[6],
-            'clave': data[7]
+            'documento': data[3],
+            'correo': data[4],
+            'telefono': data[5],
+            'direccion': data[6],
+            'ciudad': data[7],
+            'clave': data[8]
         }
         return jsonify(user_data)
     return jsonify({'error': 'Usuario no encontrado'}), 404
 
 
 @admin_bp.route('/update_usuario/<id>', methods=['POST'])
-@admin_required
 def update_usuario(id):
     if request.method == 'POST':
         nombre = request.form['Nombre']
         apellido = request.form['Apellido']
+        documento = request.form['Documento']
         correo = request.form['Correo']
         telefono = request.form['Telefono']
         direccion = request.form['Direccion']
@@ -488,17 +485,28 @@ def update_usuario(id):
 
         cur = mysql.connection.cursor()
         cur.execute('''UPDATE usuarios 
-                        SET Nombre = %s, Apellido = %s, Correo = %s, 
+                        SET Nombre = %s, Apellido = %s, N_Documento = %s,Correo = %s, 
                             Telefono = %s, Direccion = %s, Ciudad = %s, Clave = %s 
                         WHERE id_usuario = %s''',
-                    (nombre, apellido, correo, telefono, direccion, ciudad, clave_hash, id))
+                    (nombre, apellido, documento, correo, telefono, direccion, ciudad, clave_hash, id))
         mysql.connection.commit()
-        cur.close()
-
         flash('Usuario actualizado correctamente', "success")
-        return redirect(url_for('admin_bp.usuarios'))
+        return redirect(url_for('usuarios'))
 
 
+@admin_bp.route('/delete_usuario/<id>', methods=['POST'])
+def delete_usuario(id):
+    cur = mysql.connection.cursor()
+    # Solo actualiza si el usuario está activo
+    cur.execute('CALL eliminarusuario(%s)', (id,))
+    mysql.connection.commit()
+
+    if cur.rowcount > 0:
+        flash('Usuario inactivado correctamente', "success")
+    else:
+        flash('El usuario ya estaba inactivo o no existe', "warning")
+
+    return redirect(url_for('usuarios'))
 # -------------------------------------- VENTAS -----------------------------------------
 
 

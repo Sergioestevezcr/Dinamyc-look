@@ -35,7 +35,7 @@
 <body>
     <header class="header">
         <div class="nombre-empresa">
-            <a href="index.html">Dinamyc Look</a>
+            <a href="{{ url_for('client_bp.index_cliente') }}">Dinamyc Look</a>
         </div>
         <nav class="navbar" id="nav">
             <ul class="nav-links">
@@ -83,7 +83,7 @@
                     <p class="text-iniciar-sesion">Ingresa tu correo electrónico y te enviaremos un enlace para
                         recuperar tu contraseña</p>
 
-                    <form class="form-iniciar-sesion" method="POST" action="{{ url_for('forgot_password') }}">
+                    <form class="form-iniciar-sesion" method="POST" action="{{ url_for('auth_bp.forgot_password') }}">
                         <label class="label-form-iniciar-sesion">
                             <i class='bx bx-envelope'></i>
                             <input type="email" name="email" required placeholder="Correo electrónico registrado"
@@ -108,7 +108,7 @@
             <div class="footer-section">
                 <h4>Sobre Nosotros</h4>
                 <p>Somos tu aliado para un cabello radiante, con soluciones perfectas y deslumbrantes.</p>
-                <button class="btn-conocenos"><a href="conocenos.html">Conoce más</a></button>
+                <button class="btn-conocenos"><a href="{{ url_for('client_bp.conocenos') }}">Conoce más</a></button>
             </div>
             <div class="footer-section">
                 <h4>Contáctanos</h4>
@@ -121,7 +121,7 @@
                     <a href="">
                         <li><i class='bx bxl-tiktok'></i></li>
                     </a>
-                    <a href="">
+                    <a href="https://www.instagram.com/dinamyc_look/">
                         <li><i class='bx bxl-instagram'></i></li>
                     </a>
                     <a href="">
@@ -131,7 +131,9 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 DinamycLook | Todos los derechos reservados</p>
+            <p>&copy; 2024 DinamycLook® | Todos los derechos reservados | BY: Laura vargas , Sergio Soriano. </p>vargas
+            ,
+            Sergio Soriano </p>
         </div>
     </footer>
 

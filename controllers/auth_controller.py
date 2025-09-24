@@ -155,14 +155,14 @@ def forgot_password():
                     server.quit()
                     flash(
                         'Hemos enviado un enlace de recuperación a tu correo electrónico', 'success')
-                except Exception as e:
+                except smtplib.SMTPException:
                     flash('No se pudo enviar el correo. Intenta más tarde.', 'error')
             else:
                 flash('Si el correo existe, recibirás un enlace de recuperación', 'info')
 
             cur.close()
-        except Exception as e:
-            flash(f'Error en el sistema: {str(e)}', 'error')
+        except Exception:
+            flash('Error en el sistema.', 'error')
 
     return render_template('Vista_usuario/clave_olvidada.html')
 

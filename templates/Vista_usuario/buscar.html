@@ -291,7 +291,7 @@
                     <a href="">
                         <li><i class='bx bxl-tiktok'></i></li>
                     </a>
-                    <a href="">
+                    <a href="https://www.instagram.com/dinamyc_look/">
                         <li><i class='bx bxl-instagram'></i></li>
                     </a>
                     <a href="">
@@ -311,8 +311,8 @@
     <script src="{{ url_for('static', filename='js/script_carrito.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
     <script>
-        window.TOTAL_PRODUCTOS = {{ total_productos | tojson }};
-        window.SEARCH_URL = {{ url_for('client_bp.buscar') | tojson }};
+        window.TOTAL_PRODUCTOS = {{ total_productos | tojson | safe }};
+        window.SEARCH_URL = "{{ url_for('client_bp.buscar') }}";
     </script>
 
     <script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
