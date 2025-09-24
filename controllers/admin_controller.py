@@ -12,7 +12,7 @@ from fpdf import FPDF, HTMLMixin
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp'}
 
-admin_bp = Blueprint('admin_bp', __name__)
+admin_bp = Blueprint('admin_bp', __name__)  # Creacion del blueprint
 
 # -------------------------------------- DECORADORES -----------------------------------------
 

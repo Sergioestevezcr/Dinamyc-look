@@ -1,4 +1,4 @@
-your_project_root/
+Dinamyc-look/
 ├── app.py                  # Archivo principal de la aplicación:
 │                           # - Instancia de Flask
 │                           # - Carga de configuración (desde config.py)
