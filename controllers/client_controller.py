@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, session
-from app import mysql, app
+from database import mysql
 from decorators import login_required, cliente_required
 client_bp = Blueprint('client_bp', __name__)
 
