@@ -278,12 +278,12 @@
             <div class="footer-section">
                 <h4>Sobre Nosotros</h4>
                 <p>Somos tu aliado para un cabello radiante, con soluciones perfectas y deslumbrantes.</p>
-                <button class="btn-conocenos"><a href="{{ url_for('client_bp.conocenos') }}">Conoce más</a></button>
+                <button class="btn-conocenos"><a href="{{ url_for('conocenos') }}">Conoce más</a></button>
             </div>
             <div class="footer-section">
                 <h4>Contáctanos</h4>
-                <p>Email: info@dinamylook.com</p>
-                <p>Teléfono: +57 123 456 7890</p>
+                <p>Email: dinamycloock@gmail.com</p>
+                <p>Teléfono: +57 3009528943</p>
                 <ul class="redes">
                     <a href="">
                         <li><i class='bx bxl-facebook-circle'></i></li>
@@ -294,14 +294,13 @@
                     <a href="https://www.instagram.com/dinamyc_look/">
                         <li><i class='bx bxl-instagram'></i></li>
                     </a>
-                    <a href="">
-                        <li><i class='bx bxl-whatsapp'></i></li>
+                    <li><i class='bx bxl-whatsapp'></i></li>
                     </a>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 DinamyLook | Todos los derechos reservados</p>
+            <p>&copy; 2024 DinamycLook® | Todos los derechos reservados | BY: Laura vargas , Sergio Soriano.</p>
         </div>
     </footer>
 
@@ -311,8 +310,8 @@
     <script src="{{ url_for('static', filename='js/script_carrito.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
     <script>
-        window.TOTAL_PRODUCTOS = {{ total_productos | tojson | safe }};
-        window.SEARCH_URL = "{{ url_for('client_bp.buscar') }}";
+        window.TOTAL_PRODUCTOS = "{{ total_productos | tojson }}";
+        window.SEARCH_URL = "{{ url_for('buscar') }}";
     </script>
 
     <script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>

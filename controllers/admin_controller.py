@@ -2,47 +2,17 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
-from functools import wraps
-from functools import wraps
-from config import Config   # la clase dentro de config.py
 from database import mysql  # mysql está definido en database.py
 import io
 import os
-from fpdf import FPDF, HTMLMixin
-
+# Importar decoradores y clase PDF
+from decorators import login_required, admin_required, PDF
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp'}
 
 admin_bp = Blueprint('admin_bp', __name__)  # Creacion del blueprint
 
-# -------------------------------------- DECORADORES -----------------------------------------
-
-
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if "user_id" not in session:
-            flash("Debes iniciar sesión para continuar.", "warning")
-            return redirect(url_for("auth_bp.login"))
-        return f(*args, **kwargs)
-    return decorated_function
-
-
-def admin_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if "user_id" not in session or session.get("user_role") != "Admin":
-            flash("Debes iniciar sesión como administrador para continuar.", "warning")
-            return redirect(url_for("client_bp.index_cliente"))
-        return f(*args, **kwargs)
-    return decorated_function
-
-
-class PDF(FPDF, HTMLMixin):
-    """Clase que combina FPDF con HTMLMixin para soportar tablas HTML"""
-    pass
-
-
 # -------------------------------------- DASHBOARD -----------------------------------------
+
 
 @admin_bp.route('/')
 @admin_required
@@ -58,10 +28,10 @@ def index():
     data_ventas = cur.fetchall()
 
     if data_ventas:
-        ventas = data_ventas[0][0] or 0
+        ventas_count = data_ventas[0][0] or 0
         ingresos = data_ventas[0][1] or 0
     else:
-        ventas = 0
+        ventas_count = 0
         ingresos = 0
 
     cur.execute('''SELECT SUM(detalles_venta.Cantidad_p) AS Total_Cantidad_Mes_Actual
@@ -83,7 +53,7 @@ def index():
 
     return render_template(
         'Vistas_admin/index-admin.html',
-        ventas=ventas,
+        ventas=ventas_count,
         ingresos=ingresos,
         productosT=productosT,
         vendidos=masVendidos,
@@ -160,7 +130,7 @@ def productos():
         FROM productos p
         LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion;
     ''')
-    productos = cur.fetchall()
+    productos_list = cur.fetchall()
 
     # Lista de promociones futuras
     cur.execute('''
@@ -178,7 +148,7 @@ def productos():
 
     return render_template(
         "Vistas_admin/productos.html",
-        productos=productos,
+        productos=productos_list,
         promociones=promociones
     )
 
@@ -512,7 +482,7 @@ def delete_usuario(id):
 
 @admin_bp.route('/ventas')
 @admin_required
-def ventas():
+def ventas_view():
     cur = mysql.connection.cursor()
 
     # Usar la vista "reporte" para obtener los datos de ventas ya procesados
@@ -533,20 +503,20 @@ def ventas():
     # Obtener la lista de usuarios que son clientes
     cur.execute(
         'SELECT ID_Usuario, Nombre, Apellido FROM usuarios WHERE Rol = "Cliente"')
-    usuarios = cur.fetchall()
+    usuarios_list = cur.fetchall()
 
     # Obtener la lista de productos disponibles (stock > 0)
     cur.execute(
         'SELECT ID_Producto, Nombre, Precio FROM productos WHERE Stock > 0')
-    productos = cur.fetchall()
+    productos_disponibles = cur.fetchall()
 
     cur.close()
 
     return render_template(
         'Vistas_admin/ventas.html',
         reportes=data,
-        usuarios=usuarios,
-        productos=productos
+        usuarios=usuarios_list,
+        productos=productos_disponibles
     )
 
 
@@ -561,11 +531,11 @@ def add_venta():
 
             if not id_usuario:
                 flash('Debe seleccionar un cliente', "warning")
-                return redirect(url_for('admin_bp.ventas'))
+                return redirect(url_for('admin_bp.ventas_view'))
 
             if not productos_data or not cantidades:
                 flash('Debe seleccionar al menos un producto', "warning")
-                return redirect(url_for('admin_bp.ventas'))
+                return redirect(url_for('admin_bp.ventas_view'))
 
             cur = mysql.connection.cursor()
             total_venta = 0
@@ -598,7 +568,7 @@ def add_venta():
                         if cantidad_solicitada > stock_disponible:
                             flash(
                                 f'Stock insuficiente para {nombre_producto}. Disponible: {stock_disponible}', "warning")
-                            return redirect(url_for('admin_bp.ventas'))
+                            return redirect(url_for('admin_bp.ventas_view'))
 
                         precio_final = precio - (precio * descuento / 100)
                         subtotal = precio_final * cantidad_solicitada
@@ -616,11 +586,11 @@ def add_venta():
                     else:
                         flash(
                             f'Producto "{nombre_producto}" no encontrado', "error")
-                        return redirect(url_for('admin_bp.ventas'))
+                        return redirect(url_for('admin_bp.ventas_view'))
 
             if not productos_venta:
                 flash('No hay productos válidos en la venta', "error")
-                return redirect(url_for('admin_bp.ventas'))
+                return redirect(url_for('admin_bp.ventas_view'))
 
             # Insertar en ventas
             cur.execute(
@@ -654,7 +624,7 @@ def add_venta():
         finally:
             cur.close()
 
-        return redirect(url_for('admin_bp.ventas'))
+        return redirect(url_for('admin_bp.ventas_view'))
 
 # -------------------------------------- REPORTES -----------------------------------------
 

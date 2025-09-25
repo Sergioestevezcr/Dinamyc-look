@@ -5,50 +5,13 @@ from datetime import datetime, timedelta
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.utils import formataddr
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify, current_app as app
 from werkzeug.security import generate_password_hash, check_password_hash
-from functools import wraps
 from database import mysql
+# Importar decoradores y clase PDF
+from decorators import login_required, admin_required
+from flask import Blueprint, request, render_template, flash, redirect, url_for, session, current_app as app
 
 auth_bp = Blueprint('auth_bp', __name__)
-
-# -------------------------------------- DECORADORES -----------------------------------------
-
-
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'user_id' not in session:
-            flash('Debes iniciar sesión para acceder a esta página', "info")
-            return redirect(url_for('auth_bp.login'))
-        return f(*args, **kwargs)
-    return decorated_function
-
-
-def admin_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'user_id' not in session:
-            flash('Debes iniciar sesión para acceder a esta página', "info")
-            return redirect(url_for('auth_bp.login'))
-        elif session.get('user_role') != 'Admin':
-            flash('No tienes permisos para acceder a esta página', "warning")
-            return redirect(url_for('client_bp.index_cliente'))
-        return f(*args, **kwargs)
-    return decorated_function
-
-
-def cliente_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'user_id' not in session:
-            flash('Debes iniciar sesión para acceder a esta página', "info")
-            return redirect(url_for('auth_bp.login'))
-        elif session.get('user_role') not in ['Cliente', 'Admin']:
-            flash('No tienes permisos para acceder a esta página', "warning")
-            return redirect(url_for('auth_bp.login'))
-        return f(*args, **kwargs)
-    return decorated_function
 
 # -------------------------------------- LOGIN -----------------------------------------
 
