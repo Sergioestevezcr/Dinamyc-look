@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, session, current_app
-=======
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, session
->>>>>>> b79ef56bb9f7b7dd8b1bc026196dc4d44b0fc246
 from database import mysql
 from decorators import login_required, cliente_required
 client_bp = Blueprint('client_bp', __name__)
