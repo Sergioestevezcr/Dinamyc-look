@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, session
-from app import mysql, app
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, session, current_app
+from database import mysql
 from decorators import login_required, cliente_required
 client_bp = Blueprint('client_bp', __name__)
 
@@ -15,7 +15,7 @@ def index_cliente():
 
     cur = mysql.connection.cursor()
 
-    # ✅ Traer productos con la marca del proveedor (máximo 8)
+    # Traer productos con la marca del proveedor (máximo 8)
     cur.execute("""
         SELECT p.ID_Producto, p.Nombre, p.Precio, p.Imagen, pr.Marca
         FROM productos p
@@ -532,7 +532,7 @@ def buscar():
 
     except Exception as e:
         print(">>> ERROR SQL:", str(e))
-        app.logger.error("Error en búsqueda: %s", str(e))
+        current_app.logger.error("Error en búsqueda: %s", str(e))
         flash("Error al realizar la búsqueda. Por favor, inténtalo de nuevo.", "error")
         return render_template("Vista_usuario/buscar.html",
                                resultados=[],

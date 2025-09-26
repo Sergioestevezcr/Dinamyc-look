@@ -875,7 +875,7 @@ def configuracion():
         'telefono': data[4],
         'direccion': data[5],
         'ciudad': data[6],
-        'clave': data[7]  # ⚠️ ajustar si tu tabla tiene otro orden
+        'clave': data[7]  # ajustar si tu tabla tiene otro orden
     }
 
     # Redirigir a la plantilla según el rol
