@@ -415,7 +415,7 @@ def add_usuario():
         mysql.connection.commit()
         cur.close()
         flash('Usuario agregado correctamente', "success")
-        return redirect(url_for('usuarios'))
+        return redirect(url_for('admin_bp.usuarios'))
 
 
 @admin_bp.route('/edit_usuario/<id>')
@@ -461,7 +461,7 @@ def update_usuario(id):
                     (nombre, apellido, documento, correo, telefono, direccion, ciudad, clave_hash, id))
         mysql.connection.commit()
         flash('Usuario actualizado correctamente', "success")
-        return redirect(url_for('usuarios'))
+        return redirect(url_for('admin_bp.usuarios'))
 
 
 @admin_bp.route('/delete_usuario/<id>', methods=['POST'])
@@ -476,7 +476,7 @@ def delete_usuario(id):
     else:
         flash('El usuario ya estaba inactivo o no existe', "warning")
 
-    return redirect(url_for('usuarios'))
+    return redirect(url_for('admin_bp.usuarios'))
 # -------------------------------------- VENTAS -----------------------------------------
 
 

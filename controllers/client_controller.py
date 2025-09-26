@@ -139,7 +139,7 @@ def favoritos():
                         p.Precio,
                         p.Imagen,
                         prov.Marca
-                    FROM Productos p
+                    FROM productos p
                     INNER JOIN favoritos f
                         ON p.ID_Producto = f.ID_ProductoFK
                         AND f.ID_UsuarioFK = %s
@@ -181,19 +181,23 @@ def detallesproducto(id):
     user_name = session.get("user_name")
 
     cur = mysql.connection.cursor()
-    cur.execute("""SELECT ID_Producto, Nombre, Descripcion, Precio, Imagen, Marca
-                   FROM productos WHERE ID_Producto = %s""", (id,))
+    cur.execute("""SELECT p.ID_Producto, p.Nombre, p.Descripcion, p.Precio, p.Imagen, pr.Marca
+                    FROM productos p
+                    JOIN proveedores pr ON p.ID_ProveedorFK = pr.ID_Proveedor
+                    WHERE p.ID_Producto = %s""", (id,))
     productodetalles = cur.fetchone()
 
-    cur.execute("""SELECT ID_Producto, Nombre, Precio, Imagen
-                   FROM productos
-                   WHERE ID_Producto != %s
-                   AND Marca = (SELECT Marca FROM productos WHERE ID_Producto = %s)
-                   ORDER BY RAND() LIMIT 4""", (id, id,))
+    cur.execute("""SELECT p.ID_Producto, p.Nombre, p.Precio, p.Imagen
+                    FROM productos p
+                    WHERE p.ID_Producto != %s
+                    AND p.ID_ProveedorFK = (SELECT ID_ProveedorFK FROM productos WHERE ID_Producto = %s)
+                    ORDER BY RAND() LIMIT 4""", (id, id,))
     relacionados = cur.fetchall()
 
-    cur.execute(
-        'SELECT ID_Producto, Nombre, Precio, Imagen, Marca FROM productos ORDER BY RAND() LIMIT 6')
+    cur.execute('''SELECT p.ID_Producto, p.Nombre, p.Precio, p.Imagen, pr.Marca
+                    FROM productos p
+                    JOIN proveedores pr ON p.ID_ProveedorFK = pr.ID_Proveedor
+                    ORDER BY RAND() LIMIT 6''')
     caruseldetalles = cur.fetchall()
 
     detalles_favoritos = []
@@ -556,13 +560,20 @@ def render_marca(nombre_marca, template, var_name, var_name_lim=None):
 
     # Traer productos por marca
     cur.execute(
-        "SELECT ID_Producto, Nombre, Precio, Imagen, Marca FROM Productos WHERE Marca = %s", (nombre_marca,))
+        """SELECT p.ID_Producto, p.Nombre, p.Precio, p.Imagen, pr.Marca
+            FROM productos p
+            JOIN proveedores pr ON p.ID_ProveedorFK = pr.ID_Proveedor
+            WHERE pr.Marca = %s""", (nombre_marca,))
     data = cur.fetchall()
 
     data_lim = []
     if var_name_lim:
         cur.execute(
-            "SELECT ID_Producto, Nombre, Precio, Imagen, Marca FROM Productos WHERE Marca = %s LIMIT 6", (nombre_marca,))
+            """SELECT p.ID_Producto, p.Nombre, p.Precio, p.Imagen, pr.Marca
+                FROM productos p
+                JOIN proveedores pr ON p.ID_ProveedorFK = pr.ID_Proveedor
+                WHERE pr.Marca = %s
+                LIMIT 6""", (nombre_marca,))
         data_lim = cur.fetchall()
 
     # Inicializamos variables para favoritos y nombre
