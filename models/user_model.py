@@ -71,7 +71,7 @@ class UserModel:
         cur = mysql.connection.cursor()
         cur.execute('''
             SELECT p.ID_Producto, p.Nombre, p.Precio, p.Imagen, p.Marca 
-            FROM Productos p
+            FROM productos p
             INNER JOIN favoritos f ON p.ID_Producto = f.ID_ProductoFK AND f.ID_UsuarioFK = %s
             ORDER BY p.Marca ASC
         ''', (user_id,))

@@ -7,7 +7,7 @@ class ProductModel:
     def get_products_by_brand(brand):
         cur = mysql.connection.cursor()
         cur.execute(
-            'SELECT ID_Producto, Nombre, Precio, Imagen, Marca FROM Productos WHERE Marca = %s', (brand,))
+            'SELECT ID_Producto, Nombre, Precio, Imagen, Marca FROM productos WHERE Marca = %s', (brand,))
         data = cur.fetchall()
         cur.close()
         return data

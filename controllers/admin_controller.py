@@ -42,8 +42,8 @@ def index():
     productosT = cur.fetchone()[0]
 
     cur.execute(
-        'SELECT Producto, Marca, Total_Ventas FROM masvendido ORDER BY masvendido.Total_Ventas DESC LIMIT 10')
-    masVendidos = cur.fetchall()
+        'SELECT Nombre , Total_Vendido FROM mas_vendidos ORDER BY mas_vendidos.Total_Vendido DESC LIMIT 10')
+    mas_vendidos = cur.fetchall()
 
     cur.execute(
         'SELECT * FROM prductosxacabar ORDER BY prductosxacabar.Stock DESC LIMIT 10')
@@ -56,7 +56,7 @@ def index():
         ventas=ventas_count,
         ingresos=ingresos,
         productosT=productosT,
-        vendidos=masVendidos,
+        vendidos=mas_vendidos,
         acabados=xacabar,
         admin_name=session.get('user_name')
     )
@@ -67,13 +67,11 @@ def index():
 @admin_bp.route('/ventas_por_mes')
 @admin_required
 def ventas_por_mes():
-    # Creamos listas con 12 posiciones (una por cada mes)
     ingresos_mensuales = [0] * 12
     ventas_mensuales = [0] * 12
     meses = ['Ene.', 'Feb.', 'Mar.', 'Abr.', 'May.', 'Jun.',
              'Jul.', 'Ago.', 'Sep.', 'Oct.', 'Nov.', 'Dic.']
 
-    # Consulta para obtener ventas y sumatoria de ingresos por mes
     cur = mysql.connection.cursor()
     cur.execute("""
         SELECT MONTH(Fecha) AS mes, 
@@ -81,25 +79,21 @@ def ventas_por_mes():
             COUNT(*) AS total_ventas
         FROM ventas
         GROUP BY mes
-        ORDER BY mes
-    """)
+        ORDER BY mes """)
     resultados = cur.fetchall()
     cur.close()
 
-    # Llenamos los arrays con los datos obtenidos
     for fila in resultados:
         mes_idx = int(fila[0]) - 1
         ingresos_mensuales[mes_idx] = int(fila[1]) if fila[1] else 0
         ventas_mensuales[mes_idx] = int(fila[2]) if fila[2] else 0
 
     return jsonify({
-        'labels': meses[:datetime.now().month],  # Solo hasta el mes actual
+        'labels': meses[:datetime.now().month],
         'dataIngresos': ingresos_mensuales[:datetime.now().month],
         'dataVentas': ventas_mensuales[:datetime.now().month]
     })
-
-
-# -------------------------------------- PRODUCTOS -----------------------------------------
+# -------------------------------------- productos -----------------------------------------
 
 
 @admin_bp.route('/productos')
@@ -116,7 +110,7 @@ def productos():
             p.Imagen, 
             p.Precio AS precio_original,
             p.Stock, 
-            p.Marca, 
+            prov.Marca, 
             p.Categoria,
             pr.ID_Promocion,
             pr.Descuento,
@@ -128,7 +122,8 @@ def productos():
                 ELSE NULL
             END AS precio_final
         FROM productos p
-        LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion;
+        LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
+        LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor
     ''')
     productos_list = cur.fetchall()
 
@@ -256,7 +251,7 @@ def update_producto(id):
         flash('Producto actualizado correctamente', "success")
         return redirect(url_for('admin_bp.productos'))
 
-# -------------------------------------- PROMOCIONES/DESCUENTOS ----------------------------------------
+# -------------------------------------- promociones/DESCUENTOS ----------------------------------------
 
 
 @admin_bp.route('/promociones')
@@ -302,7 +297,7 @@ def add_promocion():
 
 
 @admin_bp.route('/edit_promocion/<id>')
-def edit_promociones(id):
+def edit_promocion(id):
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM promociones WHERE id_promocion = %s', (id,))
     data = cur.fetchone()
@@ -318,7 +313,7 @@ def edit_promociones(id):
 
 
 @admin_bp.route('/update_promocion/<id>', methods=['POST'])
-def update_promociones(id):
+def update_promocion(id):
     if request.method == 'POST':
         descuento = request.form['Descuento']
         fechai = request.form['Fecha_Inicial']
@@ -377,7 +372,7 @@ def asignar_promocion():
         cur.close()
         return redirect(url_for("admin_bp.promociones"))
 
-# -------------------------------------- USUARIOS -----------------------------------------
+# -------------------------------------- usuarios -----------------------------------------
 
 
 @admin_bp.route('/usuarios')
@@ -477,7 +472,7 @@ def delete_usuario(id):
         flash('El usuario ya estaba inactivo o no existe', "warning")
 
     return redirect(url_for('admin_bp.usuarios'))
-# -------------------------------------- VENTAS -----------------------------------------
+# -------------------------------------- ventas -----------------------------------------
 
 
 @admin_bp.route('/ventas')
@@ -781,18 +776,15 @@ def ver_reporte(id):
 
 # -------------------------------------- FACTURA -----------------------------------------
 
-
 @admin_bp.route('/factura/<id_venta>')
 @login_required
 def factura(id_venta):
-    user_id = session['user_id']                # ID del usuario logueado
-    # Rol del usuario ('Admin' o 'Cliente')
-    rol = session.get('user_role')
+    user_id = session['user_id']
+    rol = (session.get('user_role') or "").lower()   # 🔹 cambio mínimo: siempre minúsculas
 
     cur = mysql.connection.cursor()
 
-    if rol == 'Admin':
-        # Admin puede ver cualquier factura
+    if rol == 'admin':
         cur.execute('''
             SELECT Num_venta, Fecha, Nombre_Cliente, Apellido_Cliente,
                    Producto, Precio_Original, Descuento, Precio_Final,
@@ -800,8 +792,7 @@ def factura(id_venta):
             FROM reporte
             WHERE Num_venta = %s
         ''', (id_venta,))
-    elif rol == 'Cliente':
-        # Cliente solo puede ver sus facturas
+    elif rol == 'cliente':
         cur.execute('''
             SELECT Num_venta, Fecha, Nombre_Cliente, Apellido_Cliente,
                    Producto, Precio_Original, Descuento, Precio_Final,
@@ -825,8 +816,7 @@ def factura(id_venta):
         flash('Factura no encontrada o no autorizada', 'warning')
         return redirect(url_for('client_bp.compras'))
 
-    # Renderizar según rol
-    if rol == 'Admin':
+    if rol == 'admin':
         return render_template(
             'Vistas_admin/factura.html',
             factura=factura_data,
@@ -836,7 +826,7 @@ def factura(id_venta):
             id_venta=id_venta,
             total=total
         )
-    else:  # Cliente
+    else:  # cliente
         return render_template(
             'Vista_usuario/factura.html',
             factura=factura_data,
@@ -847,15 +837,14 @@ def factura(id_venta):
             total=total
         )
 
-# -------------------------------------- CONFIGURACIÓN / PERFIL -----------------------------------------
 
+# -------------------------------------- CONFIGURACIÓN / PERFIL -----------------------------------------
 
 @admin_bp.route('/configuracion', methods=['GET'])
 @login_required
 def configuracion():
-    id = session['user_id']                # ID del usuario logueado
-    # Rol del usuario ('Admin' o 'Cliente')
-    rol = session.get('user_role')
+    id = session['user_id']
+    rol = (session.get('user_role') or "").lower()   # 🔹 cambio mínimo: minúsculas
 
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM usuarios WHERE ID_Usuario = %s', (id,))
@@ -866,7 +855,6 @@ def configuracion():
         flash('Usuario no encontrado', 'error')
         return redirect(url_for('auth_bp.login'))
 
-    # Convertimos la tupla en un diccionario (ajusta índices según tu tabla real)
     usuario = {
         'id_usuario': data[0],
         'nombre': data[1],
@@ -875,13 +863,12 @@ def configuracion():
         'telefono': data[4],
         'direccion': data[5],
         'ciudad': data[6],
-        'clave': data[7]  # ajustar si tu tabla tiene otro orden
+        'clave': data[7]
     }
 
-    # Redirigir a la plantilla según el rol
-    if rol == 'Admin':
+    if rol == 'admin':
         return render_template('Vistas_admin/configuracion.html', usuario=usuario)
-    elif rol == 'Cliente':
+    elif rol == 'cliente':
         return render_template('Vista_usuario/perfil.html', usuario=usuario, user=id)
     else:
         flash('Rol no reconocido', 'error')
@@ -889,24 +876,22 @@ def configuracion():
 
 
 @admin_bp.route('/actualizar_usuario/<int:id>', methods=['POST'])
-@login_required
+@admin_required
 def actualizar_usuario(id):
     usuario_id = session['user_id']
-    rol = session.get('user_role')
+    rol = (session.get('user_role') or "").lower()   # 🔹 cambio mínimo: minúsculas
 
-    # Verificar permisos
-    if rol == 'Cliente' and usuario_id != id:
+    if rol == 'cliente' and usuario_id != id:
         flash('No tienes permiso para actualizar este usuario', 'error')
         return redirect(url_for('admin_bp.configuracion'))
 
-    # Obtener datos del formulario
     nombre = request.form['nombre']
     apellido = request.form['apellido']
     correo = request.form['correo']
     telefono = request.form['telefono']
     direccion = request.form['direccion']
     ciudad = request.form['ciudad']
-    clave = request.form['clave'].strip()  # puede venir vacío
+    clave = request.form['clave'].strip()
 
     cur = mysql.connection.cursor()
 

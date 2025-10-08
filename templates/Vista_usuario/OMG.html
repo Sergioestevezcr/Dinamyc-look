@@ -54,6 +54,11 @@
 
 		<!----------------------------------- 1.1 Barra de busqueda ------------------------------------>
 		<div class="barra-de-busqueda">
+			<!-- Botón visible solo en pantallas pequeñas -->
+			<button type="button" class="toggle-search">
+				<i class="fas fa-search"></i>
+			</button>
+
 			<form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
 				<input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
 				<div class="btn-serch">
@@ -76,7 +81,7 @@
 								Favoritos</span></a>
 						<a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
 								Compras</span></a>
-						<a href="admin_bp.configuracion" class="active"><i class='bx bxs-user'></i><span>
+						  <a href="{{ url_for('admin_bp.configuracion') }}"><i class='bx bxs-user'></i><span>
 								Perfil</span></a>
 						<a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
 							sesión</a>
@@ -193,18 +198,7 @@
 							${{ "{:,}".format(producto[2]).replace(",", ".") }}
 							{% endif %}
 						</p>
-						<p class="text-precio" id="text-precio">
-							{% if producto[5] %} {# precio_final existe #}
-							<span class="precio-original">
-								${{ "{:,}".format(producto[2]).replace(",", ".") }}
-							</span><br>
-							<span class="precio-descuento">
-								${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
-							</span>
-							{% else %}
-							${{ "{:,}".format(producto[2]).replace(",", ".") }}
-							{% endif %}
-						</p>
+						 
 						<button class="btn-add" id="btn-add" type="button">Agregar <i
 								class='bx bx-shopping-bag'></i></button>
 					</div>
@@ -275,10 +269,10 @@
 					<a href="">
 						<li><i class='bx bxl-tiktok'></i></li>
 					</a>
-					<a href="">
-						<a href="https://www.instagram.com/dinamyc_look/">
+					<a href="https://www.instagram.com/dinamyc_look/">
 							<li><i class='bx bxl-instagram'></i></li>
 						</a>
+					<a href="">
 						<li><i class='bx bxl-whatsapp'></i></li>
 					</a>
 				</ul>
@@ -294,6 +288,7 @@
 	<script src="{{ url_for('static', filename= 'js/script_alert.js') }}"></script>
 	<script src="{{ url_for('static', filename= 'js/script_carrito.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
 </body>
 
 </html>

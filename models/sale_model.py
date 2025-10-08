@@ -33,7 +33,7 @@ class SaleModel:
         productos_totales = cur.fetchone()[0]
 
         cur.execute(
-            'SELECT Producto, Marca, Total_Ventas FROM masvendido ORDER BY masvendido.Total_Ventas DESC LIMIT 10')
+            'SELECT Producto, Marca, Total_Ventas FROM mas_vendidos ORDER BY mas_vendidos.Total_Ventas DESC LIMIT 10')
         mas_vendidos = cur.fetchall()
 
         cur.execute(
@@ -47,7 +47,7 @@ class SaleModel:
     def get_monthly_sales_data():
         cur = mysql.connection.cursor()
         cur.execute("""
-            SELECT MONTH(Fecha) AS mes, SUM(Total) AS total_ingresos, COUNT(*) AS total_ventas
+            SELECT MONTH(Fecha) AS mes, SUM(Total) AS total_ingresos, COUNT(*) AS Total_Vendido
             FROM ventas
             GROUP BY mes
             ORDER BY mes

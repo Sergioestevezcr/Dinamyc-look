@@ -59,7 +59,7 @@
                     <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
                                 class="fa-solid fa-user"></i><span>Clientes</span></a>
                     </li>
-                    <li><a href="{{ url_for('admin_bp.ventas') }}"><i
+                    <li><a href="{{ url_for('admin_bp.ventas_view') }}"><i
                                 class='bx bxs-dollar-circle'></i><span>Ventas</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.productos') }}" class="active"><i
@@ -162,7 +162,7 @@
     <div id="addModal" class="modal-background">
         <div class="modal-content">
             <h2 class="modal-header">Agregar Nuevo Producto</h2>
-            <form id="addForm" action="/add_producto" method="POST" enctype="multipart/form-data">
+            <form id="addForm" action="{{ url_for('admin_bp.add_producto') }}" method="POST" enctype="multipart/form-data">
 
                 <!-- Nombre -->
                 <div class="form-group">
@@ -302,8 +302,7 @@
 
     <!-- Pie -->
     <footer class="footer">
-        <p>&copy; 2024 DinamycLook® | Todos los derechos reservados | BY: Laura vargas , Sergio Soriano. </p>vargas ,
-        Sergio Soriano </p>
+        <p>&copy; 2024 DinamycLook® | Todos los derechos reservados | BY: Laura vargas , Sergio Soriano. </p>
     </footer>
 
     <!-- Scripts -->

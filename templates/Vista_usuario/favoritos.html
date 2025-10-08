@@ -44,6 +44,11 @@
 		</div>
 
 		<div class="barra-de-busqueda">
+			<!-- Botón visible solo en pantallas pequeñas -->
+			<button type="button" class="toggle-search">
+				<i class="fas fa-search"></i>
+			</button>
+
 			<form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
 				<input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
 				<div class="btn-serch">
@@ -107,7 +112,7 @@
 						Favoritos</span></a></li>
 			<li><a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
 						Compras</span></a></li>
-			<li><a href="admin_bp.configuracion"><i class='bx bxs-user'></i><span> Perfil</span></a>
+			<li><a href="{{ url_for('admin_bp.configuracion') }}"><i class='bx bxs-user'></i><span> Perfil</span></a>
 			</li>
 		</ul>
 	</section>
@@ -118,7 +123,7 @@
 			<div class="container-product-cards">
 				{% for f in favoritos %}
 				<div class="product-card">
-					<a href="{{ url_for('detallesproducto', id=f[0]) }}">
+					<a href="{{ url_for('client_bp.detallesproducto', id=f[0]) }}">
 						<div class="image-container">
 							<!-- Botón favoritos -->
 							<button class="btn-fav" data-id="{{ f[0] }}">
@@ -147,6 +152,7 @@
 	<script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_carrito.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
 </body>
 
 </html>

@@ -14,14 +14,22 @@ def index_cliente():
     user_name = session.get("user_name")
 
     cur = mysql.connection.cursor()
-
-    # Traer productos con la marca del proveedor (máximo 8)
-    cur.execute("""
-        SELECT p.ID_Producto, p.Nombre, p.Precio, p.Imagen, pr.Marca
-        FROM productos p
-        JOIN proveedores pr ON p.ID_ProveedorFK = pr.ID_Proveedor
-        LIMIT 8
-    """)
+    cur.execute('''SELECT
+    	p.ID_Producto, 
+        p.Nombre,
+        p.Precio AS precio_original,
+        p.Imagen, 
+        prov.Marca AS Marca,
+        CASE
+            WHEN pr.Fecha_Inicial <= CURDATE() 
+                AND pr.Fecha_Final >= CURDATE()
+                AND pr.Descuento IS NOT NULL
+            THEN p.Precio - (p.Precio * pr.Descuento / 100)
+            ELSE NULL
+        END AS precio_final
+      FROM productos p
+      LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
+      LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor LIMIT 8''')
     data = cur.fetchall()
 
     favoritos_list = []
@@ -81,7 +89,7 @@ def la_receta():
 
 @client_bp.route('/magic_hair')
 def magic_hair():
-    return render_marca("Magic Hair", "Vista_usuario/magic-hair.html", "productosmagic")
+    return render_marca("Magic Hair", "Vista_usuario/magic-hair.html", "productosmagic", "productosmagiclim")
 
 
 @client_bp.route('/OMG')
@@ -98,7 +106,7 @@ def la_pocion():
 def conocenos():
     return render_template('Vista_usuario/conocenos.html')
 
-# -------------------------------------- FAVORITOS -----------------------------------------
+# -------------------------------------- favoritos -----------------------------------------
 
 
 @client_bp.route("/toggle_favorito/<int:producto_id>", methods=["POST"])
@@ -134,18 +142,24 @@ def favoritos():
 
     # Traer productos favoritos con la marca del proveedor
     cur.execute('''SELECT
-                        p.ID_Producto,
+                    	p.ID_Producto, 
                         p.Nombre,
-                        p.Precio,
-                        p.Imagen,
-                        prov.Marca
-                    FROM productos p
-                    INNER JOIN favoritos f
-                        ON p.ID_Producto = f.ID_ProductoFK
+                        p.Precio AS precio_original,
+                        p.Imagen, 
+                        prov.Marca AS Marca,
+                        CASE
+                            WHEN pr.Fecha_Inicial <= CURDATE() 
+                                AND pr.Fecha_Final >= CURDATE()
+                                AND pr.Descuento IS NOT NULL
+                            THEN p.Precio - (p.Precio * pr.Descuento / 100)
+                            ELSE NULL
+                        END AS precio_final
+                      FROM productos p
+                      INNER Join favoritos f
+                        ON p.ID_Producto = f.ID_ProductoFk
                         AND f.ID_UsuarioFK = %s
-                    INNER JOIN proveedores prov
-                        ON p.ID_ProveedorFK = prov.ID_Proveedor
-                    ORDER BY prov.Marca ASC''', (user_id,))
+                      LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
+                      LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor ORDER BY prov.Marca ASC''', (user_id,))
     data = cur.fetchall()
 
     # Inicializar variables
@@ -156,7 +170,7 @@ def favoritos():
     if user_id:
         # Nombre del usuario
         cur.execute(
-            "SELECT Nombre FROM Usuarios WHERE ID_Usuario = %s", (user_id,))
+            "SELECT Nombre FROM usuarios WHERE ID_Usuario = %s", (user_id,))
         row = cur.fetchone()
         nombre = row[0] if row else None
 
@@ -181,23 +195,61 @@ def detallesproducto(id):
     user_name = session.get("user_name")
 
     cur = mysql.connection.cursor()
-    cur.execute("""SELECT p.ID_Producto, p.Nombre, p.Descripcion, p.Precio, p.Imagen, pr.Marca
-                    FROM productos p
-                    JOIN proveedores pr ON p.ID_ProveedorFK = pr.ID_Proveedor
-                    WHERE p.ID_Producto = %s""", (id,))
+    cur.execute('''SELECT
+                    p.ID_Producto, 
+                    p.Nombre,
+                    p.Descripcion,
+                    p.Precio AS precio_original,
+                    p.Imagen, 
+                    prov.Marca AS Marca,
+                    CASE
+                        WHEN pr.Fecha_Inicial <= CURDATE() 
+                            AND pr.Fecha_Final >= CURDATE()
+                            AND pr.Descuento IS NOT NULL
+                        THEN p.Precio - (p.Precio * pr.Descuento / 100)
+                        ELSE NULL
+                    END AS precio_final
+                FROM productos p
+                LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
+                LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor 
+                WHERE p.ID_Producto = %s''', (id,))
     productodetalles = cur.fetchone()
 
-    cur.execute("""SELECT p.ID_Producto, p.Nombre, p.Precio, p.Imagen
+    cur.execute("""SELECT 
+                        p.ID_Producto, 
+                        p.Nombre,
+                        p.Precio AS precio_original,
+                        p.Imagen,
+                        CASE
+                              WHEN pr.Fecha_Inicial <= CURDATE() 
+                                  AND pr.Fecha_Final >= CURDATE()
+                                  AND pr.Descuento IS NOT NULL
+                              THEN p.Precio - (p.Precio * pr.Descuento / 100)
+                            ELSE NULL
+                        END AS precio_final
                     FROM productos p
+                    LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
                     WHERE p.ID_Producto != %s
                     AND p.ID_ProveedorFK = (SELECT ID_ProveedorFK FROM productos WHERE ID_Producto = %s)
                     ORDER BY RAND() LIMIT 4""", (id, id,))
     relacionados = cur.fetchall()
 
-    cur.execute('''SELECT p.ID_Producto, p.Nombre, p.Precio, p.Imagen, pr.Marca
+    cur.execute('''SELECT
+                        p.ID_Producto, 
+                        p.Nombre,
+                        p.Precio AS precio_original,
+                        p.Imagen, 
+                        prov.Marca AS Marca,
+                        CASE
+                              WHEN pr.Fecha_Inicial <= CURDATE() 
+                                  AND pr.Fecha_Final >= CURDATE()
+                                  AND pr.Descuento IS NOT NULL
+                              THEN p.Precio - (p.Precio * pr.Descuento / 100)
+                            ELSE NULL
+                        END AS precio_final
                     FROM productos p
-                    JOIN proveedores pr ON p.ID_ProveedorFK = pr.ID_Proveedor
-                    ORDER BY RAND() LIMIT 6''')
+                    LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
+                    LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor ORDER BY RAND() LIMIT 6''')
     caruseldetalles = cur.fetchall()
 
     detalles_favoritos = []
@@ -352,7 +404,7 @@ def carrito_finalizar():
         id_producto = cur.fetchone()[0]
 
         cur.execute("""INSERT INTO detalles_venta (ID_VentaFK, ID_ProductoFK, Cantidad_p, SubTotal)
-                       VALUES (%s, %s, %s, %s)""", (id_venta, id_producto, cantidad, precio * cantidad))
+                       VALUES (%s, %s, %s, %s)""", (id_venta, id_producto, cantidad, d))
 
     cur.execute("DELETE FROM carrito_temp WHERE ID_UsuarioFK = %s", (user_id,))
     session.pop("carrito", None)
@@ -387,7 +439,7 @@ def compras():
     # Solo si hay usuario logueado
     if user_id:
         cur.execute(
-            "SELECT Nombre FROM Usuarios WHERE ID_Usuario = %s", (user_id,))
+            "SELECT Nombre FROM usuarios WHERE ID_Usuario = %s", (user_id,))
         row = cur.fetchone()
         nombre = row[0] if row else None
 
@@ -398,157 +450,109 @@ def compras():
                            nombre=nombre)
 
 # -------------------------------------- BUSCAR -----------------------------------------
-
-
 @client_bp.route('/buscar', methods=['GET'])
 def buscar():
     user_id = session.get("user_id")
     user_name = session.get("user_name")
 
     query = request.args.get("q", "").strip()
-    categoria = request.args.get("categoria", "")
-    subcategoria = request.args.get("subcategoria", "")
-    precio_min = request.args.get("precio_min", type=int)
-    precio_max = request.args.get("precio_max", type=int)
+    categoria = request.args.get("categoria", "").strip()
+    subcategoria = request.args.get("subcategoria", "").strip()
+    precio_min = int(request.args.get("precio_min", 0) or 0)
+    precio_max = int(request.args.get("precio_max", 0) or 0)
 
     cur = mysql.connection.cursor()
     try:
-        # Caso sin filtros → traer todos
-        if not (query or categoria or subcategoria or precio_min or precio_max):
-            cur.execute("""
-                SELECT 
-                    p.ID_Producto,
-                    p.Nombre,
-                    p.Precio,
-                    p.Imagen,
-                    prov.Marca AS Marca,
-                    p.Categoria
-                FROM productos p
-                JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor
-                ORDER BY precio ASC
-            """)
-            resultados = cur.fetchall()
+        base_sql = """
+            SELECT p.ID_Producto, p.Nombre, p.Precio, p.Imagen, prov.Marca, p.Categoria
+            FROM productos p
+            JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor
+        """
+        where_conditions = []
+        filtros = []
+
+        if query:
+            where_conditions.append(
+                "(LOWER(p.Nombre) LIKE %s OR LOWER(p.Categoria) LIKE %s OR LOWER(prov.Marca) LIKE %s OR LOWER(p.Descripcion) LIKE %s)"
+            )
+            filtros.extend([f"%{query.lower()}%"]*4)
+
+        if categoria:
+            where_conditions.append("p.Categoria = %s")
+            filtros.append(categoria)
+
+        subcategoria_mapping = {
+            "shampoo": ["shampoo", "champú"],
+            "acondicionador": ["acondicionador"],
+            "tratamiento": ["tratamiento", "mascarilla", "ampolla"],
+            "crema": ["crema", "loción"],
+            "bloqueador_solar": ["bloqueador", "protector solar", "spf"],
+            "bronceador": ["bronceador", "autobronceante"],
+            "exfoliante": ["exfoliante", "scrub", "peeling"]
+        }
+        if subcategoria.lower() in subcategoria_mapping:
+            terms = subcategoria_mapping[subcategoria.lower()]
+            condition = " OR ".join(["LOWER(p.Nombre) LIKE %s"]*len(terms))
+            where_conditions.append(f"({condition})")
+            filtros.extend([f"%{t}%" for t in terms])
+
+        if precio_min > 0:
+            where_conditions.append("p.Precio >= %s")
+            filtros.append(precio_min)
+        if precio_max > 0:
+            where_conditions.append("p.Precio <= %s")
+            filtros.append(precio_max)
+
+        where_clause = " WHERE " + " AND ".join(where_conditions) if where_conditions else ""
+
+        if query:
+            final_sql = f"{base_sql} {where_clause} ORDER BY CASE WHEN LOWER(p.Nombre) LIKE %s THEN 1 ELSE 2 END, p.Precio ASC"
+            filtros.append(f"%{query.lower()}%")
         else:
-            base_sql = """
-                SELECT 
-                    p.ID_Producto,
-                    p.Nombre,
-                    p.Precio,
-                    p.Imagen,
-                    prov.Marca AS Marca,
-                    p.Categoria
-                FROM productos p
-                JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor
-            """
-            where_conditions = []
-            filtros = []
+            final_sql = f"{base_sql} {where_clause} ORDER BY p.Precio ASC"
 
-            if query:
-                where_conditions.append("""
-                    (LOWER(p.Nombre) LIKE %s OR 
-                     LOWER(p.Categoria) LIKE %s OR 
-                     LOWER(prov.Marca) LIKE %s OR
-                     LOWER(p.Descripcion) LIKE %s)
-                """)
-                query_param = f"%{query.lower()}%"
-                filtros.extend([query_param] * 4)
+        cur.execute(final_sql, filtros)
+        resultados = cur.fetchall()
 
-            if categoria:
-                where_conditions.append("p.Categoria = %s")
-                filtros.append(categoria)
+        total_productos = len(resultados)
+        resultado_mensaje = (
+            "No se encontraron productos." if total_productos == 0 else
+            "Se encontró 1 producto." if total_productos == 1 else
+            f"Se encontraron {total_productos} productos."
+        )
 
-            if subcategoria and subcategoria not in ["", "todas_las_subcategorías"]:
-                subcategoria_mapping = {
-                    "shampoo": ["shampoo", "champú"],
-                    "acondicionador": ["acondicionador"],
-                    "tratamiento": ["tratamiento", "mascarilla", "ampolla"],
-                    "crema": ["crema", "loción"],
-                    "bloqueador_solar": ["bloqueador", "protector solar", "SPF"],
-                    "bronceador": ["bronceador", "autobronceante"],
-                    "exfoliante": ["exfoliante", "scrub", "peeling"]
-                }
-                if subcategoria.lower() in subcategoria_mapping:
-                    terms = subcategoria_mapping[subcategoria.lower()]
-                    condition = " OR ".join(
-                        ["LOWER(p.Nombre) LIKE %s"] * len(terms))
-                    where_conditions.append(f"({condition})")
-                    filtros.extend([f"%{t}%" for t in terms])
-                else:
-                    where_conditions.append("LOWER(p.Nombre) LIKE %s")
-                    filtros.append(
-                        f"%{subcategoria.lower().replace('_', ' ')}%")
-
-            if precio_min is not None and precio_min > 0:
-                where_conditions.append("p.Precio >= %s")
-                filtros.append(precio_min)
-
-            if precio_max is not None and precio_max > 0:
-                where_conditions.append("p.Precio <= %s")
-                filtros.append(precio_max)
-
-            if precio_min and precio_max and precio_min > precio_max:
-                flash("El precio mínimo no puede ser mayor al precio máximo", "error")
-                precio_min, precio_max = precio_max, precio_min
-
-            where_clause = " WHERE " + \
-                " AND ".join(where_conditions) if where_conditions else ""
-            final_sql = f"""{base_sql} {where_clause}
-                            ORDER BY CASE WHEN LOWER(p.Nombre) LIKE %s THEN 1 ELSE 2 END, p.Precio ASC"""
-            filtros.append(f"%{query.lower()}%" if query else "%%")
-
-            cur.execute(final_sql, filtros)
-            resultados = cur.fetchall()
-
-        # Favoritos y nombre usuario
+        # Traer favoritos
         productobusf = []
         nombre = None
         if user_id:
-            cur.execute(
-                "SELECT ID_ProductoFK FROM favoritos WHERE ID_UsuarioFK = %s", (user_id,))
-            productobusf = [row[0] for row in cur.fetchall()]
-
-            cur.execute(
-                "SELECT Nombre FROM Usuarios WHERE ID_Usuario = %s", (user_id,))
+            cur.execute("SELECT Nombre FROM usuarios WHERE ID_Usuario = %s", (user_id,))
             row = cur.fetchone()
             nombre = row[0] if row else None
 
-        # Totales
-        total_productos = len(resultados)
-        if total_productos == 0:
-            resultado_mensaje = "No se encontraron productos."
-        elif total_productos == 1:
-            resultado_mensaje = "Se encontró 1 producto."
-        else:
-            resultado_mensaje = f"Se encontraron {total_productos} productos."
+            cur.execute("SELECT ID_ProductoFK FROM favoritos WHERE ID_UsuarioFK = %s", (user_id,))
+            productobusf = [row[0] for row in cur.fetchall()]
 
-        return render_template("Vista_usuario/buscar.html",
-                               resultados=resultados,
-                               query=query,
-                               categoria=categoria,
-                               subcategoria=subcategoria,
-                               precio_min=precio_min,
-                               precio_max=precio_max,
-                               productobusf=productobusf,
-                               user=user_name,
-                               total_productos=total_productos,
-                               resultado_mensaje=resultado_mensaje,
-                               nombre=nombre)
-
+        return render_template(
+            "Vista_usuario/buscar.html",
+            resultados=resultados,
+            query=query,
+            categoria=categoria,
+            subcategoria=subcategoria,
+            precio_min=precio_min,
+            precio_max=precio_max,
+            productobusf=productobusf,
+            user=user_name,
+            total_productos=total_productos,
+            resultado_mensaje=resultado_mensaje,
+            nombre=nombre
+        )
     except Exception as e:
-        print(">>> ERROR SQL:", str(e))
-        current_app.logger.error("Error en búsqueda: %s", str(e))
-        flash("Error al realizar la búsqueda. Por favor, inténtalo de nuevo.", "error")
-        return render_template("Vista_usuario/buscar.html",
-                               resultados=[],
-                               query=query,
-                               categoria=categoria,
-                               subcategoria=subcategoria,
-                               productobusf=[],
-                               total_productos=0,
-                               resultado_mensaje="Error en la búsqueda.",
-                               nombre=None)
+        print("ERROR SQL:", e)
+        flash("Error al realizar la búsqueda.", "error")
+        return render_template("Vista_usuario/buscar.html", resultados=[], query=query)
     finally:
         cur.close()
+
 
 # -------------------------------------- FUNCIÓN AUXILIAR -----------------------------------------
 
@@ -558,7 +562,30 @@ def render_marca(nombre_marca, template, var_name, var_name_lim=None):
     user_name = session.get("user_name")
     cur = mysql.connection.cursor()
 
-    # Traer productos por marca
+    # ----------- FUNCIÓN 1 (promos) -----------
+    cur.execute("""
+        SELECT
+            p.ID_Producto, 
+            p.Nombre,
+            p.Precio AS precio_original,
+            p.Imagen, 
+            prov.Marca AS Marca,
+            CASE
+                WHEN pr.Fecha_Inicial <= CURDATE() 
+                    AND pr.Fecha_Final >= CURDATE()
+                    AND pr.Descuento IS NOT NULL
+                THEN p.Precio - (p.Precio * pr.Descuento / 100)
+                ELSE NULL
+            END AS precio_final
+        FROM productos p
+        LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
+        LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor 
+        LIMIT 8
+    """)
+    data_promos = cur.fetchall()
+    # -----------------------------------------
+
+    # ----------- FUNCIÓN 2 (marca) -----------
     cur.execute(
         """SELECT p.ID_Producto, p.Nombre, p.Precio, p.Imagen, pr.Marca
             FROM productos p
@@ -576,31 +603,28 @@ def render_marca(nombre_marca, template, var_name, var_name_lim=None):
                 LIMIT 6""", (nombre_marca,))
         data_lim = cur.fetchall()
 
-    # Inicializamos variables para favoritos y nombre
     favoritos_marca = []
     nombre = None
 
-    # Solo si el usuario tiene sesión activa
     if user_id:
-        # Nombre desde la BD
-        cur.execute(
-            "SELECT Nombre FROM Usuarios WHERE ID_Usuario = %s", (user_id,))
+        cur.execute("SELECT Nombre FROM usuarios WHERE ID_Usuario = %s", (user_id,))
         row = cur.fetchone()
         nombre = row[0] if row else None
 
-        # Favoritos desde la BD
-        cur.execute(
-            "SELECT ID_ProductoFK FROM favoritos WHERE ID_UsuarioFK = %s", (user_id,))
+        cur.execute("SELECT ID_ProductoFK FROM favoritos WHERE ID_UsuarioFK = %s", (user_id,))
         favoritos_marca = [row[0] for row in cur.fetchall()]
 
     cur.close()
+    # -----------------------------------------
 
-    # Retornar template con las mismas variables que la primera función
+    # Retornar template con TODO
     return render_template(
         template,
-        **{var_name: data},
+        **{var_name: data},             # productos por marca
         **({var_name_lim: data_lim} if var_name_lim else {}),
         user=user_name,
         favoritos=favoritos_marca,
-        nombre=nombre
+        nombre=nombre,
+        data_promos=data_promos,        # 👈 productos con promos
+        data=data                       # 👈 productos normales (por marca)
     )

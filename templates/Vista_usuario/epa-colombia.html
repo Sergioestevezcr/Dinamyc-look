@@ -54,6 +54,11 @@
 
 		<!----------------------------------- 1.1 Barra de busqueda ------------------------------------>
 		<div class="barra-de-busqueda">
+			<!-- Botón visible solo en pantallas pequeñas -->
+			<button type="button" class="toggle-search">
+				<i class="fas fa-search"></i>
+			</button>
+
 			<form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
 				<input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
 				<div class="btn-serch">
@@ -76,7 +81,7 @@
 								Favoritos</span></a>
 						<a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
 								Compras</span></a>
-						<a href="admin_bp.configuracion" class="active"><i class='bx bxs-user'></i><span>
+						  <a href="{{ url_for('admin_bp.configuracion') }}"><i class='bx bxs-user'></i><span>
 								Perfil</span></a>
 						<a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
 							sesión</a>
@@ -130,21 +135,13 @@
 		<div class="carruseles" id="slider">
 			<!-- las section son las imagenes que va a ontener el carrusel -->
 			<section class="slider-section">
-				<img src="{{ url_for('static', filename= 'imagenes/img_referencia_1.jpg') }}"
+				<img src="{{ url_for('static', filename= 'imagenes/EPA_Colombia/BANNER_SHOPY_SEPTIEMBRE.png') }}"
 					alt="descripcion de la imagen ">
 			</section>
 
 			<section class="slider-section">
-				<img src="{{ url_for('static', filename= 'imagenes/img_referencia_2.jpg') }}"
+				<img src="{{ url_for('static', filename= 'imagenes/EPA_Colombia/Banner_Fusion_Keratina.png') }}"
 					alt="descripcion de la imagen ">
-			</section>
-
-			<section class="slider-section">
-				<img src="{{ url_for('static', filename= 'imagenes/img_referencia_3.jpg') }}">
-			</section>
-			<section class="slider-section">
-				<img src="{{ url_for('static', filename= 'imagenes/img_referencia_4.jpg') }}"
-					alt="descripcion de la imagen">
 			</section>
 		</div>
 		<!-- estas etiquetas son los botones para mover las imagenes hacia la derecha o izquierda -->
@@ -164,37 +161,39 @@
 		<div class="container-product-cards3">
 			<div class="product-card3">
 				<div class="image-container3">
-					<img src="../../imagenes/anyeluz/DUO-ROMERO.jpg" alt="Producto">
+					<img src="../../static/imagenes/EPA_Colombia/MiniComboKeratina1.webp" alt="Producto">
 				</div>
 				<div class="text-card3">
-					<h3>Nombre del combo N1</h3>
-					<p class="descrption">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque laoreet
-						tortor viverra dolor viverra egestas. Etiam efficitur justo et dictum molestie. Integer sed
-						egestas tortor.</p>
+					<h3>Mini combo Epa colombia</h3>
+					<p class="descrption">La Keratina Epa Colombia con su nueva f6rmula es la soluciön perfecta
+para obtener un cabello liso de verdad. Este Tratamiento Capilar estå
+diseöado especialmente para cabellos naturales, afros, tinturados (oscuros)
+o crespos que buscan recuperar la fibra capilar daöada por la exposiciön al
+sol, el uso de la plancha y otros procesos quimicos. Con resultados de
+alisado instantåneo y 100 % natural, sin la presencia de formol ni
+amoniaco, este tratamiento te ofrece una duraci6n de 4 a 6 meses.</p>
 					<a class="btn-add" id="btn-add3" href="#">Ver Más</a>
 				</div>
 			</div>
 			<div class="product-card3" id="inverse">
 				<div class="image-container3">
-					<img src="../../imagenes/anyeluz/DUO-ROMERO.jpg" alt="Producto">
+					<img src="../../static/imagenes/EPA_Colombia/Supercombo_Keratina_2.jpg" alt="Producto">
 				</div>
 				<div class="text-card3" id="inverse-text">
-					<h3>Nombre del combo N2</h3>
-					<p class="descrption">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque laoreet
-						tortor viverra dolor viverra egestas. Etiam efficitur justo et dictum molestie. Integer sed
-						egestas tortor.</p>
+					<h3>Super Combo Keratina - Epa Colombia</h3>
+					<p class="descrption">LSuper Combo Keratina Epa Colombia: Alisado Profesional para Cabellos de Ensueño  NUEVA EDICIÓN 
+Descubre nuestro Super Combo Keratina, el aliado perfecto para lograr un cabello liso y radiante. Esta keratina alisadora está especialmente diseñada para cabellos naturales sanos, crespos, afros y tinturados en tonos oscuros como negros o castaños, sin necesidad de decoloraciones previas. Además, nuestra fórmula está libre de formol y amoniaco, brindando un tratamiento seguro y confiable.</p>
 					<a class="btn-add" id="btn-add3" href="#">Ver Más</a>
 				</div>
 			</div>
 			<div class="product-card3">
 				<div class="image-container3">
-					<img src="../../imagenes/anyeluz/DUO-ROMERO.jpg" alt="Producto">
+					<img src="../../static/imagenes/EPA_Colombia/MiniComboCirugia1.webp" alt="Producto">
 				</div>
 				<div class="text-card3">
-					<h3>Nombre del combo N3</h3>
-					<p class="descrption">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque laoreet
-						tortor viverra dolor viverra egestas. Etiam efficitur justo et dictum molestie. Integer sed
-						egestas tortor.</p>
+					<h3>Mini Combo Cirugía - Epa Colombia</h3>
+					<p class="descrption">Mini Combo Cirugía Capilar Epa Colombia: Transformación Capilar Excepcional
+Descubre nuestro Mini-Combo Cirugía Capilar Epa Colombia, el tratamiento capilar revolucionario para aquellos que desean transformar su cabello con decoloración, mechas, rayitos, balayage o tintes claros. Esta keratina alisadora está diseñada especialmente para proporcionar un alisado impecable, sin comprometer la salud de tu cabello. Además, nuestra fórmula está libre de formol y amoniaco, brindando una experiencia segura y confiable.</p>
 					<a class="btn-add" id="btn-add3" href="#">Ver Más</a>
 				</div>
 			</div>
@@ -203,7 +202,7 @@
 	<!--------------------------------------- Seccion dos ------------------------------------------>
 	<section class="section4-product">
 		<!-- Título y subtítulo -->
-		<h1 id="t4">Productos EDA Cosméticos</h1>
+		<h1 id="t4">Productos EPA Colombia</h1>
 		<p id="p4">Belleza y cuidado para tu cabello</p>
 		<!-- Contenedor principal del carrusel -->
 		<div class="carousel-prd-container">
@@ -294,18 +293,7 @@
 							${{ "{:,}".format(producto[2]).replace(",", ".") }}
 							{% endif %}
 						</p>
-						<p class="text-precio" id="text-precio">
-							{% if producto[5] %} {# precio_final existe #}
-							<span class="precio-original">
-								${{ "{:,}".format(producto[2]).replace(",", ".") }}
-							</span><br>
-							<span class="precio-descuento">
-								${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
-							</span>
-							{% else %}
-							${{ "{:,}".format(producto[2]).replace(",", ".") }}
-							{% endif %}
-						</p>
+						 
 						<button class="btn-add" id="btn-add" type="button">Agregar <i
 								class='bx bx-shopping-bag'></i></button>
 					</div>
@@ -317,7 +305,7 @@
 	<!---------------------------------------- Seccion Cuatro -------------------------------------------->
 	<section class="section2-product">
 		<div class="cp-container">
-			<h1 id="t2">Imposible Dejar Los Pasar</h1>
+			<h1 id="t2">Imposible Dejalos Pasar</h1>
 			<div class="carousel-product">
 				{% for producto in productosepa %}
 				<div class="product-card2">
@@ -348,18 +336,7 @@
 								${{ "{:,}".format(producto[2]).replace(",", ".") }}
 								{% endif %}
 							</p>
-							<p class="text-precio" id="text-precio">
-								{% if producto[5] %} {# precio_final existe #}
-								<span class="precio-original">
-									${{ "{:,}".format(producto[2]).replace(",", ".") }}
-								</span><br>
-								<span class="precio-descuento">
-									${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
-								</span>
-								{% else %}
-								${{ "{:,}".format(producto[2]).replace(",", ".") }}
-								{% endif %}
-							</p>
+							 
 							<button class="btn-add" id="btn-add2" type="button">Agregar <i
 									class='bx bx-shopping-bag'></i></button>
 						</div>
@@ -406,6 +383,7 @@
 	<script src="{{ url_for('static', filename= 'js/script_alert.js') }}"></script>
 	<script src="{{ url_for('static', filename= 'js/script_carrito.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
 </body>
 
 </html>

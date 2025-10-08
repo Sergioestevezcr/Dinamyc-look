@@ -70,7 +70,7 @@
                     <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
                                 class="fa-solid fa-user"></i><span>Clientes</span></a>
                     </li>
-                    <li><a href="{{ url_for('admin_bp.ventas') }}"><i
+                    <li><a href="{{ url_for('admin_bp.ventas_view') }}"><i
                                 class='bx bxs-dollar-circle'></i><span>Ventas</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.productos') }}"><i
@@ -211,9 +211,8 @@
     <!-- Script de JavaScript-->
     <script src="{{ url_for('static', filename='js/script_sidebar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        fetch('/ventas_por_mes')
+        fetch('{{ url_for("admin_bp.ventas_por_mes") }}')
             .then(response => response.json())
             .then(data => {
                 // INICIO: Gráfico de INGRESOS
@@ -276,7 +275,7 @@
                     }
                 });
 
-                // INICIO: Gráfico de VENTAS
+                // INICIO: Gráfico de ventas
                 const ctxVentas = document.getElementById('chartVentas').getContext('2d');
                 new Chart(ctxVentas, {
                     type: 'bar',

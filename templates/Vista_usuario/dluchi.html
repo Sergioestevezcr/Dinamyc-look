@@ -53,6 +53,11 @@
 
 		<!----------------------------------- 1.1 Barra de busqueda ------------------------------------>
 		<div class="barra-de-busqueda">
+			<!-- Botón visible solo en pantallas pequeñas -->
+			<button type="button" class="toggle-search">
+				<i class="fas fa-search"></i>
+			</button>
+
 			<form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
 				<input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
 				<div class="btn-serch">
@@ -75,7 +80,7 @@
 								Favoritos</span></a>
 						<a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
 								Compras</span></a>
-						<a href="admin_bp.configuracion" class="active"><i class='bx bxs-user'></i><span>
+						  <a href="{{ url_for('admin_bp.configuracion') }}"><i class='bx bxs-user'></i><span>
 								Perfil</span></a>
 						<a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
 							sesión</a>
@@ -130,7 +135,7 @@
 		<div class="carruseles" id="slider">
 			<!-- las section son las imagenes que va a ontener el carrusel -->
 			<section class="slider-section">
-				<img src="{{ url_for('static', filename= 'imagenes/img_referencia_1.jpg') }}"
+				<img src="{{ url_for('static', filename= 'imagenes/Milagros/milagros.webp') }}"
 					alt="descripcion de la imagen ">
 			</section>
 
@@ -160,7 +165,7 @@
 	<!--------------------------------------- 6. Seccion Cuatro ------------------------------------------>
 	<section class="section4-product">
 		<!-- Título y subtítulo -->
-		<h1 id="t4">Productos EDA Cosméticos</h1>
+		<h1 id="t4">Productos Mas vendidos</h1>
 		<p id="p4">Belleza y cuidado para tu cabello</p>
 		<!-- Contenedor principal del carrusel -->
 		<div class="carousel-prd-container">
@@ -203,18 +208,7 @@
 								${{ "{:,}".format(producto[2]).replace(",", ".") }}
 								{% endif %}
 							</p>
-							<p class="text-precio" id="text-precio">
-								{% if producto[5] %} {# precio_final existe #}
-								<span class="precio-original">
-									${{ "{:,}".format(producto[2]).replace(",", ".") }}
-								</span><br>
-								<span class="precio-descuento">
-									${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
-								</span>
-								{% else %}
-								${{ "{:,}".format(producto[2]).replace(",", ".") }}
-								{% endif %}
-							</p>
+							 
 							<button class="btn-add" id="btn-add4" type="button">Agregar <i
 									class='bx bx-shopping-bag'></i></button>
 						</div>
@@ -232,7 +226,7 @@
 	<!---------------------------------------- 5. Seccion dos -------------------------------------------->
 	<section class="section2-product">
 		<div class="cp-container">
-			<h1 id="t2">Imposible Dejar Los Pasar</h1>
+			<h1 id="t2">Imposible Dejarlos Pasar</h1>
 			<div class="carousel-product">
 				{% for producto in productosdluchi %}
 				<div class="product-card2">
@@ -329,6 +323,7 @@
 	<script src="{{ url_for('static', filename= 'js/script_alert.js') }}"></script>
 	<script src="{{ url_for('static', filename= 'js/script_carrito.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
 </body>
 
 </html>

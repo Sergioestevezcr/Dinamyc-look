@@ -40,10 +40,15 @@
 
 	<header class="header">
 		<div class="nombre-empresa">
-			<a href="{{ url_for('client_bp.index_cliente') }}">Dinamy Look</a>
+			<a href="{{ url_for('client_bp.index_cliente') }}">Dinamyc Look</a>
 		</div>
 
 		<div class="barra-de-busqueda">
+			<!-- Botón visible solo en pantallas pequeñas -->
+			<button type="button" class="toggle-search">
+				<i class="fas fa-search"></i>
+			</button>
+
 			<form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
 				<input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
 				<div class="btn-serch">
@@ -62,14 +67,10 @@
 				<li class="usuario-menu">
 					<a href="#" class="nombre-user">¡Hola, {{ nombre }}!</a>
 					<div class="usuario-dropdown">
-						<a href="{{ url_for('client_bp.favoritos') }}"><i class='bx bxs-star'></i><span>
-								Favoritos</span></a>
-						<a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
-								Compras</span></a>
-						<a href="admin_bp.configuracion" class="active"><i class='bx bxs-user'></i><span>
-								Perfil</span></a>
-						<a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
-							sesión</a>
+						<a href="{{ url_for('client_bp.favoritos') }}"><i class='bx bxs-star'></i><span> Favoritos</span></a>
+						<a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span> Compras</span></a>
+						<a href="{{ url_for('admin_bp.configuracion') }}"><i class='bx bxs-user'></i><span> Perfil</span></a>
+						<a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</a>
 					</div>
 				</li>
 
@@ -169,7 +170,7 @@
 		<!-- Sección 2 -->
 		<section class="section2-product">
 			<div class="cp-container">
-				<h1 id="t2">Imposible Dejar Los Pasar</h1>
+				<h1 id="t2">Imposible Dejarlos Pasar</h1>
 				<div class="carousel-product">
 					{% for producto in productos2 %}
 					<div class="product-card2">
@@ -217,37 +218,41 @@
 			<div class="container-product-cards3">
 				<div class="product-card3">
 					<div class="image-container3">
-						<img src="../../imagenes/anyeluz/DUO-ROMERO.jpg" alt="Producto">
+						<img src="../../static/imagenes/EPA_Colombia/MiniComboKeratina1.webp" alt="Producto">
 					</div>
 					<div class="text-card3">
-						<h3>Nombre del combo N1</h3>
-						<p class="descrption">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-							laoreet tortor viverra dolor viverra egestas. Etiam efficitur justo et dictum molestie.
-							Integer sed egestas tortor.</p>
+						<h3>Mini combo Epa colombia</h3>
+						<p class="descrption">La Keratina Epa Colombia con su nueva f6rmula es la soluciön perfecta
+para obtener un cabello liso de verdad. Este Tratamiento Capilar estå
+diseöado especialmente para cabellos naturales, afros, tinturados (oscuros)
+o crespos que buscan recuperar la fibra capilar daöada por la exposiciön al
+sol, el uso de la plancha y otros procesos quimicos. Con resultados de
+alisado instantåneo y 100 % natural, sin la presencia de formol ni
+amoniaco, este tratamiento te ofrece una duraci6n de 4 a 6 meses.</p>
 						<a class="btn-add" id="btn-add3" href="#">Ver Más</a>
 					</div>
 				</div>
 				<div class="product-card3" id="inverse">
 					<div class="image-container3">
-						<img src="../../imagenes/anyeluz/DUO-ROMERO.jpg" alt="Producto">
+						<img src="../../static/imagenes/Anyeluz/KIT-POTENCIALIZADOR2.jpg" alt="Producto">
 					</div>
 					<div class="text-card3" id="inverse-text">
-						<h3>Nombre del combo N2</h3>
-						<p class="descrption">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-							laoreet tortor viverra dolor viverra egestas. Etiam efficitur justo et dictum molestie.
-							Integer sed egestas tortor.</p>
+						<h3>KIT POTENCIALIZADOR ANYELUZ</h3>
+						<p class="descrption">Descubre nuestro kit potencializador ideal para aquellas personas que desean hacer crecer su cabello y mejorar la circulación del cuero cabelludo. Nuestros productos están formulados con un 100% de extractos naturales, brindando una experiencia de cuidado capilar sin comprometer la salud de tu cabello.
+							Comenzando con nuestro Shampoo con Romero, este estimulante natural es conocido por su capacidad para fortalecer y vigorizar el cuero cabelludo. Gracias a sus propiedades, el romero promueve la circulación sanguínea hacia los folículos pilosos, proporcionándoles nutrientes esenciales. Esto ayuda a mantener los folículos pilosos activos y favorece el crecimiento de un cabello más fuerte y saludable.
+						</p>
 						<a class="btn-add" id="btn-add3" href="#">Ver Más</a>
 					</div>
 				</div>
 				<div class="product-card3">
 					<div class="image-container3">
-						<img src="../../imagenes/anyeluz/DUO-ROMERO.jpg" alt="Producto">
+						<img src="../../static/imagenes/Milagros/Repair-power.webp" alt="Producto">
 					</div>
 					<div class="text-card3">
-						<h3>Nombre del combo N3</h3>
-						<p class="descrption">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-							laoreet tortor viverra dolor viverra egestas. Etiam efficitur justo et dictum molestie.
-							Integer sed egestas tortor.</p>
+						<h3>Kit Reparación Extrema</h3>
+						<p class="descrption">Si tu cabello está dañado, maltratado o sin vida, este kit es tu mejor aliado. Su fórmula avanzada actúa directamente sobre la fibra capilar, reparando profundamente, reduciendo la caída y aportando brillo y suavidad desde la primera aplicación.
+
+Con el poder del Tratamiento Emergencia Capilar, el Bio Repolarizador Capilar y los dos Tratamientos Capilares Rescate Instantáneo (El Elixir Revitalizante y El Experto en Rescate), tu cabello recuperará fuerza, vitalidad y resistencia frente al calor y procesos químicos.</p>
 						<a class="btn-add" id="btn-add3" href="#">Ver Más</a>
 					</div>
 				</div>
@@ -256,7 +261,7 @@
 
 		<!-- Sección 4 -->
 		<section class="section4-product">
-			<h1 id="t4">Productos EDA Cosméticos</h1>
+			<h1 id="t4">Productos EPA Colombia</h1>
 			<p id="p4">Belleza y cuidado para tu cabello</p>
 			<div class="carousel-prd-container">
 				<button class="btn-left-prd"><i class='bx bx-left-arrow-alt'></i></button>
@@ -340,6 +345,7 @@
 	<script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_carrito.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
 </body>
 
 </html>

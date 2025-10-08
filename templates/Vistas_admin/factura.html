@@ -52,22 +52,19 @@
                     <li><a href="{{ url_for('admin_bp.index') }}"><i
                                 class='bx bxs-dashboard'></i><span>Dashboard</span></a></li>
                     <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
-                                class="fa-solid fa-user"></i><span>Clientes</span></a>
-                    </li>
-                    <li><a href="{{ url_for('admin_bp.ventas') }}" class="active"><i
+                                class="fa-solid fa-user"></i><span>Clientes</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.ventas_view') }}" class="active"><i
                                 class='bx bxs-dollar-circle'></i><span>Ventas</span></a></li>
                     <li><a href="{{ url_for('admin_bp.productos') }}"><i
                                 class="fas fa-tags"></i><span>Productos</span></a></li>
                     <li><a href="{{ url_for('admin_bp.promociones') }}"><i
                                 class="fas fa-percent"></i><span>Promociones</span></a></li>
                     <li><a href="{{ url_for('admin_bp.reportes') }}"><i
-                                class="fa-solid fa-receipt"></i><span>Reportes</span></a>
-                    </li>
+                                class="fa-solid fa-receipt"></i><span>Reportes</span></a></li>
                     <li><a href="{{ url_for('admin_bp.configuracion') }}"><i
                                 class="fa-solid fa-gear"></i><span>Configuración</span></a></li>
                     <li><a href="{{ url_for('auth_bp.logout') }}"><i class='bx bx-log-out'></i><span>Cerrar
-                                sesión</span></a>
-                    </li>
+                                sesión</span></a></li>
                 </ul>
             </nav>
         </aside>
@@ -76,13 +73,12 @@
         <main class="main-content">
             <header class="main-header">
                 <button class="menu-toggle" id="open_btn"><i class='bx bx-menu'></i></button>
-                <a href="{{ url_for('admin_bp.ventas') }}" class="btn-atras">
-                    < Volver</a>
+                <a href="{{ url_for('admin_bp.ventas_view') }}" class="btn-atras">Volver</a>
             </header>
 
-            <section class="admin_bp.factura-container">
-                <h1>admin_bp.factura #{{ id_venta }}</h1>
-                <div class="info-admin_bp.factura">
+            <section class="factura-container">
+                <h1>Factura #{{ id_venta }}</h1>
+                <div class="info-factura">
                     <p>Cliente: {{ nombre }} {{ apellido }}</p>
                     <p>Fecha: {{ fecha }}</p>
                 </div>
@@ -99,14 +95,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for row in admin_bp.factura %}
+                            {% for row in factura %}
                             <tr>
-                                <td>{{ row[4] }}</td> <!-- Producto -->
-                                <td>${{ "{:,}".format(row[5]).replace(",", ".") }}</td> <!-- Precio_Original -->
-                                <td>{{ row[6] }}%</td> <!-- Descuento -->
-                                <td>${{ "{:,}".format(row[7]).replace(",", ".") }}</td> <!-- Precio_Final -->
-                                <td>{{ row[8] }}</td> <!-- Cantidad_p -->
-                                <td>${{ "{:,}".format(row[9]).replace(",", ".") }}</td> <!-- subtotal_final -->
+                                <td>{{ row[4] }}</td>
+                                <td>${{ "{:,}".format(row[5]).replace(",", ".") }}</td>
+                                <td>{{ row[6] }}%</td>
+                                <td>${{ "{:,}".format(row[7]).replace(",", ".") }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>${{ "{:,}".format(row[9]).replace(",", ".") }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -122,13 +118,12 @@
         </main>
     </div>
 
-
     <!-- Pie de página -->
     <footer class="footer">
         <p>&copy; 2024 Dinamyc Look | Todos los derechos reservados</p>
     </footer>
 
-    <!-- Scripts para funcionalidades: barra lateral, popups, alertas y formularios -->
+    <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/script_sidebar.js') }}"></script>
 </body>
 

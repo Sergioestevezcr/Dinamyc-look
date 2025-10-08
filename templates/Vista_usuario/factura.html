@@ -44,13 +44,18 @@
         </div>
 
         <div class="barra-de-busqueda">
-            <form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
-                <input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
-                <div class="btn-serch">
-                    <button type="submit"><i class="fas fa-search"></i></button>
-                </div>
-            </form>
-        </div>
+			<!-- Botón visible solo en pantallas pequeñas -->
+			<button type="button" class="toggle-search">
+				<i class="fas fa-search"></i>
+			</button>
+
+			<form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
+				<input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
+				<div class="btn-serch">
+					<button type="submit"><i class="fas fa-search"></i></button>
+				</div>
+			</form>
+		</div>
 
         <nav class="navbar" id="nav">
             <ul class="nav-links">
@@ -107,7 +112,7 @@
             </li>
             <li><a href="{{ url_for('client_bp.compras') }}" class="active"><i class='bx bxs-shopping-bags'></i><span>
                         Compras</span></a></li>
-            <li><a href="admin_bp.configuracion"><i class='bx bxs-user'></i><span> Perfil</span></a>
+            <li><a href="{{ url_for(admin_bp.configuracion) }}"><i class='bx bxs-user'></i><span> Perfil</span></a>
             </li>
         </ul>
     </section>
@@ -157,6 +162,7 @@
     <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_carrito.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
 </body>
 
 </html>

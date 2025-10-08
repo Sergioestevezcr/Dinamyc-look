@@ -87,48 +87,98 @@
 }
 
 
-@media screen and (max-width: 1350px){}
+/************************************** RESPONSIVE **************************************/
 
-@media screen and (max-width: 980px){}
-
-@media screen and (max-width: 580px){
-	.inf-banner h1 {
-		font-size: 30px;
+/* ---------- Laptop grande (hasta 1350px) ---------- */
+@media screen and (max-width: 1350px) {
+	.inf-banner {
+		width: 55vw; /* un poco más ancho para compensar menos espacio */
 	}
 
-	.inf-banner p {
-		font-size: 15px;
+	.inf-banner h1 {
+		font-size: 36px;
 	}
 }
 
-@media screen and (max-width: 430px){
-	.container-banner{
-		height: 70vh;
+/* ---------- Tablets (hasta 980px) ---------- */
+@media screen and (max-width: 980px) {
+	.container-banner {
+		background-position: center; /* centramos la imagen */
 	}
 
 	.inf-banner {
-		height: 70vh;
-		width: 55vw;
+		width: 70vw; /* más ancho */
+		position: relative; /* ya no absoluto */
+		top: 0;
+		right: 0;
+		margin: auto;
+		text-align: center;
+		align-items: center; /* centramos el contenido */
+		height: auto;
+		padding: 60px 20px;
 	}
 
 	.inf-banner h1 {
-		font-size: 30px;
+		font-size: 32px;
 	}
 
 	.inf-banner p {
-		font-size: 15px;
+		font-size: 16px;
+		text-align: center;
+	}
+
+	.btn-banner {
+		margin: 15px auto;
 	}
 }
 
-@media screen and (max-height: 430px){
+/* ---------- Celulares medianos (hasta 580px) ---------- */
+@media screen and (max-width: 580px) {
+	.inf-banner {
+		width: 90vw;
+		padding: 40px 15px;
+	}
+
 	.inf-banner h1 {
-		font-size: 30px;
+		font-size: 26px;
+		text-align: center;
 	}
 
 	.inf-banner p {
-		font-size: 13px;
+		font-size: 14px;
+		text-align: center;
+	}
+
+	.btn-banner {
+		width: 70%;
+		text-align: center;
 	}
 }
 
+/* ---------- Celulares pequeños (hasta 400px) ---------- */
+@media screen and (max-width: 400px) {
+	.container-banner {
+		background-position: center;
+		height: 40vh; /* más bajo para pantallas chicas */
+	}
 
+	.inf-banner {
+		width: 95vw;
+		height: auto;
+		padding: 20px 10px;
+		margin: auto;
+		text-align: center;
+		align-items: center;
+		top: 0;
+	}
 
+	.inf-banner h1 {
+		font-size: 20px;
+	}
+
+	.btn-banner {
+		width: 90%;
+		padding: 8px;
+		font-size: 14px;
+	}
+}

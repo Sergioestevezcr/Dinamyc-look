@@ -4,7 +4,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 /************* Propiedades generales **********/
-/************* Propiedades generales **********/
 * {
     margin: 0;
     padding: 0;
@@ -80,6 +79,8 @@ a {
 .nav-links {
     list-style: none;
     display: flex;
+    align-items: center;   /* centra verticalmente */
+    justify-content: center;
     gap: 20px;
 }
 
@@ -137,42 +138,29 @@ a {
     font-weight: normal;
 }
 
-/* Botón de usuario */
-.usuario-btn {
-    color: #333;
-    font-size: 1.3rem;
-    text-decoration: none;
-    padding: 8px;
-    cursor: pointer;
-}
-
 /* Dropdown oculto */
 .usuario-dropdown {
     display: none;
     position: absolute;
-    top: 120%;
-    /* un poco más abajo para dejar espacio al pico */
+    top: 120%;/* un poco más abajo para dejar espacio al pico */
     right: 0;
     font-weight: normal;
     background: #fff;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 6px;
     min-width: 180px;
-    z-index: 1000;
+    z-index: 1100;
 }
 
 /* Pico arriba del menú */
 .usuario-dropdown::before {
     content: "";
     position: absolute;
-    top: -22px;
-    /* lo coloca arriba del menú */
-    right: 6px;
-    /* ajusta la posición hacia la derecha/izquierda */
+    top: -22px;/* lo coloca arriba del menú */
+    right: 6px;/* ajusta la posición hacia la derecha/izquierda */
     border-width: 12px;
     border-style: solid;
-    border-color: transparent transparent #fff transparent;
-    /* triángulo hacia abajo */
+    border-color: transparent transparent #fff transparent;/* triángulo hacia abajo */
 }
 
 /* Opciones dentro del dropdown */
@@ -195,33 +183,36 @@ a {
 
 /******************************* 1.1. BARRA DE BUSQUEDA **********************************/
 
-/*cambia la posicion del div:barra-de-busqueda*/
+/* Contenedor principal */
 .barra-de-busqueda {
     display: flex;
     align-items: center;
     position: relative;
     right: -40px;
     padding: 20px;
+    transition: all 0.3s ease-in-out;
 }
 
-/*cambia las propiedades del input */
+/* Input de búsqueda */
 .barra-de-busqueda .buscar {
     box-sizing: border-box;
     padding: 0 45px 0 20px;
+    width: 100%;
     color: #451221;
     border-radius: 50px;
     font-size: 16px;
     border: none;
     height: 40px;
-    box-shadow: rgba(166, 48, 85, .3);
-    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 8px rgba(166, 48, 85, 0.3);
+    transition: all 0.3s ease-in-out;
 }
 
 .buscar:focus {
     outline: none;
+    box-shadow: 0 3px 12px rgba(166, 48, 85, 0.4);
 }
 
-/*cambia la posicion del icono de busqueda*/
+/* Botón de búsqueda */
 .btn-serch button {
     display: flex;
     justify-content: center;
@@ -237,15 +228,36 @@ a {
     font-size: 20px;
     color: #FBFAF7;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 .btn-serch button:hover {
     background-color: #C1416D;
     transform: scale(1.05);
-    box-shadow: 0 3px 6px rgba(69, 18, 33, 0.2);
+    box-shadow: 0 3px 6px rgba(69, 18, 33, 0.3);
 }
 
+/* Botón toggle (lupa) para móvil */
+.toggle-search {
+    display: none;
+    position: absolute;
+    font-size: 20px;
+    right: 40px;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: #FBFAF7;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    z-index: 100;
+}
+
+.toggle-search:hover {
+    background-color: #C1416D;
+    transform: scale(1.05);
+}
 
 .form-busqueda {
     background: #dfdfdf;
@@ -2202,13 +2214,134 @@ button.btn-fav i.bx.bxs-leaf,
 /******************************************** MEDIACUERIS **********************************************/
 
 @media screen and (max-width: 980px) {
+    /* Header y navegación */
+    .nombre-empresa {
+        width: 180px;
+    }
     .nombre-empresa a {
-        font-size: 32px;
+        font-size: 28px;
     }
 
-    .barra-de-busqueda .buscar {
-        width: 25vw;
+    /* Estilo para la lista de navegación */
+    .nav-links {
+        gap: 5px;
     }
+
+    .nav-links i {
+        font-size: 22px;
+    }
+
+    .nav-links .house i {
+        font-size: 18px;
+    }
+
+    .nav-links .usuario-menu i {
+        font-size: 18px;
+    }
+
+    .nav-links li {
+        padding: 5px;
+        border-radius: 50%;
+    }
+
+    .nav-links li:hover {
+        padding: 5px;
+    }
+
+    .usuario-menu {
+        width: 100px;
+    }
+
+    .nombre-user {
+        display: inline-block;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 1.2;
+        text-align: center;
+        padding: 0;
+    }
+
+    /* Contenedor del menú de usuario */
+    .usuario-dropdown a {
+        font-size: 15px;
+        padding: 6px;
+    }
+
+/**************** Barra de bus. ****************/
+    /* Reposiciona el contenedor */
+    .barra-de-busqueda {
+        position: absolute;
+        right: 160px;
+        padding: 0;
+    }
+
+    /* Oculta el formulario por defecto */
+    .barra-de-busqueda form {
+        display: none;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+    }
+
+    /* Muestra el botón toggle */
+    .toggle-search {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Formulario activo (cuando se hace clic en la lupa) */
+    .barra-de-busqueda.active form {
+        display: flex;
+        position: fixed;
+        top: 65px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        margin: 0 auto;
+        padding: 15px 30px;
+        background: #ccc;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 600;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Input dentro del formulario activo */
+    .barra-de-busqueda.active .buscar {
+        width: 100%;
+        padding: 0 50px 0 20px;
+        font-size: 15px;
+        background: #FFFFFF;
+    }
+
+    /* Botón de búsqueda dentro del formulario activo */
+    .barra-de-busqueda.active .btn-serch button {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #C1416D;
+        color: #FBFAF7;
+    }
+
+    .barra-de-busqueda.active .btn-serch button:hover {
+        background-color: #7a003f;
+    }
+
+    /* Grid del formulario */
+    .form-busqueda-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .btn-buscar {
+        width: 100%;
+        margin-top: 10px;
+    }
+
 
     .form-busqueda-grid {
         grid-template-columns: 1fr;
@@ -2287,29 +2420,208 @@ button.btn-fav i.bx.bxs-leaf,
 }
 
 @media screen and (max-width: 580px) {
+    /* Header y navegación */
+    .nombre-empresa {
+        width: 120px;
+    }
     .nombre-empresa a {
-        font-size: 20px;
-    }
-
-    .nav-links {
-        gap: 10px;
-    }
-
-    .nav-links i {
         font-size: 22px;
     }
 
-    .barra-de-busqueda .buscar {
-        height: 35px;
-        width: 20vw;
-        font-size: 12px;
-        padding: 0 10px 0 5px;
+    /* Estilo para la lista de navegación */
+    .nav-links {
+        gap: 2px;
     }
 
-    .btn button {
-        width: 40px;
-        height: 40px;
+    .nav-links i {
+        font-size: 20px;
     }
+
+    .nav-links .house i {
+        font-size: 16px;
+    }
+
+    .nav-links .usuario-menu i {
+        font-size: 18px;
+    }
+
+    .nav-links li {
+        padding: 5px;
+        border-radius: 50%;
+    }
+
+    .nav-links li:hover {
+        padding: 5px;
+    }
+
+    .usuario-menu {
+        width: 90px;
+    }
+
+    .nombre-user {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: normal;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    /* Contenedor del menú de usuario */
+    .usuario-dropdown a {
+        font-size: 15px;
+        padding: 6px;
+    }
+
+    .toggle-search {
+        right: 25px;
+    }
+
+    /**************************************** 1.2 CARRITO **********************************/
+    #carrito {
+        position: fixed;
+        top: 0;
+        right: -500px;
+        /* oculto al inicio */
+        width: 450px;
+        height: 100%;
+        background: #fff;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+        transition: right 0.4s ease;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #carrito.active {
+        right: 0;
+        /* se despliega */
+    }
+
+    #carrito-header {
+        color: #73283E;
+        padding: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #carrito-header h2 {
+        font-size: 20px;
+        margin: 0;
+    }
+
+    #carrito-header button {
+        background: none;
+        border: none;
+        color: #000;
+        font-size: 22px;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+    }
+
+    #carrito-items {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+    }
+
+    .carrito-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #ddd;
+        padding: 15px;
+        margin: 10px 0;
+        border: 1px solid #ececec;
+        border-radius: 25px;
+    }
+
+    .carrito-item img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        margin-right: 10px;
+    }
+
+    .carrito-item .datos {
+        display: flex;
+        flex-direction: column;
+        width: 150px;
+    }
+
+    .carrito-item h4 {
+        flex: 1;
+        font-size: 14px;
+        margin: 0;
+        color: #73283E;
+    }
+
+    .carrito-item p {
+        font-size: 16px;
+        margin: 0 20px;
+        font-weight: 600;
+        color: rgba(115, 40, 62, 0.8);
+    }
+
+    .carrito-item button {
+        background: none;
+        border: none;
+        color: #73283E;
+        font-size: 18px;
+        cursor: pointer;
+        position: relative;
+        top: -25px;
+    }
+
+    .carrito-item input[type="number"] {
+        width: 50px;
+        padding: 5px;
+        margin: 5px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+
+    #carrito-footer {
+        padding: 15px;
+        border-top: 1px solid #ddd;
+    }
+
+    #carrito-footer p {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 0 0 10px;
+    }
+
+    #carrito-footer button {
+        width: 100%;
+        padding: 10px;
+        background: #A63055;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    /* Badge del carrito */
+    .carrito-badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #DF7DA6;
+        color: #73283E;
+        font-size: 12px;
+        font-weight: bold;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        border-radius: 50%;
+        display: none;/* oculto cuando no hay productos */
+    }
+
 
     /**************** SECCION UNO ****************/
 
@@ -2333,9 +2645,9 @@ button.btn-fav i.bx.bxs-leaf,
         margin-bottom: 0;
     }
 
-    .text-card p {
-        font-weight: 600;
-        font-size: 20px;
+    #text-precio {
+        font-size: 15px;
+        padding: 5px;
     }
 
     #btn-add {
@@ -2473,7 +2785,7 @@ button.btn-fav i.bx.bxs-leaf,
 
 }
 
-@media screen and (max-width: 430px) {
+@media screen and (max-width: 480px) {
     .nombre-empresa a {
         font-size: 18px;
     }
@@ -2492,20 +2804,22 @@ button.btn-fav i.bx.bxs-leaf,
         padding: 5px;
     }
 
-    .barra-de-busqueda .buscar {
-        height: 28px;
-        width: 20vw;
-        font-size: 11px;
-        padding: 0 10px 0 5px;
+    .barra-de-busqueda.active form {
+        width: calc(100% - 20px);
+        top: 70px;
+        padding: 12px;
     }
 
-    .btn button {
-        width: 32px;
-        height: 32px;
-        right: 30px;
+    .toggle-search {
+        right: 20px;
+        width: 36px;
+        height: 36px;
         font-size: 18px;
     }
 
+    .barra-de-busqueda.active .buscar {
+        font-size: 14px;
+    }
     /*************** SECCION UNO ****************/
     #t1 {
         padding: 0px 0;
@@ -2543,8 +2857,8 @@ button.btn-fav i.bx.bxs-leaf,
         margin-bottom: 0;
     }
 
-    .text-card p {
-        font-size: 15px;
+    .text-precio {
+        font-size: 10px;
         padding: 5px;
     }
 
