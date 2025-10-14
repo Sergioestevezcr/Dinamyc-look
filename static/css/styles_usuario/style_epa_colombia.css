@@ -9,7 +9,6 @@
 }
 
 /* Estilo para la lista de navegación */
-
 .nav-links a {
 	color: #1f4A1D;
 	text-shadow: 2px 2px 4px rgba(12, 40, 11, 0.3); 
@@ -25,6 +24,24 @@
 
 .btn-serch button:hover {
 	background-color:  #255A21;
+}
+
+.toggle-search {
+    color: #1f4A1D;
+}
+
+.toggle-search:hover {
+    background-color: rgba(67, 174, 57, 0.5);
+}
+
+
+.barra-de-busqueda.active .btn-serch button {
+    background-color: #2A7124;
+    color: #FBFAF7;
+}
+
+.barra-de-busqueda.active .btn-serch button:hover {
+    background-color: #255A21;
 }
 
 /*********************************** CARRITO *****************************/

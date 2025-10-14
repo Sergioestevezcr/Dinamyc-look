@@ -25,6 +25,23 @@
 	background-color:  #02837C;
 }
 
+.toggle-search {
+    color: #02837C;
+}
+
+.toggle-search:hover {
+    background-color: rgba(141, 255, 238, 0.4);
+}
+
+
+.barra-de-busqueda.active .btn-serch button {
+    background-color: #00A59A;
+    color: #FBFAF7;
+}
+
+.barra-de-busqueda.active .btn-serch button:hover {
+    background-color: #02837C;
+}
 /*********************************** CARRITO *****************************/
 
 #carrito-header {

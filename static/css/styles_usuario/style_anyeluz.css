@@ -1,28 +1,46 @@
 /* Header y navegación */
 .header {
-	background: #F9EAF1;
+    background: #F9EAF1;
 }
 
 .nombre-empresa a {
-	color: #DF557D;
+    color: #DF557D;
 }
 
 /* Estilo para la lista de navegación */
 
 .nav-links a {
-	color: #DF557D;
+    color: #DF557D;
 }
 
 .nav-links li:hover {
-	background-color:  rgba(243, 174, 197, 0.6);
+    background-color: rgba(243, 174, 197, 0.6);
 }
 
 .btn-serch button {
-	background-color: #DF557D;
+    background-color: #DF557D;
 }
 
 .btn-serch button:hover {
-	background-color:  #CD355A;
+    background-color: #CD355A;
+}
+
+.toggle-search {
+    color: #DF557D;
+}
+
+.toggle-search:hover {
+    background-color: rgba(243, 174, 197, 0.6);
+}
+
+
+.barra-de-busqueda.active .btn-serch button {
+    background-color: #DF557D;
+    color: #FBFAF7;
+}
+
+.barra-de-busqueda.active .btn-serch button:hover {
+    background-color: #CD355A;
 }
 
 /*********************************** CARRITO *****************************/
@@ -44,7 +62,7 @@
 }
 
 .carrito-item button {
-    color: #4A0D19 ;
+    color: #4A0D19;
 }
 
 #carrito-footer button {
@@ -59,33 +77,38 @@
 }
 
 /******************************** BARRA DE MARCAS *******************************/
-.barra-de-marcas{
-	background-color: #EA7CA0;
-	margin-left: -25px;
+.barra-de-marcas {
+    background-color: #EA7CA0;
+    margin-left: -25px;
 }
 
 .scroll-container::-webkit-scrollbar-thumb {
-    background-color: #DF557D; /* Color del "dedo" de la barra */
+    background-color: #DF557D;
+    /* Color del "dedo" de la barra */
 }
 
 .scroll-container::-webkit-scrollbar-thumb:hover {
-    background-color: #CD355A; /* Color cuando pasas el cursor por encima */
+    background-color: #CD355A;
+    /* Color cuando pasas el cursor por encima */
 }
 
 .scroll-container::-webkit-scrollbar-track {
-    background-color: #EA7CA0; /* Color del carril de la barra de desplazamiento */
+    background-color: #EA7CA0;
+    /* Color del carril de la barra de desplazamiento */
 }
 
 /*********************************** SECCION UNO (4) ***********************************/
-.section4-product{
+.section4-product {
     background-color: #FAE9F0;
 }
+
 .section4-product2 {
-	background-color: #FBFAF7;
+    background-color: #FBFAF7;
 }
+
 #t4 {
     color: #CD355A;
-    background-color: #FAE9F0; 
+    background-color: #FAE9F0;
     text-shadow: 1px 1px 2px rgba(74, 13, 25, 0.1);
 }
 
@@ -94,7 +117,7 @@
     background-color: #DF557D;
 }
 
-    /* Subtitulo */
+/* Subtitulo */
 #p4 {
     color: #DF557D;
 }
@@ -102,7 +125,7 @@
 #t4-2 {
     color: #A63055;
     background-color: #FBFAF7;
-    text-shadow: 1px 1px 2px rgba(69, 18, 33, 0.1); 
+    text-shadow: 1px 1px 2px rgba(69, 18, 33, 0.1);
 }
 
 /* Añadir línea decorativa debajo del título */
@@ -111,7 +134,7 @@
 }
 
 .carousel-product4-2 {
-	background-color: #FBFAF7;
+    background-color: #FBFAF7;
 }
 
 .carousel-prd-container {
@@ -122,12 +145,14 @@
     background-color: #FBFAF7;
 }
 
-.product-card4, .product-card4-2 {
+.product-card4,
+.product-card4-2 {
     background-color: #FFFFFF;
     box-shadow: 0 5px 15px rgba(74, 13, 25, 0.3);
 }
 
-.product-card4:hover, .product-card4-2:hover {
+.product-card4:hover,
+.product-card4-2:hover {
     box-shadow: 0 8px 20px rgba(205, 53, 90, 0.5);
 }
 
@@ -160,20 +185,27 @@
 #btn-add4 {
     background-color: #CD355A;
     color: #F9DBE6;
-    box-shadow: 0 2px 5px rgba(74, 13, 25, 0.2); 
+    box-shadow: 0 2px 5px rgba(74, 13, 25, 0.2);
 }
 
 #btn-add4:hover {
-    background-color: #932138;;
+    background-color: #932138;
+    ;
     box-shadow: 0 4px 8px rgba(74, 13, 25, 0.3);
 }
 
-.btn-right-prd, .btn-left-prd, .btn-right-prd2, .btn-left-prd2 {
+.btn-right-prd,
+.btn-left-prd,
+.btn-right-prd2,
+.btn-left-prd2 {
     background-color: #CD355A;
     box-shadow: 0 3px 10px rgba(74, 13, 25, 0.3);
 }
 
-.btn-right-prd:hover, .btn-left-prd:hover, .btn-right-prd2:hover, .btn-left-prd2:hover {
+.btn-right-prd:hover,
+.btn-left-prd:hover,
+.btn-right-prd2:hover,
+.btn-left-prd2:hover {
     background-color: #DF557D;
 }
 
@@ -185,14 +217,14 @@
     background-color: #CD355A;
 }
 
-
 /*********************************** SECCION DOS (1) ***********************************/
 .section1-product {
     background-color: #FBFAF7;
 }
+
 #t1 {
     color: #CD355A;
-    background-color: #FBFAF7; 
+    background-color: #FBFAF7;
     text-shadow: 1px 1px 2px rgba(74, 13, 25, 0.1);
 }
 
@@ -210,11 +242,11 @@
 
 .product-card {
     background-color: #FFFFFF;
-    box-shadow: rgba(205, 53, 90, .4); 
+    box-shadow: rgba(205, 53, 90, .4);
 }
 
 .product-card:hover {
-    box-shadow: rgba(205, 53, 90, 0.6); 
+    box-shadow: rgba(205, 53, 90, 0.6);
 }
 
 .text-card {
@@ -231,32 +263,33 @@
     color: rgba(248, 210, 227, 0.8);
 }
 
-  /* Botón de agregar al carrito */
+/* Botón de agregar al carrito */
 #btn-add {
     background-color: #DF557D;
     color: #fbe8f0;
-    box-shadow: 0 2px 5px rgba(74, 13, 25, 0.2); 
+    box-shadow: 0 2px 5px rgba(74, 13, 25, 0.2);
 }
 
 #btn-add:hover {
     background-color: #CD355A;
     box-shadow: 0 4px 8px rgba(74, 13, 25, 0.3);
 }
+
 /*********************************** SECCION TRES (2) ***********************************/
 
 .cp-container {
     background: linear-gradient(to bottom, #FAE9F0, #FAE9F0);
-    box-shadow: inset 0 0px 0px rgba(74, 13, 25, 0.2); 
+    box-shadow: inset 0 0px 0px rgba(74, 13, 25, 0.2);
 }
 
 #t2 {
     color: #CD355A;
-    text-shadow: 1px 1px 3px rgba(74, 13, 25, 0.3); 
+    text-shadow: 1px 1px 3px rgba(74, 13, 25, 0.3);
 }
 
 /* Personalización de la barra de scroll horizontal */
 .carousel-product::-webkit-scrollbar {
-    height: 10px; 
+    height: 10px;
 }
 
 .carousel-product::-webkit-scrollbar-thumb {
@@ -277,7 +310,7 @@
 }
 
 .product-card2:hover {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); 
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 .text-card2 {
@@ -285,11 +318,11 @@
     color: #932138
 }
 
-  /* Botón de agregar al carrito */
+/* Botón de agregar al carrito */
 #btn-add2 {
     background-color: #CD355A;
     color: #F9DBE6;
-    box-shadow: 0 2px 5px rgba(74, 13, 25, 0.2); 
+    box-shadow: 0 2px 5px rgba(74, 13, 25, 0.2);
 }
 
 #btn-add2:hover {
@@ -341,7 +374,7 @@ button.btn-fav i.bx.bxs-star,
 
 .card-rel a {
     background: #e7e5e0;
-    box-shadow: 0 2px 6px rgba(74, 13, 25,0.1);
+    box-shadow: 0 2px 6px rgba(74, 13, 25, 0.1);
 }
 
 .card-rel h3 {

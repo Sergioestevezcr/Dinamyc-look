@@ -8,7 +8,6 @@
 }
 
 /* Estilo para la lista de navegación */
-
 .nav-links a {
 	color: #f34074;
 }
@@ -23,6 +22,23 @@
 
 .btn-serch button:hover {
 	background-color:  #DF1F60;
+}
+
+.toggle-search {
+    color: #F34074;
+}
+
+.toggle-search:hover {
+    background-color: rgba(243, 174, 197, 0.6);
+}
+
+.barra-de-busqueda.active .btn-serch button {
+    background-color: #F34074;
+    color: #FBFAF7;
+}
+
+.barra-de-busqueda.active .btn-serch button:hover {
+    background-color: #DF1F60;
 }
 
 /*********************************** CARRITO *****************************/

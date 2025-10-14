@@ -41,7 +41,7 @@
                     <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
                                 class="fa-solid fa-user"></i><span>Clientes</span></a>
                     </li>
-                    <li><a href="{{ url_for('admin_bp.ventas') }}"><i
+                    <li><a href="{{ url_for('admin_bp.ventas_view') }}"><i
                                 class='bx bxs-dollar-circle'></i><span>Ventas</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.productos') }}"><i
@@ -96,7 +96,7 @@
                                     </a>
 
                                     <a href="{{ url_for('admin_bp.ver_reporte', id=reporte[0]) }}" target="_blank">
-                                        <i class="fa-solid fa-eye"></i> Previsualizar
+                                        <i class="fa-solid fa-eye"></i> Ver
                                     </a>
                                 </td>
                             </tr>
@@ -113,7 +113,7 @@
         <div class="modal-content">
             <h2 class="modal-header">Generar Nuevo Reporte</h2>
 
-            <form id="addForm" action="/generar_reporte" method="POST">
+            <form id="addForm" action="{{ url_for('admin_bp.generar_reporte') }}" method="POST">
 
                 <!-- Fecha inicio -->
                 <div class="form-group">

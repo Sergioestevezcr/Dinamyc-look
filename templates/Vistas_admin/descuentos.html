@@ -62,7 +62,7 @@
                     <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
                                 class="fa-solid fa-user"></i><span>Clientes</span></a>
                     </li>
-                    <li><a href="{{ url_for('admin_bp.ventas') }}"><i
+                    <li><a href="{{ url_for('admin_bp.ventas_view') }}"><i
                                 class='bx bxs-dollar-circle'></i><span>Ventas</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.productos') }}"><i
@@ -136,7 +136,7 @@
     <div id="addModal" class="modal-background">
         <div class="modal-content">
             <h2 class="modal-header">Agregar Nueva Promoción</h2>
-            <form id="addForm" action="/add_promocion" method="POST"
+            <form id="addForm" action="{{ url_for('admin_bp.add_promocion') }}" method="POST"
                 data-required-fields='["descuento", "fecha_inicial", "fecha_final"]'>
 
                 <div class="form-group">
@@ -175,7 +175,7 @@
     <div id="editModal" class="modal-background">
         <div class="modal-content">
             <h2 class="modal-header">Editar Promoción</h2>
-            <form id="editForm" method="POST" data-base-action="/update_promocion" data-entity-type="promocion"
+            <form id="editForm" method="POST" data-base-action="{{ url_for('admin_bp.update_promocion', id=0)[:-1] }}" data-entity-type="promocion"
                 data-required-fields='["descuento", "fecha_inicial", "fecha_final"]'>
 
                 <div class="form-group">
@@ -214,7 +214,7 @@
     <div id="asigModal" class="modal-background">
         <div class="modal-content">
             <h2 class="modal-header">Asignar Promoción</h2>
-            <form action="/asignar_promocion" method="POST" id="promoForm">
+            <form action="{{ url_for('admin_bp.asignar_promocion') }}" method="POST" id="promoForm">
                 <!-- Selección de promoción -->
                 <div class="form-group">
                     <div class="label-form"><i class="fa-solid fa-percent"></i>

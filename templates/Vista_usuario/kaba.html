@@ -53,6 +53,11 @@
 
 		<!----------------------------------- 1.1 Barra de busqueda ------------------------------------>
 		<div class="barra-de-busqueda">
+			<!-- Botón visible solo en pantallas pequeñas -->
+			<button type="button" class="toggle-search">
+				<i class="fas fa-search"></i>
+			</button>
+
 			<form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
 				<input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
 				<div class="btn-serch">
@@ -69,13 +74,13 @@
 				{% if user %}
 				<!-- Icono de usuario cuando ha iniciado sesión -->
 				<li class="usuario-menu">
-					<a href="#"><i class="fa-solid fa-user"></i></a>
+					<a href="#" class="nombre-user">¡Hola, {{ nombre }}!</a>
 					<div class="usuario-dropdown">
 						<a href="{{ url_for('client_bp.favoritos') }}"><i class='bx bxs-star'></i><span>
 								Favoritos</span></a>
 						<a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
 								Compras</span></a>
-						<a href="admin_bp.configuracion" class="active"><i class='bx bxs-user'></i><span>
+						<a href="{{ url_for('admin_bp.configuracion') }}" class="active"><i class='bx bxs-user'></i><span>
 								Perfil</span></a>
 						<a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
 							sesión</a>
@@ -83,7 +88,8 @@
 				</li>
 
 				{% else %}
-				<li title="Iniciar Sesión"><a href="{{ url_for('auth_bp.login') }}"><i class='bx bx-log-in'></i></a>
+				<li class="house" title="Iniciar Sesión"><a href="{{ url_for('auth_bp.login') }}"><i
+							class="fa fa-user"></i></a>
 				</li>
 				{% endif %}
 			</ul>
@@ -175,23 +181,27 @@
 							<i class="bx bx-star"></i> <!-- VACÍA si no -->
 							{% endif %}
 						</button>
-						<!-- Botón favoritos -->
-						<button class="btn-fav" data-id="{{ producto[0] }}">
-							{% if producto[0] in favoritos %}
-							<i class="bx bxs-star fav-relleno"></i> <!-- RELLENA si ya es favorito -->
-							{% else %}
-							<i class="bx bx-star"></i> <!-- VACÍA si no -->
-							{% endif %}
-						</button>
 						<img src="{{ url_for('static', filename='imagenes/' ~ producto[3]) }}" alt="Producto">
 					</div>
 					<div class="text-card">
 						<h3>{{ producto[1] }}</h3>
 						<p id="text-marca">{{ producto[4] }}</p>
-						<p class="text-precio" id="text-precio"">${{ " {:,}".format(producto[2]).replace(",", "." )
-							}}</p>
+						<div class="text-cardown">
+							<p class="text-precio" id="text-precio">
+								{% if producto[5] %} {# precio_final existe #}
+								<span class="precio-original">
+									${{ "{:,}".format(producto[2]).replace(",", ".") }}
+								</span><br>
+								<span class="precio-descuento">
+									${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
+								</span>
+								{% else %}
+								${{ "{:,}".format(producto[2]).replace(",", ".") }}
+								{% endif %}
+							</p>
 							<button class="btn-add" id="btn-add" type="button">Agregar <i
 									class='bx bx-shopping-bag'></i></button>
+						</div>
 					</div>
 				</a>
 			</div>
@@ -240,10 +250,23 @@
 						<div class="text-card4">
 							<h3>{{ producto[1] }}</h3>
 							<p id="text-marca2">{{ producto[4] }}</p>
-							<p class="text-precio" id="text-precio2">${{ "{:,}".format(producto[2]).replace(",", ".") }}
-							</p>
-							<button class="btn-add" id="btn-add4" type="button">Agregar <i
-									class='bx bx-shopping-bag'></i></button>
+							<div class="text-cardown">
+								<p class="text-precio" id="text-precio2">
+									{% if producto[5] %} {# precio_final existe #}
+									<span class="precio-original">
+										${{ "{:,}".format(producto[2]).replace(",", ".") }}
+									</span><br>
+									<span class="precio-descuento">
+										${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
+									</span>
+									{% else %}
+									${{ "{:,}".format(producto[2]).replace(",", ".") }}
+									{% endif %}
+								</p>
+								<button class="btn-add" id="btn-add4" type="button">
+									Agregar <i class='bx bx-shopping-bag'></i>
+								</button>
+							</div>
 						</div>
 					</a>
 				</div>
@@ -273,45 +296,27 @@
 								<i class="bx bx-star"></i> <!-- VACÍA si no -->
 								{% endif %}
 							</button>
-							<!-- Botón favoritos -->
-							<button class="btn-fav" data-id="{{ producto[0] }}">
-								{% if producto[0] in favoritos %}
-								<i class="bx bxs-star fav-relleno"></i> <!-- RELLENA si ya es favorito -->
-								{% else %}
-								<i class="bx bx-star"></i> <!-- VACÍA si no -->
-								{% endif %}
-							</button>
 							<img src="{{ url_for('static', filename='imagenes/' ~ producto[3]) }}" alt="Producto">
 						</div>
 						<div class="text-card2">
 							<h3>{{ producto[1] }}</h3>
 							<p id="text-marca">{{ producto[4] }}</p>
-							<p class="text-precio" id="text-precio">
-								{% if producto[5] %} {# precio_final existe #}
-								<span class="precio-original">
+							<div class="text-cardown">
+								<p class="text-precio" id="text-precio">
+									{% if producto[5] %} {# precio_final existe #}
+									<span class="precio-original">
+										${{ "{:,}".format(producto[2]).replace(",", ".") }}
+									</span><br>
+									<span class="precio-descuento">
+										${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
+									</span>
+									{% else %}
 									${{ "{:,}".format(producto[2]).replace(",", ".") }}
-								</span><br>
-								<span class="precio-descuento">
-									${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
-								</span>
-								{% else %}
-								${{ "{:,}".format(producto[2]).replace(",", ".") }}
-								{% endif %}
-							</p>
-							<p class="text-precio" id="text-precio">
-								{% if producto[5] %} {# precio_final existe #}
-								<span class="precio-original">
-									${{ "{:,}".format(producto[2]).replace(",", ".") }}
-								</span><br>
-								<span class="precio-descuento">
-									${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
-								</span>
-								{% else %}
-								${{ "{:,}".format(producto[2]).replace(",", ".") }}
-								{% endif %}
-							</p>
-							<button class="btn-add" id="btn-add2" type="button">Agregar <i
-									class='bx bx-shopping-bag'></i></button>
+									{% endif %}
+								</p>
+								<button class="btn-add" id="btn-add2" type="button">Agregar <i
+										class='bx bx-shopping-bag'></i></button>
+							</div>
 						</div>
 					</a>
 				</div>
@@ -361,10 +366,22 @@
 						<div class="text-card4">
 							<h3>{{ producto[1] }}</h3>
 							<p id="text-marca2">{{ producto[4] }}</p>
-							<p class="text-precio" id="text-precio2">${{ "{:,}".format(producto[2]).replace(",", ".") }}
-							</p>
-							<button class="btn-add" id="btn-add4" type="button">Agregar <i
-									class='bx bx-shopping-bag'></i></button>
+							<div class="text-cardown">
+								<p class="text-precio" id="text-precio2">
+									{% if producto[5] %} {# precio_final existe #}
+									<span class="precio-original">
+										${{ "{:,}".format(producto[2]).replace(",", ".") }}
+									</span><br>
+									<span class="precio-descuento">
+										${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
+									</span>
+									{% else %}
+									${{ "{:,}".format(producto[2]).replace(",", ".") }}
+									{% endif %}
+								</p>
+								<button class="btn-add" id="btn-add4" type="button">Agregar <i
+										class='bx bx-shopping-bag'></i></button>
+							</div>
 						</div>
 					</a>
 				</div>
@@ -416,6 +433,7 @@
 	<script src="{{ url_for('static', filename= 'js/script_alert.js') }}"></script>
 	<script src="{{ url_for('static', filename= 'js/script_carrito.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
 </body>
 
 </html>

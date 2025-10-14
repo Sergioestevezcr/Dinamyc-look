@@ -62,7 +62,7 @@
                     <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
                                 class="fa-solid fa-user"></i><span>Clientes</span></a>
                     </li>
-                    <li><a href="{{ url_for('admin_bp.ventas') }}"><i
+                    <li><a href="{{ url_for('admin_bp.ventas_view') }}"><i
                                 class='bx bxs-dollar-circle'></i><span>Ventas</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.productos') }}"><i
@@ -94,19 +94,28 @@
                     <div class="form-group ddos1">
                         <div class="label-form-config">
                             <i class="fa-solid fa-user"></i>
-                            <input type="text" id="edit-nombre" class="input-form" name="nombre" placeholder="Nombre"
+                            <input type="text" id="edit-nombre" class="input-form" name="Nombre" placeholder="Nombre"
                                 value="{{ usuario.nombre }}" required>
                         </div>
                         <div class="label-form-config">
                             <i class="fa-solid fa-user"></i>
-                            <input type="text" id="edit-apellido" class="input-form" name="apellido"
+                            <input type="text" id="edit-apellido" class="input-form" name="Apellido"
                                 placeholder="Apellidos" value="{{ usuario.apellido }}" required>
                         </div>
                     </div>
+
+                    <div class="form-group-config">
+                        <div class="label-form-config">
+                            <i class="fas fa-id-card"></i>
+                            <input type="number" id="edit-documento" class="input-form" name="Documento"
+                                placeholder="Número de Documento" value="{{ usuario.documento }}" required>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <div class="label-form-config">
                             <i class="fa-solid fa-envelope"></i>
-                            <input type="email" id="edit-correo" class="input-form" name="correo"
+                            <input type="email" id="edit-correo" class="input-form" name="Correo"
                                 placeholder="Correo electrónico" value="{{ usuario.correo }}" required>
                         </div>
                     </div>
@@ -114,7 +123,7 @@
                     <div class="form-group">
                         <div class="label-form-config">
                             <i class="fa-solid fa-phone"></i>
-                            <input type="tel" id="edit-telefono" class="input-form" name="telefono"
+                            <input type="tel" id="edit-telefono" class="input-form" name="Telefono"
                                 placeholder="Número de teléfono" value="{{ usuario.telefono }}" required>
                         </div>
                     </div>
@@ -122,13 +131,13 @@
                     <div class="form-group ddos1">
                         <div class="label-form-config">
                             <i class="fa-solid fa-location-dot"></i>
-                            <input type="text" id="edit-direccion" class="input-form" name="direccion"
+                            <input type="text" id="edit-direccion" class="input-form" name="Direccion"
                                 placeholder="Dirección" value="{{ usuario.direccion }}" required>
                         </div>
 
                         <div class="label-form-config">
                             <i class="fa-solid fa-city"></i>
-                            <input type="text" id="edit-ciudad" class="input-form" name="ciudad" placeholder="Ciudad"
+                            <input type="text" id="edit-ciudad" class="input-form" name="Ciudad" placeholder="Ciudad"
                                 value="{{ usuario.ciudad }}" required>
                         </div>
                     </div>
@@ -136,7 +145,7 @@
                     <div class="form-group">
                         <div class="label-form-config">
                             <i class="fa-solid fa-lock"></i>
-                            <input type="password" id="edit-password" class="input-form" name="clave"
+                            <input type="password" id="edit-password" class="input-form" name="Clave"
                                 placeholder="Contraseña" value="">
                         </div>
                     </div>

@@ -1,7 +1,8 @@
 # app.py
 from flask import Flask, render_template
 import os
-from database import mysql  # extensión de MySQL
+from database import mysql
+from config import Config
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -12,19 +13,11 @@ def create_app():
         static_folder=os.path.join(BASE_DIR, 'static')
     )
 
-    # ---------------- Configuración MySQL ----------------
-    flask_app.config['MYSQL_HOST'] = '13.59.80.138'
-    flask_app.config['MYSQL_USER'] = 'admin1'
-    flask_app.config['MYSQL_PASSWORD'] = 'Is41l0'
-    flask_app.config['MYSQL_DB'] = 'dinamyc_look2'
-    mysql.init_app(flask_app)
+    # ---------------- Configuración base ----------------
+    flask_app.config.from_object(Config)
 
-    # ---------------- Configuración correo ----------------
-    flask_app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-    flask_app.config['MAIL_PORT'] = 587
-    flask_app.config['MAIL_USE_TLS'] = True
-    flask_app.config['MAIL_USERNAME'] = 'vargasruizlauravalentina@gmail.com'
-    flask_app.config['MAIL_PASSWORD'] = 'rjvc vwsr mtuq phzt'
+    # ---------------- Inicialización de extensiones ----------------
+    mysql.init_app(flask_app)
 
     # ---------------- Configuración uploads ----------------
     UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'imagenes')
@@ -36,10 +29,11 @@ def create_app():
     from controllers.admin_controller import admin_bp
     from controllers.diagnostic_controller import diagnostic_bp
 
-    flask_app.register_blueprint(client_bp)
-    flask_app.register_blueprint(auth_bp)
-    flask_app.register_blueprint(admin_bp)
-    flask_app.register_blueprint(diagnostic_bp)
+    # Cada blueprint con su url_prefix para evitar conflictos
+    flask_app.register_blueprint(client_bp, url_prefix="/")
+    flask_app.register_blueprint(auth_bp, url_prefix="/auth")
+    flask_app.register_blueprint(admin_bp, url_prefix="/admin")
+    flask_app.register_blueprint(diagnostic_bp, url_prefix="/diagnostic")
 
     # ---------------- Handlers de error ----------------
     @flask_app.errorhandler(404)
@@ -50,5 +44,5 @@ def create_app():
     def internal_server_error(e):
         return render_template('errors/500.html'), 500
 
+    # return debe ir al final
     return flask_app
-

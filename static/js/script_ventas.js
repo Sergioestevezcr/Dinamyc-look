@@ -1,16 +1,16 @@
 // Espera a que todo el contenido del DOM esté cargado antes de ejecutar el código
 document.addEventListener('DOMContentLoaded', function() {
     // Referencias a elementos del DOM que se usan en el formulario de ventas
-    const addBtn = document.querySelector('.add-btn');           // Botón para abrir el modal
-    const addModal = document.getElementById('addModal');        // Contenedor modal
-    const cancelAddBtn = document.getElementById('cancelAddBtn');// Botón para cerrar el modal
-    const addForm = document.getElementById('addForm');          // Formulario para agregar venta
-    const addProductoBtn = document.getElementById('add-producto-btn'); // Botón para añadir filas de productos
-    const productosContainer = document.getElementById('productos-container'); // Contenedor de filas de productos
+    const addBtn = document.querySelector('.add-btn');
+    const addModal = document.getElementById('addModal');
+    const cancelAddBtn = document.getElementById('cancelAddBtn');
+    const addForm = document.getElementById('addForm');
+    const addProductoBtn = document.getElementById('add-producto-btn');
+    const productosContainer = document.getElementById('productos-container');
 
-        // ================== CLIENTE (datalist nombre → ID oculto) ==================
-    const inputNombre = document.getElementById("usuario-nombre"); // visible
-    const inputId = document.getElementById("usuario-id"); // oculto (se envía)
+    // ================== CLIENTE (datalist nombre → ID oculto) ==================
+    const inputNombre = document.getElementById("usuario-nombre");
+    const inputId = document.getElementById("usuario-id");
     const dataListUsuarios = document.getElementById("usuarios-list");
 
     if (inputNombre) {
@@ -19,32 +19,28 @@ document.addEventListener('DOMContentLoaded', function() {
             const opcion = Array.from(dataListUsuarios.options).find(opt => opt.value === valor);
 
             if (opcion) {
-                // Copiar el ID real al campo oculto
                 inputId.value = opcion.dataset.id;
             } else {
-                // Si escriben algo no válido, limpiar el hidden
                 inputId.value = "";
             }
         });
     }
 
-
-    // ----------------- Abrir modal al hacer clic en "Agregar" -----------------
+    // ----------------- Abrir modal -----------------
     if (addBtn) {
         addBtn.addEventListener('click', function() {
-            addModal.style.display = 'flex'; // Muestra el modal
+            addModal.style.display = 'flex';
         });
     }
 
-    // ----------------- Cerrar modal al hacer clic en "Cancelar" -----------------
+    // ----------------- Cerrar modal -----------------
     if (cancelAddBtn) {
         cancelAddBtn.addEventListener('click', function() {
-            addModal.style.display = 'none'; // Oculta el modal
-            resetForm(); // Restablece el formulario a su estado inicial
+            addModal.style.display = 'none';
+            resetForm();
         });
     }
 
-    // ----------------- Cerrar modal al hacer clic fuera de su contenido -----------------
     window.addEventListener('click', function(event) {
         if (event.target === addModal) {
             addModal.style.display = 'none';
@@ -52,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // ----------------- Agregar una nueva fila de producto al formulario -----------------
+    // ----------------- Agregar nueva fila de producto -----------------
     if (addProductoBtn) {
         addProductoBtn.addEventListener('click', function() {
             addProductoRow();
@@ -62,35 +58,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // ----------------- Validar formulario antes de enviar -----------------
     if (addForm) {
         addForm.addEventListener('submit', function(event) {
-            // Si la validación falla, detener el envío y mantener el modal abierto
             if (!validateVentaForm()) {
                 event.preventDefault();
                 return;
             }
-        
-            // Solo si pasa la validación, cerrar el modal
             addModal.style.display = 'none';
         });
     }
 
-    // ----------------- Configurar event listeners para productos existentes -----------------
+    // ----------------- Configurar event listeners iniciales -----------------
     setupProductEventListeners();
 
     // =================== FUNCIONES AUXILIARES ===================
 
-    // Configura los event listeners para los productos
+    // Configura los event listeners para todos los productos
     function setupProductEventListeners() {
         const productoSelects = document.querySelectorAll('.producto-select');
         const cantidadInputs = document.querySelectorAll('.cantidad-input');
 
         productoSelects.forEach(select => {
-            // Event listener para cuando se selecciona del datalist
-            select.addEventListener('input', function() {
+            // Usar 'change' en lugar de 'input' para mejor compatibilidad con datalist
+            select.addEventListener('change', function() {
                 updatePrice(this);
             });
             
-            // Event listener para cuando cambia el valor
-            select.addEventListener('change', function() {
+            // Añadir blur para capturar cuando el usuario sale del campo
+            select.addEventListener('blur', function() {
                 updatePrice(this);
             });
         });
@@ -106,31 +99,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Restablece el formulario a su estado inicial
+    // Restablece el formulario
     function resetForm() {
-        addForm.reset(); // Limpia los valores de todos los inputs
-        // Deja solamente una fila de producto
+        addForm.reset();
         const productosItems = productosContainer.querySelectorAll('.producto-item');
         for (let i = 1; i < productosItems.length; i++) {
-            productosItems[i].remove(); // Elimina filas extras
+            productosItems[i].remove();
         }
-        updateTotal(); // Actualiza el total a cero
+        // Limpiar campos calculados de la primera fila
+        const firstRow = productosContainer.querySelector('.producto-item');
+        if (firstRow) {
+            firstRow.querySelector('.precio-display').value = '';
+            firstRow.querySelector('.subtotal-display').value = '';
+        }
+        updateTotal();
     }
 
-    // Duplica la primera fila de producto para agregar una nueva
+    // Duplica la primera fila de producto
     function addProductoRow() {
         const firstProductoItem = productosContainer.querySelector('.producto-item');
-        const newProductoItem = firstProductoItem.cloneNode(true); // Clona la fila
+        const newProductoItem = firstProductoItem.cloneNode(true);
         
-        // Limpia los valores del nuevo elemento
         const inputs = newProductoItem.querySelectorAll('input');
         inputs.forEach(input => {
-            input.value = ''; // Borra valores de los inputs
+            input.value = '';
         });
         
-        productosContainer.appendChild(newProductoItem); // Agrega la fila al contenedor
-        
-        // Configurar event listeners para la nueva fila
+        productosContainer.appendChild(newProductoItem);
         setupProductEventListenersForRow(newProductoItem);
     }
 
@@ -140,11 +135,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const cantidadInput = row.querySelector('.cantidad-input');
 
         if (productoSelect) {
-            productoSelect.addEventListener('input', function() {
+            productoSelect.addEventListener('change', function() {
                 updatePrice(this);
             });
             
-            productoSelect.addEventListener('change', function() {
+            productoSelect.addEventListener('blur', function() {
                 updatePrice(this);
             });
         }
@@ -160,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Valida los datos del formulario de venta antes de enviarlo
+    // Valida los datos del formulario
     function validateVentaForm() {
         const usuarioId = document.getElementById('usuario-id');
         const usuarioNombre = document.getElementById('usuario-nombre');
@@ -184,14 +179,16 @@ document.addEventListener('DOMContentLoaded', function() {
             if (producto && cantidad && parseInt(cantidad) > 0) {
                 hasValidProduct = true;
 
-                // Validar productos duplicados
-                if (productosSeleccionados.has(producto)) {
+                // Extraer solo el nombre del producto (antes del guión)
+                const nombreProducto = producto.split(' - ')[0].trim();
+                
+                if (productosSeleccionados.has(nombreProducto)) {
                     alert('Este producto ya fue seleccionado. Modifique la cantidad si desea más');
                     productoSelects[i].focus();
                     return false;
                 }
 
-                productosSeleccionados.add(producto);
+                productosSeleccionados.add(nombreProducto);
             }
         }
 
@@ -200,7 +197,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
 
-        // Validaciones cruzadas: cantidad sin producto o producto sin cantidad válida
         for (let i = 0; i < productoSelects.length; i++) {
             const producto = productoSelects[i].value;
             const cantidad = cantidadInputs[i].value;
@@ -218,74 +214,102 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        return true; // Si pasó todas las validaciones
+        return true;
     }
 
     // =================== FUNCIONES GLOBALES ===================
 
     // Actualiza el precio cuando se selecciona un producto
     window.updatePrice = function(selectElement) {
-        const inputValue = selectElement.value;
-        const productoItem = selectElement.closest('.producto-item');
-        const precioDisplay = productoItem.querySelector('.precio-display');
-        
-        // Buscar en el datalist el precio correspondiente
-        const datalist = document.getElementById('productos-list');
-        const options = datalist.querySelectorAll('option');
-        let precio = null;
-        
-        for (let option of options) {
-            if (option.value === inputValue) {
-                precio = option.getAttribute('data-precio');
-                break;
-            }
-        }
-        
-        // Muestra el precio en el campo correspondiente
-        if (precio) {
-            const precioFormateado = parseFloat(precio).toLocaleString('es-CO');
-            precioDisplay.value = '$' + precioFormateado;
-        } else {
-            precioDisplay.value = '';
-        }
+    const inputValue = selectElement.value.trim();
+    if (!inputValue) return;
 
-        updateSubtotal(selectElement); // Actualiza el subtotal al cambiar producto
+    const productoItem = selectElement.closest('.producto-item');
+    const precioDisplay = productoItem.querySelector('.precio-display');
+    const datalist = document.getElementById('productos-list');
+    const options = datalist.querySelectorAll('option');
+    
+    let precio = null;
+    let descuento = 0;
+    
+    // Buscar coincidencia exacta o parcial
+    for (let option of options) {
+        const optionValue = option.value.trim();
+        if (optionValue === inputValue || optionValue.startsWith(inputValue.split(' - ')[0])) {
+            precio = parseFloat(option.getAttribute('data-precio'));
+            descuento = parseFloat(option.getAttribute('data-descuento')) || 0;
+            
+            // Actualizar el input con el valor completo del option si no coincide exactamente
+            if (optionValue !== inputValue) {
+                selectElement.value = optionValue;
+            }
+            break;
+        }
     }
 
-    // Calcula y muestra el subtotal para la fila
+    if (precio !== null) {
+        let precioFinal = precio;
+
+        // Aplicar descuento si existe
+        if (descuento > 0) {
+            precioFinal = precio - (precio * descuento / 100);
+            precioDisplay.value = `$${precioFinal.toLocaleString('es-CO')}`;
+        } else {
+            precioDisplay.value = `$${precio.toLocaleString('es-CO')}`;
+        }
+
+    } else {
+        precioDisplay.value = '';
+    }
+
+    updateSubtotal(selectElement);
+}
+
+
+    // Calcula y muestra el subtotal
     window.updateSubtotal = function(element) {
-        const productoItem = element.closest('.producto-item');
-        const productoSelect = productoItem.querySelector('.producto-select');
-        const cantidadInput = productoItem.querySelector('.cantidad-input');
-        const subtotalDisplay = productoItem.querySelector('.subtotal-display');
-        
-        const inputValue = productoSelect.value;
-        const cantidad = cantidadInput.value;
-        
-        // Buscar el precio en el datalist
-        const datalist = document.getElementById('productos-list');
-        const options = datalist.querySelectorAll('option');
-        let precio = null;
-        
-        for (let option of options) {
-            if (option.value === inputValue) {
-                precio = option.getAttribute('data-precio');
-                break;
-            }
+    const productoItem = element.closest('.producto-item');
+    const productoSelect = productoItem.querySelector('.producto-select');
+    const cantidadInput = productoItem.querySelector('.cantidad-input');
+    const subtotalDisplay = productoItem.querySelector('.subtotal-display');
+    
+    const inputValue = productoSelect.value.trim();
+    const cantidad = cantidadInput.value;
+    
+    if (!inputValue || !cantidad || parseInt(cantidad) <= 0) {
+        subtotalDisplay.value = '';
+        updateTotal();
+        return;
+    }
+    
+    const datalist = document.getElementById('productos-list');
+    const options = datalist.querySelectorAll('option');
+    let precio = null;
+    let descuento = 0;
+    
+    for (let option of options) {
+        const optionValue = option.value.trim();
+        if (optionValue === inputValue || optionValue.startsWith(inputValue.split(' - ')[0])) {
+            precio = parseFloat(option.getAttribute('data-precio'));
+            descuento = parseFloat(option.getAttribute('data-descuento')) || 0;
+            break;
         }
-        
-        // Calcula subtotal solo si hay precio y cantidad válida
-        if (precio && cantidad && parseInt(cantidad) > 0) {
-            const subtotal = parseFloat(precio) * parseInt(cantidad);
-            subtotalDisplay.value = '$' + subtotal.toLocaleString('es-CO');
-        } else {
-            subtotalDisplay.value = '';
-        }
-        
-        updateTotal(); // Recalcula el total general
     }
 
-    // Calcula y muestra el total de la venta sumando todos los subtotales
+    if (precio !== null) {
+        // Aplica el descuento al subtotal
+        const precioFinal = precio - (precio * descuento / 100);
+        const subtotal = precioFinal * parseInt(cantidad);
+        subtotalDisplay.value = '$' + subtotal.toLocaleString('es-CO');
+    } else {
+        subtotalDisplay.value = '';
+    }
+
+    updateTotal();
+}
+
+
+    // Calcula el total de la venta
     window.updateTotal = function() {
         const subtotalDisplays = document.querySelectorAll('.subtotal-display');
         const totalVentaInput = document.getElementById('total-venta');
@@ -293,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         subtotalDisplays.forEach(subtotalDisplay => {
             let subtotalValue = subtotalDisplay.value.replace('$', '').trim();
-            subtotalValue = subtotalValue.replace(/\./g, ''); // quitar separadores de miles
+            subtotalValue = subtotalValue.replace(/\./g, '');
             if (subtotalValue && !isNaN(subtotalValue)) {
                 total += parseFloat(subtotalValue);
             }
@@ -302,13 +326,13 @@ document.addEventListener('DOMContentLoaded', function() {
         totalVentaInput.value = '$' + total.toLocaleString('es-CO');
     }
 
-    // Elimina una fila de producto, dejando al menos una
+    // Elimina una fila de producto
     window.removeProducto = function(button) {
         const productosItems = document.querySelectorAll('.producto-item');
         if (productosItems.length > 1) {
             const productoItem = button.closest('.producto-item');
             productoItem.remove();
-            updateTotal(); // Actualiza el total tras eliminar
+            updateTotal();
         } else {
             alert('Debe mantener al menos una fila de producto');
         }

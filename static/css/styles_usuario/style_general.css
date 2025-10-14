@@ -4,7 +4,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 /************* Propiedades generales **********/
-/************* Propiedades generales **********/
 * {
     margin: 0;
     padding: 0;
@@ -80,6 +79,9 @@ a {
 .nav-links {
     list-style: none;
     display: flex;
+    align-items: center;
+    /* centra verticalmente */
+    justify-content: center;
     gap: 20px;
 }
 
@@ -133,23 +135,14 @@ a {
     display: inline-block;
 }
 
-.usuario-menu a{
+.usuario-menu a {
     font-weight: normal;
-}
-
-/* Botón de usuario */
-.usuario-btn {
-    color: #333;
-    font-size: 1.3rem;
-    text-decoration: none;
-    padding: 8px;
-    cursor: pointer;
 }
 
 /* Dropdown oculto */
 .usuario-dropdown {
     display: none;
-    position: absolute;
+    position: fixed;
     top: 120%;
     /* un poco más abajo para dejar espacio al pico */
     right: 0;
@@ -195,33 +188,36 @@ a {
 
 /******************************* 1.1. BARRA DE BUSQUEDA **********************************/
 
-/*cambia la posicion del div:barra-de-busqueda*/
+/* Contenedor principal */
 .barra-de-busqueda {
     display: flex;
     align-items: center;
     position: relative;
     right: -40px;
     padding: 20px;
+    transition: all 0.3s ease-in-out;
 }
 
-/*cambia las propiedades del input */
+/* Input de búsqueda */
 .barra-de-busqueda .buscar {
     box-sizing: border-box;
     padding: 0 45px 0 20px;
+    width: 100%;
     color: #451221;
     border-radius: 50px;
     font-size: 16px;
     border: none;
     height: 40px;
-    box-shadow: rgba(166, 48, 85, .3);
-    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 8px rgba(166, 48, 85, 0.3);
+    transition: all 0.3s ease-in-out;
 }
 
 .buscar:focus {
     outline: none;
+    box-shadow: 0 3px 12px rgba(166, 48, 85, 0.4);
 }
 
-/*cambia la posicion del icono de busqueda*/
+/* Botón de búsqueda */
 .btn-serch button {
     display: flex;
     justify-content: center;
@@ -237,15 +233,41 @@ a {
     font-size: 20px;
     color: #FBFAF7;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 .btn-serch button:hover {
     background-color: #C1416D;
     transform: scale(1.05);
-    box-shadow: 0 3px 6px rgba(69, 18, 33, 0.2);
+    box-shadow: 0 3px 6px rgba(69, 18, 33, 0.3);
 }
 
+/* Botón toggle (lupa) para móvil */
+.toggle-search {
+    display: none;
+    position: absolute;
+    font-size: 20px;
+    right: -60px;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: #FBFAF7;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    z-index: 100;
+}
+
+/* Cuando SÍ hay usuario - necesitas más espacio para el menú */
+body:has(.usuario-menu) .toggle-search {
+    right: 40px;
+}
+
+.toggle-search:hover {
+    background-color: #C1416D;
+    transform: scale(1.05);
+}
 
 .form-busqueda {
     background: #dfdfdf;
@@ -483,6 +505,26 @@ a {
     flex: 1;
     padding: 15px;
     overflow-y: auto;
+}
+
+/* Personalización de la barra de scroll horizontal */
+#carrito-items::-webkit-scrollbar {
+    width: 6px;
+    /* Altura de la barra de scroll horizontal */
+}
+
+#carrito-items::-webkit-scrollbar-thumb {
+    background-color: #DF7DA6;
+    border-radius: 10px;
+    /* Bordes redondeados */
+}
+
+#carrito-items::-webkit-scrollbar-thumb:hover {
+    background-color: #C1416D;
+}
+
+#carrito-items::-webkit-scrollbar-track {
+    background-color: #ececec;
 }
 
 .carrito-item {
@@ -774,22 +816,36 @@ a {
     color: #A63055;
 }
 
-/* Icono del botón de agregar */
-.add-btn i {
-    font-size: 22px;
-    padding-right: 6px;
-}
-
-/* Icono para la acción de editar */
-.edit-icon a {
-    font-size: 20px;
-    color: #A63055;
+/* Contenedor con scroll horizontal para tablas */
+.table-container {
+    overflow-x: auto;
 }
 
 /* Contenedor con scroll horizontal para tablas */
 .table-container {
     overflow-x: auto;
 }
+
+/* Personalización de la barra de scroll horizontal */
+.table-container::-webkit-scrollbar {
+    height: 6px;
+    /* Altura de la barra de scroll horizontal */
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background-color: #DF7DA6;
+    border-radius: 10px;
+    /* Bordes redondeados */
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background-color: #C1416D;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background-color: #ececec;
+}
+
 
 /* Estilo base de la tabla de pedidos */
 .orders-table {
@@ -924,6 +980,8 @@ a {
 }
 
 .btn-atras {
+    position: relative;
+    top: -15px;
     background-color: #F4D6E4;
     padding: 10px 20px;
     border-radius: 20px;
@@ -972,12 +1030,14 @@ a {
 
 /* Personalización de la barra de scroll horizontal */
 .scroll-container::-webkit-scrollbar {
-    height: 6px; /* Altura de la barra de scroll horizontal */
+    height: 6px;
+    /* Altura de la barra de scroll horizontal */
 }
 
 .scroll-container::-webkit-scrollbar-thumb {
     background-color: #DF7DA6;
-    border-radius: 10px; /* Bordes redondeados */
+    border-radius: 10px;
+    /* Bordes redondeados */
 }
 
 .scroll-container::-webkit-scrollbar-thumb:hover {
@@ -1039,7 +1099,8 @@ o eliminar alguna imagen del carrusel*/
     height: 100vh;
     object-fit: cover;
     border-radius: 0px;
-    transition: all 0.3s ease-in-out; /* Añadir transición suave */
+    transition: all 0.3s ease-in-out;
+    /* Añadir transición suave */
 }
 
 /*este modifica las propiedades que tienen los botones para desplazarze por el 
@@ -1050,7 +1111,8 @@ carrusel de imagnes*/
     position: absolute;
     top: 50%;
     font-size: 32px;
-    background-color: rgba(255, 255, 255, 0.3); /* Fondo semi-transparente */
+    background-color: rgba(255, 255, 255, 0.3);
+    /* Fondo semi-transparente */
     border-radius: 50%;
     padding: 10px;
     font-weight: 600;
@@ -1059,15 +1121,18 @@ carrusel de imagnes*/
     transform: translate(0, -50%);
     transition: all 0.3s ease-in-out;
     user-select: none;
-    box-shadow: 0 2px 5px rgba(69, 18, 33, 0.2); /* Sombra para profundidad */
+    box-shadow: 0 2px 5px rgba(69, 18, 33, 0.2);
+    /* Sombra para profundidad */
 }
 
 /*modifica los hover de los botones para desplazarse en el carrusel de imagenes*/
 .btn-left:hover,
 .btn-right:hover {
-    background-color: rgba(255, 255, 255, 0.6); /* Más opaco al pasar el mouse */
+    background-color: rgba(255, 255, 255, 0.6);
+    /* Más opaco al pasar el mouse */
     color: #A63055;
-    transform: translate(0, -50%) scale(1.1); /* Efecto de aumento */
+    transform: translate(0, -50%) scale(1.1);
+    /* Efecto de aumento */
 }
 
 /*modifica la posicion en la que se encuentran los botones dentro del container*/
@@ -1125,14 +1190,15 @@ carrusel de imagnes*/
 
 .product-card {
     background-color: #FBFAF7;
-    width: 270px;
-    height: 500px;
+    width: 100%;
+    height: 540px;
     border-radius: 10px;
     box-shadow: rgba(166, 48, 85, .4);
     text-align: center;
     position: relative;
     transition: all 0.3s ease-in-out;
-    overflow: hidden; /* Para evitar que la imagen se salga al hacer hover */
+    overflow: hidden;
+    /* Para evitar que la imagen se salga al hacer hover */
 }
 
 .product-card:hover {
@@ -1149,13 +1215,20 @@ carrusel de imagnes*/
     border-radius: 0 0 10px 10px;
     background-color: #FAFAFA;
     color: #73283E;
-    height: 230px;
+    height: 270px;
 }
 
 .text-card h3 {
     font-size: 16px;
     font-weight: 500;
     text-align: left;
+}
+
+.text-cardown {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 #text-precio,
@@ -1195,18 +1268,24 @@ carrusel de imagnes*/
     box-shadow: 0 4px 8px rgba(69, 18, 33, 0.3);
 }
 
+.image-container {
+    background: #ffffff;
+}
+
 .image-container img {
     width: 100%;
     border-radius: 10px 10px 0 0;
     cursor: pointer;
     height: 280px;
-    object-fit: cover; /* Asegurar que las imágenes se recorten adecuadamente */
+    object-fit: contain;
+    /* Asegurar que las imágenes se recorten adecuadamente */
     transition: all 0.3s ease-in-out;
 }
 
 .image-container img:hover {
     transform: scale(1.05);
-    filter: brightness(1.1); /*Ligeramente más brillante*/
+    filter: brightness(1.1);
+    /*Ligeramente más brillante*/
 }
 
 /* Estilos para botones de favoritos */
@@ -1294,7 +1373,7 @@ button.btn-fav i.bx.bxs-leaf,
     justify-content: space-between;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    gap: 50px;
+    gap: 30px;
     padding: 20px 20px 20px 50px;
 }
 
@@ -1318,13 +1397,14 @@ button.btn-fav i.bx.bxs-leaf,
 }
 
 .product-card2 {
-    flex: 0 0 auto; /*<factor-de-crecimiento> <factor-de-encogimiento> <tamaño-base>;*/
+    flex: 0 0 auto;
+    /*<factor-de-crecimiento> <factor-de-encogimiento> <tamaño-base>;*/
     scroll-snap-align: center;
     border-radius: 10px;
     overflow: hidden;
     background-color: #FBFAF7;
     width: 270px;
-    height: 500px;
+    height: 540px;
     box-shadow: 0 5px 15px rgba(69, 18, 33, 0.3);
     text-align: center;
     position: relative;
@@ -1345,7 +1425,7 @@ button.btn-fav i.bx.bxs-leaf,
     border-radius: 0 0 10px 10px;
     background-color: #FAFAFA;
     color: #73283E;
-    height: 230px;
+    height: 270px;
 }
 
 .text-card2 h3 {
@@ -1595,13 +1675,14 @@ button.btn-fav i.bx.bxs-leaf,
 /* Tarjeta de producto */
 .product-card4,
 .product-card4-2 {
-    flex: 0 0 auto; /*<factor-de-crecimiento> <factor-de-encogimiento> <tamaño-base>;*/
+    flex: 0 0 auto;
+    /*<factor-de-crecimiento> <factor-de-encogimiento> <tamaño-base>;*/
     scroll-snap-align: center;
     border-radius: 10px;
     overflow: hidden;
     background-color: #FFFFFF;
     width: 270px;
-    height: 500px;
+    height: 540px;
     box-shadow: 0 5px 15px rgba(69, 18, 33, 0.3);
     text-align: center;
     position: relative;
@@ -1632,7 +1713,7 @@ button.btn-fav i.bx.bxs-leaf,
     border-radius: 0 0 10px 10px;
     background-color: #FAFAFA;
     color: #73283E;
-    height: 230px;
+    height: 270px;
 }
 
 /* Estilo para el nombre del producto */
@@ -1758,16 +1839,14 @@ button.btn-fav i.bx.bxs-leaf,
     transform: scale(1.2);
 }
 
-/**************************************** DETALLE PRODUCTO **********************************/
+/**************************** DETALLE PRODUCTO ********************************/
 
-/* Contenedor principal detalle */
 .detalle-container {
-    display: flex;
-    margin: 0;
-    position: relative;
-    top: 0px;
-    background: #FFFFFF;
-    padding: 20px 20px 30px 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    background: #fff;
+    padding: 20px 20px 30px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -1775,33 +1854,22 @@ button.btn-fav i.bx.bxs-leaf,
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
 }
 
 .detalle-imagen img {
-    width: auto;
+    width: 100%;
     max-height: 100vh;
     border-radius: 10px;
     object-fit: contain;
 }
 
-.detalle-columna {
-    width: 48%;
-}
-
 .detalle-info {
-    flex: 1;
+    width: 100%;
 }
 
 .detalle-info h1 {
     font-size: 30px;
     margin-bottom: 15px;
-}
-
-.cantidad input[type=number]::-webkit-inner-spin-button,
-.cantidad input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
 }
 
 .descripcion {
@@ -1818,19 +1886,25 @@ button.btn-fav i.bx.bxs-leaf,
     margin-bottom: 25px;
 }
 
+/* ----- Acciones ----- */
 .acciones {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
+.text-cantidad {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
 .cantidad {
     display: flex;
     align-items: center;
     gap: 5px;
-    background-color: #FFFFFF;
-    border: 1px solid #000000;
+    border: 1px solid #000;
     border-radius: 25px;
+    background: #fff;
     width: fit-content;
     padding: 5px 0;
 }
@@ -1840,40 +1914,37 @@ button.btn-fav i.bx.bxs-leaf,
     text-align: center;
     border: none;
     font-size: 16px;
+    appearance: textfield;
 }
 
 .cantidad button {
+    border: none;
+    background: none;
     font-size: 16px;
     font-weight: 700;
-    padding: 5px 10px;
-    border: none;
     cursor: pointer;
-    border-radius: 25px 0 0 25px;
-    background-color: #FFFFFF;
-}
-
-.cantidad #cantidad-inv {
-    border-radius: 0 25px 25px 0;
+    padding: 5px 10px;
 }
 
 .btn-principal {
     background: #a10055;
-    color: white;
+    color: #fff;
     border: none;
     padding: 12px 20px;
     border-radius: 25px;
-    cursor: pointer;
     font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s ease;
 }
 
 .btn-principal:hover {
     background: #7a003f;
 }
 
-/* Relacionados */
+/* ----- Productos Relacionados ----- */
 .titulo-relacionados {
     max-width: 1300px;
-    margin: 20px auto 20px;
+    margin: 20px auto;
     font-size: 20px;
     text-align: center;
     border-top: 1px solid #192013;
@@ -1882,15 +1953,14 @@ button.btn-fav i.bx.bxs-leaf,
 
 .card-rel a {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    background: #FBFAF7;
+    background: #fbfaf7;
     border-radius: 15px;
     padding: 10px;
-    text-align: center;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     height: 100px;
     width: 280px;
+    text-decoration: none;
 }
 
 .card-rel img {
@@ -1898,30 +1968,18 @@ button.btn-fav i.bx.bxs-leaf,
     height: 80px;
     object-fit: contain;
     border-radius: 10px;
-    margin: 0 10px 0 0;
+    margin-right: 10px;
 }
 
 .card-rel h3 {
     margin: 5px 0;
     font-size: 12px;
     color: #333;
-    text-align: center;
-}
-
-.card-rel a {
-    text-decoration: none;
-}
-
-.text-cantidad {
-    position: relative;
-    bottom: -10px;
-    font-size: 14px;
-    margin: 10px 0 0;
 }
 
 .price {
     display: block;
-    margin: 0 0 5px 0;
+    margin-bottom: 5px;
     font-weight: bold;
     color: #28a745;
     font-size: 14px;
@@ -1929,7 +1987,7 @@ button.btn-fav i.bx.bxs-leaf,
 
 #btn-add-rel {
     background: #a10055;
-    color: white;
+    color: #fff;
     border: none;
     padding: 5px;
     margin: 5px;
@@ -1938,27 +1996,26 @@ button.btn-fav i.bx.bxs-leaf,
     font-weight: bold;
 }
 
-/*** Flechas ***/
-
+/* ----- Swiper ----- */
 .swiper-container-externo {
     position: relative;
     width: 600px;
 }
 
-/* .swiper-button-prev,
+.swiper-button-prev,
 .swiper-button-next {
     position: absolute;
-    top: 65%;               
+    top: 65%;
     transform: translateY(-50%);
     width: 35px;
     height: 35px;
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(0, 0, 0, 0.3);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10;
-} */
+}
 
 .swiper-button-prev {
     left: -20px;
@@ -1972,10 +2029,9 @@ button.btn-fav i.bx.bxs-leaf,
 .swiper-button-next i {
     font-size: 18px;
     color: #fff;
-    line-height: 1;
 }
 
-/* Oculta solo las flechas automáticas generadas por Swiper */
+/* Ocultar flechas automáticas de Swiper */
 .swiper-button-prev.swiper-button-disabled::after,
 .swiper-button-next.swiper-button-disabled::after,
 .swiper-button-prev::after,
@@ -1983,14 +2039,7 @@ button.btn-fav i.bx.bxs-leaf,
     display: none;
 }
 
-/* Tus flechas personalizadas siguen visibles */
-.swiper-button-prev i,
-.swiper-button-next i {
-    font-size: 18px;
-    color: #fff;
-}
-
-/*** Puntitos ***/
+/* ----- Paginación (puntitos) ----- */
 .swiper-pagination-container {
     width: 100%;
     display: flex;
@@ -1998,7 +2047,6 @@ button.btn-fav i.bx.bxs-leaf,
     position: relative;
     bottom: -35px;
 }
-
 
 .swiper-container-externo .swiper-pagination-bullet {
     width: 12px;
@@ -2010,6 +2058,7 @@ button.btn-fav i.bx.bxs-leaf,
 .swiper-container-externo .swiper-pagination-bullet-active {
     background-color: #000;
 }
+
 
 /**************************************** Footer **********************************/
 .footer {
@@ -2202,12 +2251,144 @@ button.btn-fav i.bx.bxs-leaf,
 /******************************************** MEDIACUERIS **********************************************/
 
 @media screen and (max-width: 980px) {
+
+    /* Header y navegación */
+    .nombre-empresa {
+        width: 180px;
+    }
+
     .nombre-empresa a {
         font-size: 32px;
     }
 
-    .barra-de-busqueda .buscar {
-        width: 25vw;
+    /* Estilo para la lista de navegación */
+    .nav-links {
+        gap: 10px;
+    }
+
+    .nav-links i {
+        font-size: 22px;
+    }
+
+    .nav-links .house i {
+        font-size: 18px;
+    }
+
+    .nav-links .usuario-menu i {
+        font-size: 18px;
+    }
+
+    .nav-links li {
+        padding: 5px;
+        border-radius: 50%;
+    }
+
+    .nav-links li:hover {
+        padding: 5px;
+    }
+
+    .usuario-menu {
+        width: 130px;
+    }
+
+    .nombre-user {
+        display: inline-block;
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 1.2;
+        text-align: center;
+        padding: 0;
+    }
+
+    .usuario-dropdown {
+        z-index: 900;
+    }
+
+    /* Contenedor del menú de usuario */
+    .usuario-dropdown a {
+        font-size: 15px;
+        padding: 6px;
+    }
+
+    /**************** Barra de bus. ****************/
+    /* Reposiciona el contenedor */
+    .barra-de-busqueda {
+        position: absolute;
+        right: 210px;
+        padding: 0;
+    }
+
+    /* Oculta el formulario por defecto */
+    .barra-de-busqueda form {
+        display: none;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+    }
+
+    /* Muestra el botón toggle */
+    .toggle-search {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        right: -45px;
+    }
+
+
+    /* Formulario activo (cuando se hace clic en la lupa) */
+    .barra-de-busqueda.active form {
+        display: flex;
+        position: fixed;
+        top: 65px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        margin: 0 auto;
+        padding: 15px 30px;
+        background: #ccc;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 200;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Input dentro del formulario activo */
+    .barra-de-busqueda.active .buscar {
+        width: 100%;
+        padding: 0 50px 0 20px;
+        font-size: 15px;
+        background: #FFFFFF;
+    }
+
+    /* Botón de búsqueda dentro del formulario activo */
+    .barra-de-busqueda.active .btn-serch button {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #C1416D;
+        color: #FBFAF7;
+    }
+
+    .barra-de-busqueda.active .btn-serch button:hover {
+        background-color: #7a003f;
+    }
+
+    /* Grid del formulario */
+    .form-busqueda-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .btn-buscar {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .form-group label {
+        font-size: 16px;
     }
 
     .form-busqueda-grid {
@@ -2233,6 +2414,266 @@ button.btn-fav i.bx.bxs-leaf,
         min-width: 35px;
         font-size: 12px;
     }
+
+    /***************** Carrito ****************/
+    #carrito {
+        width: 350px;
+    }
+
+    #carrito-header h2 {
+        font-size: 18px;
+        margin: 0;
+    }
+
+    .carrito-item {
+        padding: 15px 15px 0;
+    }
+
+    .carrito-item img {
+        min-width: 70px;
+        max-width: 70px;
+        height: 70px;
+        object-fit: cover;
+        margin-right: 10px;
+    }
+
+    .carrito-item h4 {
+        font-size: 14px;
+    }
+
+    .carrito-item p {
+        font-size: 14px;
+    }
+
+    .carrito-item button {
+        font-size: 14px;
+    }
+
+    .carrito-item input[type="number"] {
+        font-size: 12px;
+    }
+
+    #carrito-footer p {
+        font-size: 14px;
+    }
+
+    #carrito-footer button {
+        padding: 10px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    /* Badge del carrito */
+    .carrito-badge {
+        top: -7px;
+        right: -7px;
+        width: 18px;
+        height: 18px;
+    }
+
+    /************** perfil ***************/
+    /* Menú lateral más estrecho */
+    .vert {
+        width: 70px;
+        padding: 100px 0;
+    }
+
+    .vert a {
+        margin: 15px 10px;
+        padding: 12px;
+        justify-content: center;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .vert a span {
+        display: none;
+    }
+
+    .vert a i {
+        margin-right: 0;
+        font-size: 20px;
+    }
+
+    /* Ajustar contenido principal */
+    .main-content {
+        margin-left: 70px;
+        padding: 24px 16px;
+    }
+
+    /* Formulario */
+    .container-config {
+        padding: 24px 16px;
+        max-width: 100%;
+    }
+
+    .container-config h1 {
+        font-size: 24px;
+        margin-bottom: 24px;
+    }
+
+    .ddos1 {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    /************** compras ***************/
+    /* Tabla de pedidos */
+    .recent-orders {
+        max-width: 90vw;
+        padding: 12px;
+        border-radius: 12px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+        margin-bottom: 24px;
+    }
+
+    .titulo-com {
+        font-size: 26px;
+        padding-left: 20px;
+    }
+
+    .add-btn {
+        width: 100%;
+        justify-content: flex-end;
+        font-size: 14px;
+    }
+
+    .add-btn i {
+        font-size: 20px;
+    }
+
+    .orders-table th,
+    .orders-table td {
+        padding: 12px 8px;
+        font-size: 14px;
+    }
+
+    .btn-mas {
+        min-width: 120px;
+    }
+
+    .btn-mas a {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+
+    /************* Factura **************/
+    .factura-container {
+        max-width: 90vw;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .factura-container h1 {
+        font-size: 22px;
+    }
+
+    .factura-container th,
+    .factura-container td {
+        padding: 10px 6px;
+        font-size: 13px;
+    }
+
+    .factura-container tfoot td {
+        font-size: 14px;
+    }
+
+    .barra-de-marcas img {
+        height: 30px;
+        width: auto;
+        padding: 0 20px;
+        transition: all 0.2s ease-in-out;
+    }
+
+    /***************** SECCION UNO **************/
+
+    #t1 {
+        font-size: 32px;
+        padding: 20px 0;
+    }
+
+    /* Añadir línea decorativa debajo del título */
+    #t1::after {
+        bottom: 20px;
+    }
+
+    #p1 {
+        top: -20px;
+        font-size: 16px;
+        padding: 0 15px;
+    }
+
+    .container-product-cards {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+        padding: 15px;
+    }
+
+    .product-card {
+        width: 100%;
+        height: 500px;
+    }
+
+    .image-container img {
+        height: 250px;
+    }
+
+    .text-card {
+        height: 260px;
+    }
+
+    #text-precio,
+    #text-precio2 {
+        padding: 8px 40px;
+        font-size: 16px;
+    }
+
+    .precio-original {
+        font-size: 12px;
+    }
+
+    .precio-descuento {
+        font-size: 16px;
+    }
+
+    #btn-add {
+        padding: 10px 40px;
+        font-size: 15px;
+    }
+
+    .btn-fav i {
+        font-size: 26px;
+    }
+
+    /***************** SECCION DOS **************/
+
+    #t2 {
+        font-size: 32px;
+    }
+
+    .carousel-product {
+        gap: 20px;
+    }
+
+    .product-card2 {
+        width: 250px;
+        height: 500px;
+    }
+
+    .text-card2 {
+        height: 260px;
+    }
+
+    #btn-add2 {
+        padding: 10px 40px;
+        font-size: 15px;
+    }
+
 
     /************* SECCION TRES ***************/
     .section3-product {
@@ -2279,6 +2720,77 @@ button.btn-fav i.bx.bxs-leaf,
         justify-content: center;
     }
 
+    /***************** SECCION CUATRO **************/
+    #t4,
+    #t4-2 {
+        font-size: 32px;
+    }
+
+    /* Añadir línea decorativa debajo del título */
+    c {
+        bottom: 20px;
+    }
+
+    #p4 {
+        top: -20px;
+        font-size: 16px;
+        padding: 0 15px;
+    }
+
+    .product-card4,
+    .product-card4-2 {
+        width: 250px;
+        height: 500px;
+    }
+
+    .text-card4 {
+        height: 260px;
+    }
+
+    #btn-add4,
+    #btn-add4-2 {
+        padding: 10px 40px;
+        font-size: 15px;
+    }
+
+    /***************** DETALLEs PRODUCTO ****************/
+    .detalle-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        padding: 15px;
+    }
+
+    .detalle-imagen img {
+        max-height: 60vh;
+    }
+
+    .detalle-info h1 {
+        font-size: 24px;
+    }
+
+    .descripcion {
+        font-size: 14px;
+    }
+
+    .precio {
+        font-size: 22px;
+    }
+
+    .swiper-container-externo {
+        width: 100%;
+        max-width: 450px;
+    }
+
+    .card-rel a {
+        width: 100%;
+        max-width: 280px;
+        height: 90px;
+    }
+
+    .card-rel h3 {
+        font-size: 11px;
+    }
+
     /************* FOOTER ***************/
     .footer-container {
         height: 230px;
@@ -2286,69 +2798,127 @@ button.btn-fav i.bx.bxs-leaf,
 
 }
 
-@media screen and (max-width: 580px) {
-    .nombre-empresa a {
-        font-size: 20px;
+@media screen and (max-width: 780px) {
+
+    /* Header y navegación */
+    .nombre-empresa {
+        width: 180px;
     }
 
+    .nombre-empresa a {
+        font-size: 30px;
+    }
+
+    /* Estilo para la lista de navegación */
     .nav-links {
-        gap: 10px;
+        gap: 5px;
     }
 
     .nav-links i {
-        font-size: 22px;
-    }
-
-    .barra-de-busqueda .buscar {
-        height: 35px;
-        width: 20vw;
-        font-size: 12px;
-        padding: 0 10px 0 5px;
-    }
-
-    .btn button {
-        width: 40px;
-        height: 40px;
-    }
-
-    /**************** SECCION UNO ****************/
-
-    .container-product-cards {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 10px;
-    }
-
-    .product-card {
-        width: 200px;
-        height: 350px;
-    }
-
-    .text-card {
-        height: 180px;
-        padding: 10px 10px;
-    }
-
-    .text-card h3 {
-        font-size: 16px;
-        margin-bottom: 0;
-    }
-
-    .text-card p {
-        font-weight: 600;
         font-size: 20px;
     }
 
-    #btn-add {
-        padding: 10px 30px;
+    .nav-links .house i {
         font-size: 16px;
     }
 
-    .image-container {
-        height: 180px;
+    .nav-links .usuario-menu i {
+        font-size: 18px;
     }
 
-    .image-container img {
-        height: 180px;
+    .nav-links li {
+        padding: 5px;
+        border-radius: 50%;
+    }
+
+    .nav-links li:hover {
+        padding: 5px;
+    }
+
+    .usuario-menu {
+        width: 120px;
+    }
+
+    .nombre-user {
+        display: inline-block;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    /* Contenedor del menú de usuario */
+    .usuario-dropdown a {
+        font-size: 15px;
+        padding: 6px;
+    }
+
+    /* Reposiciona el contenedor */
+    .barra-de-busqueda {
+        position: absolute;
+        right: 180px;
+        padding: 0;
+    }
+
+    .toggle-search {
+        font-size: 16px;
+    }
+
+    /***************** Carrito ****************/
+    #carrito {
+        width: 350px;
+    }
+
+    #carrito-header h2 {
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .carrito-item {
+        padding: 15px 15px 0;
+    }
+
+    .carrito-item img {
+        min-width: 60px;
+        max-width: 60px;
+        height: 60px;
+        object-fit: cover;
+        margin-right: 10px;
+    }
+
+    .carrito-item h4 {
+        font-size: 12px;
+    }
+
+    .carrito-item p {
+        font-size: 14px;
+    }
+
+    .carrito-item button {
+        font-size: 12px;
+    }
+
+    .carrito-item input[type="number"] {
+        font-size: 11px;
+    }
+
+    #carrito-footer p {
+        font-size: 14px;
+    }
+
+    #carrito-footer button {
+        padding: 10px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* Badge del carrito */
+    .carrito-badge {
+        top: -5px;
+        right: -5px;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
     }
 
     /***************** SECCION DOS ****************/
@@ -2364,28 +2934,8 @@ button.btn-fav i.bx.bxs-leaf,
     }
 
     .product-card2 {
-        width: 200px;
-        height: 350px;
-    }
-
-    .text-card2 {
-        height: 180px;
-        padding: 10px 10px;
-    }
-
-    .text-card2 h3 {
-        font-size: 16px;
-        margin-bottom: 0;
-    }
-
-    .text-card2 p {
-        font-weight: 600;
-        font-size: 20px;
-    }
-
-    #btn-add2 {
-        padding: 10px 30px;
-        font-size: 18px;
+        width: 280px;
+        height: 500px;
     }
 
     /************* SECCION TRES ***************/
@@ -2408,39 +2958,10 @@ button.btn-fav i.bx.bxs-leaf,
     }
 
     /**************** SECCION CUATRO ****************/
-    /* Contenedor del carrusel */
-    .carousel-prd-container {
-        padding: 10px 20px;
-        position: relative;
-        margin-top: -20px;
-    }
-
-    /* Tarjeta de producto */
-    product-card4,
+    .product-card4,
     .product-card4-2 {
-        width: 200px;
-        height: 350px;
-    }
-
-    /* Contenedor de texto */
-    .text-card4 {
-        height: 180px;
-        padding: 10px 10px;
-    }
-
-    .text-card4 h3 {
-        font-size: 16px;
-        margin-bottom: 0;
-    }
-
-    .text-card4 p {
-        font-weight: 600;
-        font-size: 20px;
-    }
-
-    #btn-add4 {
-        padding: 10px 30px;
-        font-size: 18px;
+        width: 300px;
+        height: 500px;
     }
 
     .bx {
@@ -2452,6 +2973,90 @@ button.btn-fav i.bx.bxs-leaf,
         top: 42%;
         width: 40px;
         height: 40px;
+    }
+
+    /***************** DETALLEs PRODUCTO ****************/
+
+    .detalle-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 15px 10px;
+    }
+
+    .detalle-columna {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .detalle-imagen img {
+        max-height: 70vh;
+    }
+
+    .detalle-info {
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .detalle-info h1 {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .descripcion {
+        text-align: justify;
+        font-size: 14px;
+    }
+
+    .precio {
+        font-size: 22px;
+        text-align: start;
+        display: block;
+    }
+
+    .acciones {
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+        position: relative;
+        left: -95px;
+        width: 100%;
+    }
+
+    .text-cantidad {
+        left: 130px;
+        top: -30px;
+        position: relative;
+    }
+
+    .btn-principal {
+        width: 100%;
+    }
+
+    .titulo-relacionados {
+        font-size: 18px;
+    }
+
+    .contenedor-swiper {
+        display: flex;
+        justify-content: center;
+    }
+
+    .swiper-container-externo {
+        width: 300px;
+    }
+
+    .card-rel a {
+        max-width: 320px;
+        height: 90px;
+    }
+
+    .card-rel h3 {
+        font-size: 11px;
+    }
+
+    .price {
+        font-size: 13px;
     }
 
     /************* FOOTER ***************/
@@ -2473,94 +3078,154 @@ button.btn-fav i.bx.bxs-leaf,
 
 }
 
-@media screen and (max-width: 430px) {
+@media screen and (max-width: 530px) {
+
+    /* Header y navegación */
+    .nombre-empresa {
+        width: 150px;
+    }
+
     .nombre-empresa a {
-        font-size: 18px;
+        font-size: 26px;
     }
 
     .nav-links {
-        list-style: none;
-        display: flex;
-        gap: 8px;
+        gap: 2px;
     }
 
     .nav-links i {
-        font-size: 18px;
+        font-size: 16px;
+    }
+
+    .nav-links .house i {
+        font-size: 12px;
+    }
+
+    .nav-links .usuario-menu i {
+        font-size: 12px;
+    }
+
+    .usuario-menu {
+        width: 90px;
+    }
+
+    .nombre-user {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: normal;
+        line-height: 1.2;
+        text-align: center;
     }
 
     .nav-links li {
         padding: 5px;
     }
 
-    .barra-de-busqueda .buscar {
-        height: 28px;
-        width: 20vw;
-        font-size: 11px;
-        padding: 0 10px 0 5px;
+    /**************** Barra de bus. ****************/
+    .barra-de-busqueda {
+        position: absolute;
+        right: 165px;
+        padding: 0;
     }
 
-    .btn button {
-        width: 32px;
-        height: 32px;
+    .toggle-search {
+        right: -35px;
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+
+    /* Cuando SÍ hay usuario - necesitas más espacio para el menú */
+    body:has(.usuario-menu) .toggle-search {
+        right: 20px;
+    }
+
+    .barra-de-busqueda.active .buscar {
+        height: 30px;
+        font-size: 14px;
+    }
+
+    /* Botón de búsqueda dentro del formulario activo */
+    .barra-de-busqueda.active .btn-serch button {
         right: 30px;
-        font-size: 18px;
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
     }
 
-    /*************** SECCION UNO ****************/
+    /***************** SECCION UNO **************/
+
     #t1 {
-        padding: 0px 0;
-        font-size: 25px;
+        font-size: 26px;
+        padding: 20px 0;
     }
 
     /* Añadir línea decorativa debajo del título */
     #t1::after {
-        bottom: 2px;
-        width: 80px;
-        height: 3px;
+        bottom: 22px;
+        height: 2px;
     }
 
     #p1 {
-        top: -2px;
-        font-size: 12px;
+        top: -20px;
+        font-size: 14px;
+        padding: 0 15px;
     }
 
     .container-product-cards {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 10px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+        padding: 15px;
     }
 
     .product-card {
-        width: 150px;
-        height: 275px;
+        width: 100%;
+        height: 380px;
+    }
+
+    .image-container img {
+        height: 160px;
     }
 
     .text-card {
-        height: 150px;
+        height: 230px;
     }
 
     .text-card h3 {
         font-size: 12px;
-        margin-bottom: 0;
     }
 
-    .text-card p {
-        font-size: 15px;
-        padding: 5px;
+    .text-cardown {
+        margin-top: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    #text-marca,
+    #text-marca2 {
+        font-size: 10px;
+        text-align: left;
+        color: rgba(115, 40, 62, 0.6);
+    }
+
+    #text-precio,
+    #text-precio2 {
+        padding: 8px 40px;
+        font-size: 14px;
     }
 
     #btn-add {
-        padding: 5px 20px;
+        padding: 10px 30px;
         font-size: 12px;
-        font-weight: 600;
-        height: 30px;
     }
 
-    .image-container {
-        height: 150px;
+    .precio-original {
+        font-size: 10px;
     }
 
-    .image-container img {
-        height: 150px;
+    .precio-descuento {
+        font-size: 14px;
     }
 
     /************* SECCION DOS ***************/
@@ -2571,45 +3236,32 @@ button.btn-fav i.bx.bxs-leaf,
     }
 
     #t2 {
-        font-size: 25px;
+        font-size: 26px;
         padding: 0 30px;
     }
 
     .carousel-product {
-        display: flex;
-        flex-wrap: nowrap;
-        /* No permite saltos de línea */
-        justify-content: space-between;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        gap: 20px;
+        gap: 10px;
         padding: 20px 5px 20px 5px;
     }
 
     .product-card2 {
-        width: 150px;
-        height: 295px;
+        width: 220px;
+        height: 380px;
     }
 
     .text-card2 {
-        height: 150px;
+        height: 230px;
     }
 
     .text-card2 h3 {
         font-size: 12px;
     }
 
-    .text-card2 p {
-        font-size: 15px;
-    }
-
     #btn-add2 {
-        padding: 5px 20px;
+        padding: 10px 40px;
         font-size: 12px;
-        font-weight: 600;
-        height: 30px;
     }
-
 
     /************* SECCION TRES ***************/
     .section3-product {
@@ -2671,66 +3323,131 @@ button.btn-fav i.bx.bxs-leaf,
         font-size: 15px;
     }
 
-    /**************** SECCION CUATRO ****************/
-    #t4 {
-        padding: 0px 0;
-        font-size: 25px;
+    /************* SECCION cuatro ***************/
+
+    #t4,
+    #t4-2 {
+        font-size: 26px;
     }
 
     /* Añadir línea decorativa debajo del título */
-    #t4::after {
-        bottom: 2px;
-        width: 80px;
-        height: 3px;
+    #t4::after,
+    #t4-2::after {
+        bottom: 22px;
+        height: 2px;
     }
 
     #p4 {
-        top: -2px;
-        font-size: 12px;
+        top: -20px;
+        font-size: 14px;
+        padding: 0 15px;
     }
 
-    /* Contenedor del carrusel */
-    .carousel-prd-container {
-        padding: 10px 20px;
-        position: relative;
-        margin-top: -20px;
+    .carousel-product4,
+    .carousel-product4-2 {
+        gap: 20px;
     }
 
-    /* Tarjeta de producto */
-    product-card4,
+    .product-card4,
     .product-card4-2 {
-        width: 150px;
-        height: 295px;
+        width: 220px;
+        height: 380px;
     }
 
     .text-card4 {
-        height: 150px;
+        height: 230px;
     }
 
     .text-card4 h3 {
         font-size: 12px;
     }
 
-    .text-card4 p {
-        font-size: 15px;
-    }
-
-    #btn-add4 {
-        padding: 5px 20px;
-        font-size: 12px;
-        font-weight: 600;
-        height: 30px;
-    }
-
-    .bx {
+    #btn-add4,
+    #btn-add4-2 {
+        padding: 10px 40px;
         font-size: 12px;
     }
 
-    .btn-right-prd,
-    .btn-left-prd {
-        top: 42%;
-        width: 35px;
-        height: 35px;
+    /***************** DETALLEs PRODUCTO ****************/
+    .detalle-container {
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .detalle-imagen img {
+        max-height: 40vh;
+    }
+
+    .detalle-info h1 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .descripcion {
+        font-size: 13px;
+        margin-bottom: 15px;
+    }
+
+    .precio {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .text-cantidad {
+        font-size: 13px;
+    }
+
+    .cantidad input {
+        width: 40px;
+        font-size: 14px;
+    }
+
+    .cantidad button {
+        font-size: 14px;
+        padding: 5px 8px;
+    }
+
+    .btn-principal {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+
+    .titulo-relacionados {
+        font-size: 16px;
+        margin: 15px auto;
+        padding-top: 15px;
+    }
+
+    .swiper-container-externo {
+        max-width: 100%;
+    }
+
+    .card-rel a {
+        width: 100%;
+        max-width: 280px;
+        height: 85px;
+        padding: 8px;
+    }
+
+    .card-rel img {
+        height: 70px;
+    }
+
+    .card-rel h3 {
+        font-size: 10px;
+    }
+
+    .price {
+        font-size: 12px;
+    }
+
+    #btn-add-rel {
+        padding: 4px;
+        font-size: 12px;
+    }
+
+    .swiper-pagination-container {
+        bottom: -30px;
     }
 
     /************* FOOTER ***************/
@@ -2739,7 +3456,7 @@ button.btn-fav i.bx.bxs-leaf,
     }
 
     .footer-section h4 {
-        font-size: 15pxpx;
+        font-size: 15px;
     }
 
     .footer-section p {
@@ -2752,8 +3469,165 @@ button.btn-fav i.bx.bxs-leaf,
 
     .alert {
         right: 10px;
-        left: 10px;
-        max-width: none;
+        max-width: 300px;
         top: 10px;
     }
+}
+
+@media screen and (max-width: 400px) {
+
+    /* Header y navegación */
+    .nombre-empresa {
+        width: 150px;
+    }
+
+    .nombre-empresa a {
+        font-size: 18px;
+    }
+
+    /***************** SECCION UNO **************/
+
+    .text-card h3 {
+        font-size: 16px;
+    }
+
+    #text-marca,
+    #text-marca2 {
+        font-size: 12px;
+        text-align: left;
+        color: rgba(115, 40, 62, 0.6);
+    }
+
+    #text-precio,
+    #text-precio2 {
+        padding: 8px 40px;
+        font-size: 16px;
+    }
+
+    .precio-original {
+        font-size: 12px;
+    }
+
+    .precio-descuento {
+        font-size: 16px;
+    }
+
+    #btn-add {
+        padding: 10px 30px;
+        font-size: 14px;
+    }
+
+    /************* SECCION DOS ***************/
+
+    .product-card2 {
+        width: 300px;
+        height: 380px;
+    }
+
+    .text-card2 h3 {
+        font-size: 16px;
+    }
+
+    #btn-add2 {
+        padding: 10px 30px;
+        font-size: 14px;
+    }
+
+    /***************** DETALLEs PRODUCTO ****************/
+    .detalle-container {
+        padding: 8px;
+        gap: 10px;
+    }
+
+    .detalle-imagen img {
+        max-height: 35vh;
+        border-radius: 8px;
+    }
+
+    .detalle-info h1 {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .descripcion {
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+
+    .precio {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .text-cantidad {
+        font-size: 12px;
+        margin-top: 8px;
+    }
+
+    .cantidad {
+        padding: 4px 0;
+    }
+
+    .cantidad input {
+        width: 35px;
+        font-size: 13px;
+    }
+
+    .cantidad button {
+        font-size: 13px;
+        padding: 4px 6px;
+    }
+
+    .btn-principal {
+        padding: 8px 12px;
+        font-size: 13px;
+        max-width: 250px;
+    }
+
+    .titulo-relacionados {
+        font-size: 15px;
+        margin: 12px auto;
+        padding-top: 12px;
+    }
+
+    .card-rel a {
+        max-width: 100%;
+        height: 75px;
+        padding: 6px;
+    }
+
+    .card-rel img {
+        height: 60px;
+        width: 35%;
+    }
+
+    .rel-inf {
+        flex: 1;
+    }
+
+    .card-rel h3 {
+        font-size: 9px;
+        margin: 3px 0;
+    }
+
+    .price {
+        font-size: 11px;
+        margin-bottom: 3px;
+    }
+
+    #btn-add-rel {
+        padding: 3px;
+        font-size: 11px;
+        margin: 3px;
+    }
+
+    .swiper-pagination-container {
+        bottom: -20px;
+    }
+
+    .swiper-container-externo .swiper-pagination-bullet {
+        width: 10px;
+        height: 10px;
+    }
+
 }

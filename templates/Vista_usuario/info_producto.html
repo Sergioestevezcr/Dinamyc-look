@@ -58,6 +58,11 @@
 
 		<!----------------------------------- 1.1 Barra de busqueda ------------------------------------>
 		<div class="barra-de-busqueda">
+			<!-- Botón visible solo en pantallas pequeñas -->
+			<button type="button" class="toggle-search">
+				<i class="fas fa-search"></i>
+			</button>
+
 			<form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
 				<input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
 				<div class="btn-serch">
@@ -74,13 +79,14 @@
 				{% if user %}
 				<!-- Icono de usuario cuando ha iniciado sesión -->
 				<li class="usuario-menu">
-					<a href="#"><i class="fa-solid fa-user"></i></a>
+					<a href="#" class="nombre-user">¡Hola, {{ nombre }}!</a>
 					<div class="usuario-dropdown">
 						<a href="{{ url_for('client_bp.favoritos') }}"><i class='bx bxs-star'></i><span>
 								Favoritos</span></a>
 						<a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
 								Compras</span></a>
-						<a href="{{url_for('admin_bp.configuracion')}}" class="active"><i class='bx bxs-user'></i><span>
+						<a href="{{ url_for('admin_bp.configuracion') }}" class="active"><i
+								class='bx bxs-user'></i><span>
 								Perfil</span></a>
 						<a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
 							sesión</a>
@@ -88,7 +94,8 @@
 				</li>
 
 				{% else %}
-				<li title="Iniciar Sesión"><a href="{{ url_for('auth_bp.login') }}"><i class='bx bx-log-in'></i></a>
+				<li class="house" title="Iniciar Sesión"><a href="{{ url_for('auth_bp.login') }}"><i
+							class="fa fa-user"></i></a>
 				</li>
 				{% endif %}
 			</ul>
@@ -131,6 +138,28 @@
 	<section class="detalle-container">
 		<!-- Imagen principal -->
 		<div class="detalle-imagen">
+			<!-- Botón favoritos -->
+			<button class="btn-fav" data-id="{{ productodetalles[0] }}">
+				{% if productodetalles[5] == "La Receta" %}
+				{% if productodetalles[0] in favoritos %}
+				<i class='bx bxs-leaf' id="fav-relleno"></i> <!-- RELLENA si ya es favorito -->
+				{% else %}
+				<i class='bx bx-leaf'></i> <!-- VACÍA si no -->
+				{% endif %}
+				{% elif productodetalles[5] == "D’Luchi" or productodetalles[5] == "OMG" %}
+				{% if productodetalles[0] in favoritos %}
+				<i class='bx bxs-heart' id="fav-relleno"></i> <!-- RELLENA si ya es favorito -->
+				{% else %}
+				<i class='bx bx-heart'></i> <!-- VACÍA si no -->
+				{% endif %}
+				{% else %}
+				{% if productodetalles[0] in favoritos %}
+				<i class="bx bxs-star fav-relleno"></i> <!-- RELLENA si ya es favorito -->
+				{% else %}
+				<i class="bx bx-star"></i> <!-- VACÍA si no -->
+				{% endif %}
+				{% endif %}
+			</button>
 			<img src="{{ url_for('static', filename='imagenes/' ~ productodetalles[4]) }}"
 				alt="{{ productodetalles[1] }}">
 		</div>
@@ -154,6 +183,7 @@
 			<!-- Productos relacionados -->
 			<h2 class="titulo-relacionados">Complementa tu compra</h2>
 
+			<div class="contenedor-swiper">
 			<div class="swiper-container-externo">
 				<div class="swiper relacionados-swiper">
 					<div class="swiper-wrapper">
@@ -178,6 +208,7 @@
 				<div class="swiper-pagination-container">
 					<div class="swiper-pagination"></div>
 				</div>
+			</div>
 			</div>
 		</div>
 	</section>
@@ -208,28 +239,16 @@
 							<h3>{{ c[1] }}</h3>
 							<p id="text-marca">{{ c[4] }}</p>
 							<p class="text-precio" id="text-precio">
-								{% if producto[5] %} {# precio_final existe #}
+								{% if c[5] %} {# precio_final existe #}
 								<span class="precio-original">
-									${{ "{:,}".format(producto[2]).replace(",", ".") }}
+									${{ "{:,}".format(c[2]).replace(",", ".") }}
 								</span><br>
 								<span class="precio-descuento">
-									${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
+									${{ "{:,}".format(c[5]|int).replace(",", ".") }}
 								</span>
 								{% else %}
-								${{ "{:,}".format(producto[2]).replace(",", ".") }}
+								${{ "{:,}".format(c[2]).replace(",", ".") }}
 								{% endif %}
-							</p>
-							<p class="text-precio" id="text-precio">
-								{% if producto[5] %} {# precio_final existe #}
-								<span class="precio-original">
-									${{ "{:,}".format(producto[2]).replace(",", ".") }}
-								</span><br>
-								<span class="precio-descuento">
-									${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
-								</span>
-								{% else %}
-								${{ "{:,}".format(producto[2]).replace(",", ".") }}
-								{% endif %}
 							</p>
 							<button class="btn-add" id="btn-add4" type="button">Agregar <i
 									class='bx bx-shopping-bag'></i></button>
@@ -243,25 +262,41 @@
 	</section>
 
 	<!-- Swiper JS -->
-	<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 	<script src="{{ url_for('static', filename='js/script_carusel_producto.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_carrito.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
 
 	<script>
 		const swiperRelacionados = new Swiper('.relacionados-swiper', {
-			slidesPerView: 2,
+			slidesPerView: 2, // Valor base 
 			spaceBetween: 20,
 			loop: true,
-			navigation: {
-				nextEl: '.swiper-button-next', // tus botones externos
-				prevEl: '.swiper-button-prev',
-			},
+			spaceBetween: 20,
 			pagination: {
-				el: '.swiper-pagination',      // mantienes los puntos originales
+				el: '.swiper-pagination',
 				clickable: true,
+			},
+			breakpoints: {
+				0: {
+					slidesPerView: 1,
+					spaceBetween: 10,
+				},
+				530: {
+					slidesPerView: 1,
+					spaceBetween: 15,
+				},
+				780: {
+					slidesPerView: 1,
+					spaceBetween: 20,
+				},
+				980: {
+					slidesPerView: 2,
+					spaceBetween: 25,
+				},
 			},
 		});
 	</script>

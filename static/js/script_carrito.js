@@ -126,9 +126,10 @@ function renderCarrito() {
 // ==================== EVENTOS ====================
 
 // Mostrar carrito al hacer click en el ícono
-carritoIcon.addEventListener("click", () => {
+carritoIcon.addEventListener("click", async () => {
     carrito.classList.add("active");
-    if (!carritoData.length) cargarCarrito();
+    // Siempre cargar carrito al abrir para sincronizar con servidor
+    await cargarCarrito();
 });
 
 // Cerrar carrito
@@ -138,12 +139,32 @@ cerrarCarritoBtn.addEventListener("click", () => {
 
 // Función para agregar producto al carrito
 async function agregarAlCarrito(nombre, precio, img, cantidad = 1) {
-    await fetch("/carrito_agregar", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ nombre, precio, cantidad, img })
-    });
-    await cargarCarrito(); // Refresca el carrito
+    try {
+        const response = await fetch("/carrito_agregar", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ nombre, precio, cantidad, img })
+        });
+        
+        if (response.ok) {
+            // Actualizar carrito localmente sin recargar desde servidor
+            const productoExistente = carritoData.find(item => item.nombre === nombre);
+            if (productoExistente) {
+                productoExistente.cantidad += cantidad;
+            } else {
+                carritoData.push({
+                    id: Date.now(), // ID temporal
+                    nombre: nombre,
+                    precio: precio,
+                    img: img,
+                    cantidad: cantidad
+                });
+            }
+            renderCarrito();
+        }
+    } catch (error) {
+        console.error("Error al agregar al carrito:", error);
+    }
 }
 
 // Botones para agregar productos en otras páginas
@@ -154,7 +175,20 @@ document.querySelectorAll(".btn-add").forEach(btn => {
         const card = e.target.closest(".text-card, .text-card2, .text-card4");
         if (card) {
             const nombre = card.querySelector("h3").textContent;
-            const precio = parseInt(card.querySelector(".text-precio").textContent.replace(/\D/g, ""));
+            const precioElement = card.querySelector(".text-precio");
+            
+            // Verificar si hay precio con descuento
+            let precio;
+            const precioDescuento = precioElement.querySelector(".precio-descuento");
+            
+            if (precioDescuento) {
+                // Si hay descuento, tomar el precio final (con descuento)
+                precio = parseInt(precioDescuento.textContent.replace(/\D/g, ""));
+            } else {
+                // Si no hay descuento, tomar el precio normal
+                precio = parseInt(precioElement.textContent.replace(/\D/g, ""));
+            }
+            
             const img = card.parentElement.querySelector("img").src;
             await agregarAlCarrito(nombre, precio, img, 1);
         }
@@ -186,7 +220,20 @@ function configurarBotonPrincipal() {
     btnPrincipal.addEventListener("click", async (e) => {
         e.preventDefault();
         const nombre = document.querySelector(".detalle-info h1").textContent;
-        const precio = parseInt(document.querySelector(".precio").textContent.replace(/\D/g, ""));
+        const precioElement = document.querySelector(".precio");
+        
+        // Verificar si hay precio con descuento
+        let precio;
+        const precioDescuento = precioElement.querySelector(".precio-descuento");
+        
+        if (precioDescuento) {
+            // Si hay descuento, tomar el precio final (con descuento)
+            precio = parseInt(precioDescuento.textContent.replace(/\D/g, ""));
+        } else {
+            // Si no hay descuento, tomar el precio normal
+            precio = parseInt(precioElement.textContent.replace(/\D/g, ""));
+        }
+        
         const img = document.querySelector(".detalle-imagen img").src;
         const cantidad = parseInt(document.getElementById("cantidad").value) || 1;
         await agregarAlCarrito(nombre, precio, img, cantidad);
@@ -202,7 +249,20 @@ function configurarBotonesRelacionados() {
             const cardRel = e.target.closest(".card-rel");
             if (cardRel) {
                 const nombre = cardRel.querySelector("h3").textContent;
-                const precio = parseInt(cardRel.querySelector(".price").textContent.replace(/\D/g, ""));
+                const precioElement = cardRel.querySelector(".price");
+                
+                // Verificar si hay precio con descuento
+                let precio;
+                const precioDescuento = precioElement.querySelector(".precio-descuento");
+                
+                if (precioDescuento) {
+                    // Si hay descuento, tomar el precio final (con descuento)
+                    precio = parseInt(precioDescuento.textContent.replace(/\D/g, ""));
+                } else {
+                    // Si no hay descuento, tomar el precio normal
+                    precio = parseInt(precioElement.textContent.replace(/\D/g, ""));
+                }
+                
                 const img = cardRel.querySelector("img").src;
                 await agregarAlCarrito(nombre, precio, img, 1);
             }

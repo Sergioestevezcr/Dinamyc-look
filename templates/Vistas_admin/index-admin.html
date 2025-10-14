@@ -70,7 +70,7 @@
                     <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
                                 class="fa-solid fa-user"></i><span>Clientes</span></a>
                     </li>
-                    <li><a href="{{ url_for('admin_bp.ventas') }}"><i
+                    <li><a href="{{ url_for('admin_bp.ventas_view') }}"><i
                                 class='bx bxs-dollar-circle'></i><span>Ventas</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.productos') }}"><i
@@ -173,6 +173,7 @@
                         </table>
                     </div>
                 </div>
+                
                 <div class="recent-orders">
                     <div class="section-header">
                         <h2>Productos por Acabarse</h2>
@@ -180,7 +181,7 @@
 
                     <!-- Contenedor de la tabla -->
                     <div class="table-container">
-                        <table class="orders-table">
+                        <table class="orders-table2">
                             <thead>
                                 <tr>
                                     <th>Nombre producto</th>
@@ -211,9 +212,10 @@
     <!-- Script de JavaScript-->
     <script src="{{ url_for('static', filename='js/script_sidebar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_paginacion_tabla.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        fetch('/ventas_por_mes')
+        fetch("{{ url_for('admin_bp.ventas_por_mes') }}")
             .then(response => response.json())
             .then(data => {
                 // INICIO: Gráfico de INGRESOS

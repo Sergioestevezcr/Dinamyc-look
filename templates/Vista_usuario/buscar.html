@@ -44,6 +44,11 @@
         </div>
 
         <div class="barra-de-busqueda">
+            <!-- Botón visible solo en pantallas pequeñas -->
+            <button type="button" class="toggle-search">
+                <i class="fas fa-search"></i>
+            </button>
+
             <form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
                 <input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
                 <div class="btn-serch">
@@ -53,31 +58,34 @@
         </div>
 
         <nav class="navbar" id="nav">
-            <ul class="nav-links">
-                <li class="house" title="Inicio"><a href="{{ url_for('client_bp.index_cliente') }}"><i
-                            class="fa-solid fa-house-chimney"></i></a></li>
-                <li title="Carrito"><a href="#"><i class='bx bxs-shopping-bags'></i></a></li>
-                {% if user %}
-                <li class="usuario-menu">
-                    <a href="#"><i class="fa-solid fa-user"></i></a>
-                    <div class="usuario-dropdown">
-                        <a href="{{ url_for('client_bp.favoritos') }}"><i class='bx bxs-star'></i><span>
-                                Favoritos</span></a>
-                        <a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
-                                Compras</span></a>
-                        <a href="admin_bp.configuracion" class="active"><i class='bx bxs-user'></i><span>
-                                Perfil</span></a>
-                        <a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
-                            sesión</a>
-                    </div>
-                </li>
-                {% else %}
-                <li title="Iniciar Sesión"><a href="{{ url_for('auth_bp.login') }}"><i class='bx bx-log-in'></i></a>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
+			<ul class="nav-links">
+				<li class="house" title="Inicio"><a href="{{ url_for('client_bp.index_cliente') }}"><i
+							class="fa-solid fa-house-chimney"></i></a></li>
+				<li title="Carrito"><a href="#"><i class='bx bxs-shopping-bags'></i></a></li>
+				{% if user %}
+				<!-- Icono de usuario cuando ha iniciado sesión -->
+				<li class="usuario-menu">
+					<a href="#" class="nombre-user">¡Hola, {{ nombre }}!</a>
+					<div class="usuario-dropdown">
+						<a href="{{ url_for('client_bp.favoritos') }}"><i class='bx bxs-star'></i><span>
+								Favoritos</span></a>
+						<a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
+								Compras</span></a>
+						<a href="{{ url_for('admin_bp.configuracion') }}" class="active"><i class='bx bxs-user'></i><span>
+								Perfil</span></a>
+						<a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
+							sesión</a>
+					</div>
+				</li>
+
+				{% else %}
+				<li class="house" title="Iniciar Sesión"><a href="{{ url_for('auth_bp.login') }}"><i
+							class="fa fa-user"></i></a>
+				</li>
+				{% endif %}
+			</ul>
+		</nav>
+	</header>
 
     <section class="barra-de-marcas">
         <div class="scroll-container">
@@ -135,11 +143,21 @@
                     <label for="subcategoria">Subcategoría:</label>
                     <select name="subcategoria" id="subcategoria">
                         <option value="">Todas</option>
-                        {% if subcategoria %}
-                        <option value="{{ subcategoria }}" selected>{{ subcategoria|replace('_', ' ')|title }}</option>
-                        {% endif %}
+                        <option value="shampoo" {% if subcategoria=="shampoo" %}selected{% endif %}>Shampoo</option>
+                        <option value="acondicionador" {% if subcategoria=="acondicionador" %}selected{% endif %}>
+                            Acondicionador</option>
+                        <option value="tratamiento" {% if subcategoria=="tratamiento" %}selected{% endif %}>Tratamiento
+                            / Mascarilla</option>
+                        <option value="crema" {% if subcategoria=="crema" %}selected{% endif %}>Crema / Loción</option>
+                        <option value="bloqueador_solar" {% if subcategoria=="bloqueador_solar" %}selected{% endif %}>
+                            Bloqueador solar</option>
+                        <option value="bronceador" {% if subcategoria=="bronceador" %}selected{% endif %}>Bronceador
+                        </option>
+                        <option value="exfoliante" {% if subcategoria=="exfoliante" %}selected{% endif %}>Exfoliante
+                        </option>
                     </select>
                 </div>
+
 
                 <div class="form-group">
                     <label for="precio_min">Precio mín:</label>
@@ -230,24 +248,38 @@
             <div class="container-product-cards" id="productos-container">
                 {% for p in resultados %}
                 <div class="product-card" data-id="{{ p[0] }}">
-                    <a href="{{ url_for('detallesproducto', id=p[0]) }}">
+                    <a href="{{ url_for('client_bp.detallesproducto', id=p[0]) }}">
                         <div class="image-container">
+                            <!-- Botón favoritos -->
                             <button class="btn-fav" data-id="{{ p[0] }}">
-                                {% if p[0] in productobusf %}
-                                <i class="bx bxs-star fav-relleno"></i>
+                                {% if p[0] in favoritos %}
+                                <i class="bx bxs-star fav-relleno"></i> <!-- RELLENA si ya es favorito -->
                                 {% else %}
-                                <i class="bx bx-star"></i>
+                                <i class="bx bx-star"></i> <!-- VACÍA si no -->
                                 {% endif %}
                             </button>
-                            <img src="{{ url_for('static', filename='imagenes/' ~ p[3]) }}" alt="{{ p[1] }}"
-                                loading="lazy">
+                            <img src="{{ url_for('static', filename='imagenes/' ~ p[3]) }}" alt="Producto">
                         </div>
                         <div class="text-card">
                             <h3>{{ p[1] }}</h3>
                             <p id="text-marca">{{ p[4] }}</p>
-                            <p class="text-precio" id="text-precio">${{ "{:,}".format(p[2]).replace(",", ".") }}</p>
-                            <button class="btn-add" id="btn-add" type="button">Agregar <i
-                                    class='bx bx-shopping-bag'></i></button>
+                            <div class="text-cardown">
+                                <p class="text-precio" id="text-precio">
+                                    {% if p[5] %} {# precio_final existe #}
+                                    <span class="precio-original">
+                                        ${{ "{:,}".format(p[2]).replace(",", ".") }}
+                                    </span><br>
+                                    <span class="precio-descuento">
+                                        ${{ "{:,}".format(p[5]|int).replace(",", ".") }}
+                                    </span>
+                                    {% else %}
+                                    ${{ "{:,}".format(p[2]).replace(",", ".") }}
+                                    {% endif %}
+                                </p>
+                                <button class="btn-add" id="btn-add2" type="button">Agregar <i
+                                        class='bx bx-shopping-bag'></i>
+                                </button>
+                            </div>
                         </div>
                     </a>
                 </div>
@@ -278,7 +310,7 @@
             <div class="footer-section">
                 <h4>Sobre Nosotros</h4>
                 <p>Somos tu aliado para un cabello radiante, con soluciones perfectas y deslumbrantes.</p>
-                <button class="btn-conocenos"><a href="{{ url_for('conocenos') }}">Conoce más</a></button>
+                <button class="btn-conocenos"><a href="{{ url_for('client_bp.conocenos') }}">Conoce más</a></button>
             </div>
             <div class="footer-section">
                 <h4>Contáctanos</h4>
@@ -310,8 +342,8 @@
     <script src="{{ url_for('static', filename='js/script_carrito.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
     <script>
-        window.TOTAL_PRODUCTOS = "{{ total_productos | tojson }}";
-        window.SEARCH_URL = "{{ url_for('buscar') }}";
+        window.TOTAL_productos = "{{ total_productos | tojson }}";
+        window.SEARCH_URL = "{{ url_for('client_bp.buscar') }}";
     </script>
 
     <script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>

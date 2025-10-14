@@ -85,7 +85,7 @@
 					<h2 class="crear-cuenta">Crear una cuenta</h2>
 					<!--parrafo que informa la otra manera de registrarse-->
 					<p class="text-crear-cuenta">o usa tu email para registrarte</p>
-					<form class="form-crear-cuenta" action="/registro" method="POST">
+					<form class="form-crear-cuenta" action="{{ url_for('auth_bp.registro') }}" method="POST">
 						<div class="names">
 							<label class="label-form-crear-cuenta">
 								<i class='bx bx-user'></i>
@@ -100,6 +100,12 @@
 									class="input-form-crear-cuenta">
 							</label>
 						</div>
+						<label class="label-form-crear-cuenta">
+							<i class="fas fa-id-card"></i>
+							<!--Input que permite ingresar el documento que quiere registrar el ususario-->
+							<input required type="number" placeholder="Número de Documento" name="Documento"
+								class="input-form-crear-cuenta">
+						</label>
 						<label class="label-form-crear-cuenta">
 							<i class='bx bx-envelope'></i>
 							<!--Input que permite ingresar el email que quiere registrar el ususario-->
@@ -121,13 +127,13 @@
 						<div class="names">
 							<label class="label-form-crear-cuenta">
 								<i class="material-symbols-outlined">location_on</i>
-								<!--Input que le permite ingresar la contraseña que desea registrar el usuario-->
+								<!--Input que le permite ingresar la direccion que desea registrar el usuario-->
 								<input required type="text" placeholder="Direccion" name="Direccion"
 									class="input-form-crear-cuenta">
 							</label>
 							<label class="label-form-crear-cuenta">
 								<i class="material-symbols-outlined">location_on</i>
-								<!--Input que le permite ingresar la contraseña que desea registrar el usuario-->
+								<!--Input que le permite ingresar la ciudad que desea registrar el usuario-->
 								<input required type="text" placeholder="Ciudad" name="Ciudad"
 									class="input-form-crear-cuenta" value="Bogotá">
 							</label>
@@ -169,10 +175,10 @@
 					<a href="">
 						<li><i class='bx bxl-tiktok'></i></li>
 					</a>
-					<a href="">
-						<a href="https://www.instagram.com/dinamyc_look/">
+					<a href="https://www.instagram.com/dinamyc_look/">
 							<li><i class='bx bxl-instagram'></i></li>
 						</a>
+					<a href="">
 						<li><i class='bx bxl-whatsapp'></i></li>
 					</a>
 				</ul>
@@ -184,6 +190,7 @@
 	</footer>
 	<!--java del carrusel de imagenes-->
 	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
 </body>
 
 </html>

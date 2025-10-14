@@ -60,7 +60,7 @@
 
                 <!-- Icono de usuario cuando ha iniciado sesión -->
                 <li class="usuario-menu">
-                    <a href="#"><i class="fa-solid fa-user"></i></a>
+                    <a href="#" class="nombre-user">¡Hola, {{ nombre }}!</a>
                     <div class="usuario-dropdown">
                         <a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
                             sesión</a>
@@ -107,7 +107,7 @@
             </li>
             <li><a href="{{ url_for('client_bp.compras') }}" class="active"><i class='bx bxs-shopping-bags'></i><span>
                         Compras</span></a></li>
-            <li><a href="admin_bp.configuracion"><i class='bx bxs-user'></i><span> Perfil</span></a>
+            <li><a href="{{ url_for('admin_bp.configuracion') }}"><i class='bx bxs-user'></i><span> Perfil</span></a>
             </li>
         </ul>
     </section>
@@ -118,6 +118,7 @@
                 <h1>Factura #{{ id_venta }}</h1>
                 <div class="info-factura">
                     <p>Cliente: {{ nombre }} {{ apellido }}</p>
+                    <p>C.C: {{ documento }}</p>
                     <p>Fecha: {{ fecha }}</p>
                 </div>
                 <div class="table-container">
@@ -135,12 +136,12 @@
                         <tbody>
                             {% for row in factura %}
                             <tr>
-                                <td>{{ row[4] }}</td> <!-- Producto -->
-                                <td>${{ "{:,}".format(row[5]).replace(",", ".") }}</td> <!-- Precio_Original -->
-                                <td>{{ row[6] }}%</td> <!-- Descuento -->
-                                <td>${{ "{:,}".format(row[7]).replace(",", ".") }}</td> <!-- Precio_Final -->
-                                <td>{{ row[8] }}</td> <!-- Cantidad_p -->
-                                <td>${{ "{:,}".format(row[9]).replace(",", ".") }}</td> <!-- subtotal_final -->
+                                <td>{{ row[5] }}</td> <!-- Producto -->
+                                <td>${{ "{:,}".format(row[6]).replace(",", ".") }}</td> <!-- Precio_Original -->
+                                <td>{{ row[7] }}%</td> <!-- Descuento -->
+                                <td>${{ "{:,}".format(row[8]).replace(",", ".") }}</td> <!-- Precio_Final -->
+                                <td>{{ row[9] }}</td> <!-- Cantidad_p -->
+                                <td>${{ "{:,}".format(row[10]).replace(",", ".") }}</td> <!-- subtotal_final -->
                             </tr>
                             {% endfor %}
                         </tbody>

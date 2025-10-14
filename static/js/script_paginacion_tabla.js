@@ -453,9 +453,20 @@ class TablePagination {
 document.addEventListener('DOMContentLoaded', function() {
     // Buscar todas las tablas con clase 'orders-table' y aplicar paginación
     const tables = document.querySelectorAll('.orders-table');
+    const tables2 = document.querySelectorAll('.orders-table2');
     
     tables.forEach(table => {
         new TablePagination(`.orders-table`, {
+            itemsPerPage: 10,
+            maxVisiblePages: 5,
+            itemsPerPageOptions: [5, 10, 25, 50],
+            searchSelector: '.buscar', // Selector del campo de búsqueda
+            noDataMessage: 'No se encontraron resultados'
+        });
+    });
+
+    tables2.forEach(table => {
+        new TablePagination(`.orders-table2`, {
             itemsPerPage: 10,
             maxVisiblePages: 5,
             itemsPerPageOptions: [5, 10, 25, 50],

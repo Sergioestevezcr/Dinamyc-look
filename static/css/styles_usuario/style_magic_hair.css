@@ -4,100 +4,127 @@
 }
 
 .nombre-empresa a {
-	color: #9E9260;
+	color: #7B61A0;
 }
 
 /* Estilo para la lista de navegación */
-
 .nav-links a {
-	color: #9E9260;
+	color: #7B61A0;
 }
 
 .nav-links li:hover {
-	background-color:  rgba(211, 209, 181, 0.6);
+	background-color:  rgba(156, 136, 194, 0.6);
 }
 
 .btn-serch button {
-	background-color: #BAB48A;
+	background-color: #7B61A0;
 }
 
-.btn button:hover {
-	background-color: #9E9260;
+.btn-serch button:hover {
+	background-color:  #685186;
+}
+
+
+.toggle-search {
+    color: #7B61A0;
+}
+
+.toggle-search:hover {
+    background-color: rgba(156, 136, 194, 0.6);
+}
+
+
+.barra-de-busqueda.active .btn-serch button {
+    background-color: #7B61A0;
+    color: #FBFAF7;
+}
+
+.barra-de-busqueda.active .btn-serch button:hover {
+    background-color: #685186;
+}
+/*********************************** CARRITO *****************************/
+
+#carrito-header {
+    color: #685186;
+}
+
+#carrito-header button {
+    color: #56436F;
+}
+
+.carrito-item h4 {
+    color: #56436F;
+}
+
+.carrito-item p {
+    color: rgba(86, 67, 111, 0.8);
+}
+
+.carrito-item button {
+    color: #372B4A;
+}
+
+#carrito-footer button {
+    background: #7B61A0;
+    color: #fff;
+}
+
+/* Badge del carrito */
+.carrito-badge {
+    background: #56436F;
+    color: #FFFFFF;
 }
 
 /******************************** BARRA DE MARCAS *******************************/
 .barra-de-marcas{
-	background-color: #9E9260;
+	background-color: #9C88C2;
 	margin-left: -25px;
 }
 
 .scroll-container::-webkit-scrollbar-thumb {
-    background-color: #81734D; /* Color del "dedo" de la barra */
+    background-color: #7B61A0; /* Color del "dedo" de la barra */
 }
 
 .scroll-container::-webkit-scrollbar-thumb:hover {
-    background-color: #685A40; /* Color cuando pasas el cursor por encima */
+    background-color: #685186; /* Color cuando pasas el cursor por encima */
 }
 
 .scroll-container::-webkit-scrollbar-track {
-    background-color: #9E9260; /* Color del carril de la barra de desplazamiento */
+    background-color: #9C88C2; /* Color del carril de la barra de desplazamiento */
 }
 
-/*********************************** SECCION UNO (4) ***********************************/
+/*********************************** SECCION UNO y DOS (4) ***********************************/
 .section4-product{
-    background-color: #F6F5F0;
+    background-color: #F1F0F7;
 }
 .section4-product2 {
 	background-color: #FBFAF7;
 }
 #t4 {
-    color: #81734D;
-    background-color: #F6F5F0; 
-    text-shadow: 1px 1px 2px rgba(78, 66, 53, 0.1);
+    color: #685186;
+    background-color: #F1F0F7; 
+    text-shadow: 1px 1px 2px rgba(55, 43, 74, 0.1);
 }
 
 /* Añadir línea decorativa debajo del título */
 #t4::after {
-    background-color: #9E9260;
+    background-color: #7B61A0;
 }
 
     /* Subtitulo */
 #p4 {
-    color: #9E9260;
+    color: #7B61A0;
 }
 
 #t4-2 {
-    color: #685A40;
-    background-color: transparent;
-    text-align: center;
-    padding: 30px 0;
-    font-size: 40px;
-    font-weight: 700; 
-    text-shadow: 1px 1px 2px rgba(78, 66, 53, 0.1); 
-    position: relative;
+    color: #685186;
+    background-color: #FBFAF7;
+    text-shadow: 1px 1px 2px rgba(69, 18, 33, 0.1); 
 }
 
 /* Añadir línea decorativa debajo del título */
 #t4-2::after {
-    content: "";
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 3px;
-    background-color: #81734D;
-    border-radius: 3px;
-}
-
-  /* Contenedor del carrusel */
-.carousel-prd-container2 {
-    background-color: transparent;
-    border-radius: 30px 30px 0 0;
-    padding: 10px 50px;
-    position: relative;
-    margin-top: -20px;
-    overflow: hidden;
+    background-color: #56436F;
 }
 
 .carousel-product4-2 {
@@ -105,76 +132,110 @@
 }
 
 .carousel-prd-container {
-    background-color: #F6F5F0;
+    background-color: #F1F0F7;
 }
 
+.carousel-prd-container2 {
+    background-color: #FBFAF7;
+}
 
 .product-card4, .product-card4-2 {
     background-color: #FFFFFF;
-    box-shadow: 0 5px 15px rgba(78, 66, 53, 0.3);
+    box-shadow: 0 5px 15px rgba(55, 43, 74, 0.3);
 }
 
 .product-card4:hover, .product-card4-2:hover {
-    box-shadow: 0 8px 20px rgba(129, 115, 77 , 0.5);
+    box-shadow: 0 8px 20px rgba(55, 43, 74, 0.5);
 }
-
 
 .text-card4 {
-    background-color: #9E9260;
+    background-color: #FAFAFA;
     color: #FBFAF7;
 }
 
-
-.text-card4 p {
-    color: #FBFAF7;
+.carousel-prd-container2 .text-card4 {
+    background-color: #56436F;
 }
 
-  /* Botón de agregar al carrito */
+.carousel-prd-container2 .text-card4 h3 {
+    color: #FFFFFF;
+}
+
+.text-card4 h3 {
+    color: #56436F;
+}
+
+#text-precio {
+    color: #56436F;
+    background-color: rgba(104, 81, 134, 0.4);
+}
+
+#text-marca {
+    color: rgba(123, 97, 160, 0.6);
+}
+
 #btn-add4 {
-    background-color: #D3D1B5;
-    color: #594C3A;
-    box-shadow: 0 2px 5px rgba(78, 66, 53, 0.2); 
+    background-color: #685186;
+    color: #F1F0F7;
+    box-shadow: 0 2px 5px rgba(55, 43, 74, 0.2); 
 }
 
 #btn-add4:hover {
-    background-color: #BAB48A;
-    box-shadow: 0 4px 8px rgba(78, 66, 53, 0.3);
+    background-color: #56436F;;
+    box-shadow: 0 4px 8px rgba(55, 43, 74, 0.3);
+}
+
+#btn-add4-2{
+    background-color: #9C88C2;
+    color: #372B4A;
+    box-shadow: 0 2px 5px rgba(55, 43, 74, 0.2); 
+}
+
+#btn-add4-2:hover {
+    background-color: #8E73B4;
+    box-shadow: 0 4px 8px rgba(55, 43, 74, 0.3);
 }
 
 .btn-right-prd, .btn-left-prd, .btn-right-prd2, .btn-left-prd2 {
-    background-color: #81734D;
-    box-shadow: 0 3px 10px rgba(78, 66, 53, 0.3);
+    background-color: #685186;
+    box-shadow: 0 3px 10px rgba(55, 43, 74, 0.3);
 }
 
 .btn-right-prd:hover, .btn-left-prd:hover, .btn-right-prd2:hover, .btn-left-prd2:hover {
-    background-color: #9E9260;
+    background-color: #7B61A0;
 }
 
 .carousel-dot {
-    background-color: #9E9260;
+    background-color: #7B61A0;
 }
 
 .carousel-dot.active {
-    background-color: #81734D;
+    background-color: #685186;
 }
 
+.carousel-dot2{
+    background-color: #7B61A0;
+}
 
+.carousel-dot2.active {
+    background-color: #685186;
+}
 /*********************************** SECCION DOS (1) ***********************************/
 .section1-product {
     background-color: #FBFAF7;
 }
 #t1 {
-    color: #81734D;
+    color: #685186;
     background-color: #FBFAF7; 
-    text-shadow: 1px 1px 2px rgba(78, 66, 53, 0.1);
+    text-shadow: 1px 1px 2px rgba(55, 43, 74, 0.1);
 }
 
 #t1::after {
-    background-color: #9E9260;
+    background-color: #7B61A0;
 }
 
 #p1 {
-    color: #9E9260;
+    color: #7B61A0;
 }
 
 .container-product-cards {
@@ -183,44 +244,48 @@
 
 .product-card {
     background-color: #FFFFFF;
-    box-shadow: rgba(129, 115, 77 , .4); 
+    box-shadow: rgba(55, 43, 74, .4); 
 }
 
 .product-card:hover {
-    box-shadow: rgba(129, 115, 77 , 0.6); 
+    box-shadow: rgba(55, 43, 74, 0.6); 
 }
 
 .text-card {
-    background-color: #9E9260;
+    background-color: #685186;
     color: #FBFAF7;
 }
 
+#text-precio2 {
+    color: #56436F;
+    background-color: rgba(230, 227, 241, 0.9);
+}
 
-.text-card p {
-    color: #FBFAF7;
+#text-marca2 {
+    color: rgba(230, 227, 241, 0.8);
 }
 
   /* Botón de agregar al carrito */
 #btn-add {
-    background-color: #D3D1B5;
-    color: #594C3A;
-    box-shadow: 0 2px 5px rgba(78, 66, 53, 0.2); 
+    background-color: #9C88C2;
+    color: #372B4A;
+    box-shadow: 0 2px 5px rgba(55, 43, 74, 0.2); 
 }
 
 #btn-add:hover {
-    background-color: #BAB48A;
-    box-shadow: 0 4px 8px rgba(78, 66, 53, 0.3);
+    background-color: #8E73B4;
+    box-shadow: 0 4px 8px rgba(55, 43, 74, 0.3);
 }
 /*********************************** SECCION TRES (2) ***********************************/
 
 .cp-container {
-    background: linear-gradient(to bottom, #F6F5F0, #F6F5F0);
-    box-shadow: inset 0 0px 0px rgba(78, 66, 53, 0.2); 
+    background: #F1F0F7;
+    box-shadow: inset 0 0px 0px rgba(55, 43, 74, 0.2); 
 }
 
 #t2 {
-    color: #81734D;
-    text-shadow: 1px 1px 3px rgba(78, 66, 53, 0.3); 
+    color: #685186;
+    text-shadow: 1px 1px 3px rgba(55, 43, 74, 0.3); 
 }
 
 /* Personalización de la barra de scroll horizontal */
@@ -229,20 +294,20 @@
 }
 
 .carousel-product::-webkit-scrollbar-thumb {
-    background-color: #9E9260;
+    background-color: #7B61A0;
 }
 
 .carousel-product::-webkit-scrollbar-thumb:hover {
-    background-color: #81734D;
+    background-color: #685186;
 }
 
 .carousel-product::-webkit-scrollbar-track {
-    background-color: rgba(223, 85, 125, .3);
+    background-color: rgba(142, 115, 180, .3);
 }
 
 .product-card2 {
     background-color: #FFFFFF;
-    box-shadow: 0 5px 15px rgba(78, 66, 53, 0.3);
+    box-shadow: 0 5px 15px rgba(55, 43, 74, 0.3);
 }
 
 .product-card2:hover {
@@ -250,25 +315,87 @@
 }
 
 .text-card2 {
-    background-color: #9E9260;
-    color: #FBFAF7;
-}
-
-
-.text-card2 p {
-    color: #FBFAF7;
+    background-color: #FAFAFA;
+    color: #56436F
 }
 
   /* Botón de agregar al carrito */
 #btn-add2 {
-    background-color: #D3D1B5;
-    color: #594C3A;
-    box-shadow: 0 2px 5px rgba(78, 66, 53, 0.2); 
+    background-color: #685186;
+    color: #F1F0F7;
+    box-shadow: 0 2px 5px rgba(55, 43, 74, 0.2); 
 }
 
 #btn-add2:hover {
-    background-color: #BAB48A;
-    box-shadow: 0 4px 8px rgba(78, 66, 53, 0.3);
+    background-color: #56436F;
+    box-shadow: 0 4px 8px rgba(55, 43, 74, 0.3);
 }
 
+button.btn-fav i.bx.bxs-star,
+.btn-fav i.bxs-star {
+    color: #9C88C2 !important;
+}
 
+/*********************************** DETALLES ***********************************/
+/* Contenedor principal detalle */
+.detalle-container {
+    background: #FBFAF7;
+    box-shadow: 0 4px 10px rgba(55, 43, 74, 0.2);
+}
+
+.detalle-info h1 {
+    color: #685186;
+}
+
+.descripcion {
+    color: rgba(55, 43, 74, 0.8);
+}
+
+.precio {
+    color: #685186;
+}
+
+.text-cantidad {
+    color: #56436F;
+}
+
+.btn-principal {
+    background: #7B61A0;
+    color: white;
+}
+
+.btn-principal:hover {
+    background: #685186;
+}
+
+.titulo-relacionados {
+    color: #56436F;
+    border-top: 1px solid #372B4A;
+}
+
+.card-rel a {
+    background: #e7e5e0;
+    box-shadow: 0 2px 6px rgba(55, 43, 74,0.1);
+}
+
+.card-rel h3 {
+    color: #56436F;
+}
+
+.price {
+    color: #685186;
+}
+
+#btn-add-rel {
+    background: #56436F;
+    color: white;
+}
+
+.swiper-container-externo .swiper-pagination-bullet {
+    background-color: rgba(123, 32, 51, 0.4);
+
+}
+
+.swiper-container-externo .swiper-pagination-bullet-active {
+    background-color: #56436F;
+}

@@ -59,7 +59,7 @@
                     <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
                                 class="fa-solid fa-user"></i><span>Clientes</span></a>
                     </li>
-                    <li><a href="{{ url_for('admin_bp.ventas') }}"><i
+                    <li><a href="{{ url_for('admin_bp.ventas_view') }}"><i
                                 class='bx bxs-dollar-circle'></i><span>Ventas</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.productos') }}" class="active"><i
@@ -100,13 +100,14 @@
                 </div>
 
                 <div class="table-container">
-                    <table class="orders-table">
+                    <table class="orders-table prod-c">
                         <thead>
                             <tr>
                                 <th>Imagen</th>
                                 <th>Nombre</th>
                                 <th>Descripción</th>
                                 <th>Marca</th>
+                                <th>Categoria</th>
                                 <th>Stock</th>
                                 <th>Valor</th>
                                 <th></th>
@@ -118,7 +119,7 @@
                                 <td>
                                     <div class="image-container">
                                         {% if producto[3] %}
-                                        <img src="{{ url_for('static', filename='imagenes/' + producto[3]) }}"
+                                        <img src="{{ url_for('static', filename='imagenes/' ~ producto[3]) }}"
                                             alt="Producto">
                                         {% else %}
                                         <span>Sin imagen</span>
@@ -126,8 +127,17 @@
                                     </div>
                                 </td>
                                 <td>{{ producto[1] }}</td>
-                                <td>{{ producto[2] }}</td>
+                                <td>
+                                    <div class="descripcion-corta">
+                                        {{ producto[2][:100] }}...
+                                    </div>
+                                    <div class="descripcion-completa ocultar">
+                                        {{ producto[2] }}
+                                    </div>
+                                    <button class="ver-mas-btn">Ver más</button>
+                                </td>
                                 <td>{{ producto[6] }}</td>
+                                <td>{{ producto[7] }}</td>
                                 <td>{{ producto[5] }}</td>
                                 <td>
                                     {% if producto[10] %} {# precio_final existe #}
@@ -145,7 +155,8 @@
                                     <a href="#" data-id="{{ producto[0] }}" data-nombre="{{ producto[1] }}"
                                         data-descripcion="{{ producto[2] }}" data-precio="{{ producto[4] }}"
                                         data-stock="{{ producto[5] }}" data-marca="{{ producto[6] }}"
-                                        data-promocion="{{ producto[8] }}" class="edit-btn">
+                                        data-categoria="{{ producto[7] }}" data-promocion="{{ producto[8] }}"
+                                        class="edit-btn">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
                                 </td>
@@ -162,7 +173,8 @@
     <div id="addModal" class="modal-background">
         <div class="modal-content">
             <h2 class="modal-header">Agregar Nuevo Producto</h2>
-            <form id="addForm" action="/add_producto" method="POST" enctype="multipart/form-data">
+            <form id="addForm" action="{{ url_for('admin_bp.add_producto') }}" method="POST"
+                enctype="multipart/form-data">
 
                 <!-- Nombre -->
                 <div class="form-group">
@@ -178,33 +190,55 @@
                     </div>
                 </div>
 
-                <div class="ddos">
-                    <!-- Marca -->
-                    <div class="form-group">
-                        <div class="label-form"><i class="fa-solid fa-trademark"></i>
-                            <input type="text" name="Marca" class="input-form" placeholder="Marca" required>
-                        </div>
-                    </div>
-                
-                    <!-- Precio -->
-                    <div class="form-group">
-                        <div class="label-form"><i class="fa-solid fa-dollar-sign"></i>
-                            <input type="number" name="Precio" class="input-form" placeholder="Precio" step="1" required>
-                        </div>
+                <!-- Marca -->
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-trademark"></i>
+                        <select name="Marca" class="input-form" required>
+                            <option value="">-- Selecciona una marca --</option>
+                            {% for marca in marcas %}
+                            <option value="{{ marca[0] }}">{{ marca[1] }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
 
-                <!-- Stock -->
+                <!-- Categoria -->
                 <div class="form-group">
-                    <div class="label-form"><i class="fa-solid fa-boxes"></i>
-                        <input type="number" name="Stock" class="input-form" placeholder="Stock disponible" required>
+                    <div class="label-form"><i class='bx bx-category'></i>
+                        <select name="Categoria" class="input-form" required>
+                            <option value="">-- Selecciona una categoria --</option>
+                            <option value="Cuidado capilar">Cuidado capilar</option>
+                            <option value="Cuidado de la piel">Cuidado de la piel</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="ddos">
+                    <!-- Precio -->
+                    <div class="form-group">
+                        <div class="label-form"><i class="fa-solid fa-dollar-sign"></i>
+                            <input type="number" name="Precio" class="input-form" placeholder="Precio" step="1"
+                                required>
+                        </div>
+                    </div>
+
+                    <!-- Stock -->
+                    <div class="form-group">
+                        <div class="label-form"><i class="fa-solid fa-boxes"></i>
+                            <input type="number" name="Stock" class="input-form" placeholder="Stock disponible"
+                                required>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Imagen -->
                 <div class="form-group">
-                    <div class="label-form"><i class="fa-solid fa-image"></i>
-                        <input type="file" name="Imagen" accept="image/*">
+                    <div class="label-form preview-container">
+                        <i class="fa-solid fa-upload"></i>
+                        <span>Subir Imagen</span>
+                        <input type="file" id="edit-imagen" name="Imagen" accept="image/*">
+                        <!-- Imagen de previsualización (encima del input) -->
+                        <img id="preview-edit-imagen" class="preview" style="display:none;">
                     </div>
                 </div>
 
@@ -234,8 +268,9 @@
     <div id="editModal" class="modal-background">
         <div class="modal-content">
             <h2 class="modal-header">Editar Producto</h2>
-            <form id="editForm" method="POST" enctype="multipart/form-data" data-base-action="/update_producto"
-                data-entity-type="producto" data-required-fields='["Nombre","Descripcion","Precio","Marca","Stock"]'>
+            <form id="editForm" method="POST" enctype="multipart/form-data"
+                data-base-action="{{ url_for('admin_bp.update_producto', id=0)[:-1] }}" data-entity-type="producto"
+                data-required-fields='["Nombre","Descripcion","Precio","Marca","Stock"]'>
 
 
                 <!-- Nombre -->
@@ -255,7 +290,23 @@
                 <!-- Marca -->
                 <div class="form-group">
                     <div class="label-form"><i class="fa-solid fa-trademark"></i>
-                        <input type="text" id="edit-marca" name="Marca" class="input-form" required>
+                        <select id="edit-marca" name="Marca" class="input-form" required>
+                            <option value="">-- Selecciona una marca --</option>
+                            {% for marca in marcas %}
+                            <option value="{{ marca[0] }}">{{ marca[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Categoria -->
+                <div class="form-group">
+                    <div class="label-form"><i class='bx bx-category'></i>
+                        <select name="Categoria" class="input-form" required>
+                            <option value="">-- Selecciona una categoria --</option>
+                            <option value="Cuidado capilar">Cuidado capilar</option>
+                            <option value="Cuidado de la piel">Cuidado de la piel</option>
+                        </select>
                     </div>
                 </div>
 
@@ -275,18 +326,24 @@
 
                 <!-- Imagen -->
                 <div class="form-group">
-                    <div class="label-form"><i class="fa-solid fa-image"></i>
+                    <div class="label-form preview-container">
+                        <i class="fa-solid fa-upload"></i>
+                        <span>Subir Imagen</span>
                         <input type="file" id="edit-imagen" name="Imagen" accept="image/*">
+                        <!-- Imagen de previsualización (encima del input) -->
+                        <img id="preview-edit-imagen" class="preview" style="display:none;">
                     </div>
                 </div>
 
                 <!-- Promoción -->
                 <div class="form-group">
                     <div class="label-form"><i class="fa-solid fa-percent"></i>
-                        <select id="edit-promocion" name="ID_PromocionFK" class="input-form">
+                        <select name="ID_PromocionFK" class="input-form">
                             <option value="">-- Sin Promoción --</option>
                             {% for promo in promociones %}
-                            <option value="{{ promo[0] }}">{{ promo[1] }}% ({{ promo[2] }} - {{ promo[3] }})</option>
+                            <option value="{{ promo[0] }}">
+                                {{ promo[1] }}% ({{ promo[2] }} - {{ promo[3] }})
+                            </option>
                             {% endfor %}
                         </select>
                     </div>
@@ -311,6 +368,30 @@
     <script src="{{ url_for('static', filename='js/script_pop-up.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_paginacion_tabla.js') }}"></script>
+    <script>
+        // --- VER MÁS / VER MENOS EN DESCRIPCIONES ---
+        document.addEventListener("DOMContentLoaded", function () {
+            const botones = document.querySelectorAll(".ver-mas-btn");
+
+            botones.forEach((btn) => {
+                btn.addEventListener("click", function () {
+                    const descripcionCompleta = this.previousElementSibling;
+                    const corta = descripcionCompleta.previousElementSibling;
+
+                    if (descripcionCompleta.classList.contains("mostrar")) {
+                        descripcionCompleta.classList.remove("mostrar");
+                        corta.style.display = "block";
+                        this.textContent = "Ver más";
+                    } else {
+                        descripcionCompleta.classList.add("mostrar");
+                        corta.style.display = "none";
+                        this.textContent = "Ver menos";
+                    }
+                });
+            });
+        });
+
+    </script>
 </body>
 
 </html>
