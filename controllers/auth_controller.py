@@ -30,18 +30,18 @@ def login():
             cur.close()
 
             if user:
-                # ✅ CORRECCIÓN: user[5] es la Clave (hash)
+                #  CORRECCIÓN: user[5] es la Clave (hash)
                 clave_bd = user[5] or ""
                 
-                # ✅ CORRECCIÓN: Orden correcto de argumentos
+                #  CORRECCIÓN: Orden correcto de argumentos
                 if check_password_hash(clave_bd, clave):
                     # Guardar datos en sesión
                     session["user_id"] = user[0]        # ID_Usuario
                     session["user_name"] = user[1]      # Nombre
                     session["user_lastname"] = user[2]  # Apellido
-                    session["user_email"] = user[4]     # ✅ Correo (índice 4)
+                    session["user_email"] = user[4]     # Correo (índice 4)
 
-                    # ✅ CORRECCIÓN: user[6] es el Rol
+                    #  CORRECCIÓN: user[6] es el Rol
                     rol = user[6].strip().lower()
                     session["user_role"] = rol
 
