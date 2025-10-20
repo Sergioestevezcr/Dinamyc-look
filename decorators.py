@@ -35,8 +35,3 @@ def admin_required(f):
             return redirect(url_for("client_bp.index_cliente"))
         return f(*args, **kwargs)
     return decorated_function
-
-# -------------------------------------- CLASE PDF -----------------------------------------
-
-class PDF(FPDF, HTMLMixin):
-    """Clase que combina FPDF con HTMLMixin para soportar tablas HTML"""

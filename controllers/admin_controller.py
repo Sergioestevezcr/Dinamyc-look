@@ -1,12 +1,17 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app as app, Response, send_file, jsonify
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image 
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
 from datetime import datetime, timedelta
 from database import mysql  # mysql está definido en database.py
 import io
 import os
+
 # Importar decoradores y clase PDF
-from decorators import login_required, admin_required, PDF
+from decorators import login_required, admin_required
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp'}
 
 admin_bp = Blueprint('admin_bp', __name__)  # Creacion del blueprint
@@ -657,113 +662,175 @@ def reportes():
     data = cur.fetchall()
     return render_template("Vistas_admin/reportes.html", reportes=data)
 
-
 @admin_bp.route('/generar_reporte', methods=['POST'])
 @admin_required
 def generar_reporte():
-    fecha_inicio = request.form['fecha_inicio']
-    fecha_fin = request.form['fecha_fin']
+    try:
+        fecha_inicio = request.form['fecha_inicio']
+        fecha_fin = request.form['fecha_fin']
 
-    # Convertir a datetime y sumar 1 día
-    fecha_fin_dt = datetime.strptime(fecha_fin, "%Y-%m-%d") + timedelta(days=1)
-    fecha_fin = fecha_fin_dt.strftime("%Y-%m-%d")
+        if not fecha_inicio or not fecha_fin:
+            flash("Debes seleccionar ambas fechas", "error")
+            return redirect(url_for("admin_bp.reportes"))
 
-    cur = mysql.connection.cursor()
-    cur.execute("""
-        SELECT
-            v.ID_Venta AS Num_venta,
-            v.Fecha AS Fecha,
-            CONCAT(u.nombre, ' ', u.apellido) AS cliente,
-            p.Nombre AS Producto,
-            p.Precio AS Precio_Original,
-            IFNULL(pr.Descuento, 0) AS Descuento,
-            ROUND(dv.SubTotal / NULLIF(dv.Cantidad_p, 0), 0) AS Precio_Final,
-            dv.Cantidad_p AS Cantidad_p,
-            dv.SubTotal AS SubTotal_Final,
-            v.Total AS Total_Venta
-        FROM ventas v
-        JOIN usuarios u ON u.ID_Usuario = v.ID_UsuarioFK
-        JOIN detalles_venta dv ON dv.ID_VentaFK = v.ID_Venta
-        JOIN productos p ON p.ID_Producto = dv.ID_ProductoFK
-        LEFT JOIN promociones pr 
-            ON pr.ID_Promocion = p.ID_PromocionFK 
-            AND CURDATE() BETWEEN pr.Fecha_Inicial AND pr.Fecha_Final
-        WHERE v.Fecha >= %s AND v.Fecha < %s
-        ORDER BY v.Fecha ASC
-    """, (fecha_inicio, fecha_fin))
+        fecha_fin_dt = datetime.strptime(fecha_fin, "%Y-%m-%d") + timedelta(days=1)
+        fecha_fin = fecha_fin_dt.strftime("%Y-%m-%d")
 
-    ventas = cur.fetchall()
+        cur = mysql.connection.cursor()
+        cur.execute("""
+            SELECT
+                v.ID_Venta AS Num_venta,
+                v.Fecha AS Fecha,
+                CONCAT(u.nombre, ' ', u.apellido) AS cliente,
+                p.Nombre AS Producto,
+                p.Precio AS Precio_Original,
+                IFNULL(pr.Descuento, 0) AS Descuento,
+                ROUND(dv.SubTotal / NULLIF(dv.Cantidad_p, 0), 0) AS Precio_Final,
+                dv.Cantidad_p AS Cantidad_p,
+                dv.SubTotal AS SubTotal_Final,
+                v.Total AS Total_Venta
+            FROM ventas v
+            JOIN usuarios u ON u.ID_Usuario = v.ID_UsuarioFK
+            JOIN detalles_venta dv ON dv.ID_VentaFK = v.ID_Venta
+            JOIN productos p ON p.ID_Producto = dv.ID_ProductoFK
+            LEFT JOIN promociones pr 
+                ON pr.ID_Promocion = p.ID_PromocionFK 
+                AND CURDATE() BETWEEN pr.Fecha_Inicial AND pr.Fecha_Final
+            WHERE v.Fecha >= %s AND v.Fecha < %s
+            ORDER BY v.Fecha ASC
+        """, (fecha_inicio, fecha_fin))
 
-    # Crear PDF
-    pdf = PDF()
-    pdf.add_page()
-    pdf.set_font("Arial", "B", 16)
-    pdf.cell(0, 10, "Reporte de Ventas", ln=True, align="C")
-    pdf.set_font("Arial", "", 12)
-    pdf.cell(
-        0, 10, f"Periodo: {fecha_inicio} a {fecha_fin}", ln=True, align="C")
-    pdf.ln(10)
+        ventas = cur.fetchall()
 
-    # Tabla HTML
-    html = """
-    <table border="1" width="100%" align="center" cellpadding="2">
-        <thead>
-            <tr bgcolor="#EDB4CD" style="color:white;">
-                <th width="20%">Fecha</th>
-                <th width="20%">Cliente</th>
-                <th width="30%">Prod.</th>
-                <th width="15%">Cant.</th>
-                <th width="20%">Precio</th>
-                <th width="15%">Desc.</th>
-                <th width="20%">P. Final</th>
-                <th width="20%">Subt.</th>
-            </tr>
-        </thead>
-        <tbody>
-    """
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=letter)
+        elements = []
+        styles = getSampleStyleSheet()
 
-    total_general = 0
+        # 🔧 Evitar desbordes en texto largo
+        normal_style = styles["Normal"]
+        normal_style.wordWrap = 'CJK'  # activa el ajuste automático de texto
 
-    for i, v in enumerate(ventas):
-        bgcolor = "#f2f2f2" if i % 2 == 0 else "#ffffff"
-        precio_original = f"{v[4]:,.0f}".replace(",", ".")
-        precio_final = f"{v[6]:,.0f}".replace(",", ".")
-        subtotal = f"{v[8]:,.0f}".replace(",", ".")
+         # 🔧 Ruta del logo (ajusta a tu carpeta real)
+        logo_path = os.path.join(os.getcwd(), "static", "imagenes", "logo.png")
 
-        html += f"""
-        <tr bgcolor="{bgcolor}">
-            <td>{v[1]}</td>
-            <td>{v[2]}</td>
-            <td align="left">{v[3]}</td>
-            <td>{v[7]}</td>
-            <td>${precio_original}</td>
-            <td>{v[5]}%</td>
-            <td>${precio_final}</td>
-            <td>${subtotal}</td>
-        </tr>
-        """
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=letter)
+        elements = []
+        styles = getSampleStyleSheet()
 
-        total_general += v[8]
+        # 🔧 Evitar desbordes en texto largo
+        normal_style = styles["Normal"]
+        normal_style.wordWrap = 'CJK'  # activa el ajuste automático de texto
 
-    total_general_formatted = f"{total_general:,.0f}".replace(",", ".")
-    html += f"""
-    <tr bgcolor="#EDB4CD" style="color:white; font-weight:bold;">
-        <td colspan="7" align="right">TOTAL GENERAL</td>
-        <td>${total_general_formatted}</td>
-    </tr>
-    """
-    html += "</tbody></table>"
+         # 🔧 Ruta del logo (ajusta a tu carpeta real)
+        logo_path = os.path.join(os.getcwd(), "static", "imagenes", "logos", "logo.png")
 
-    pdf.write_html(html)
-    pdf_bytes = bytes(pdf.output(dest='S'))
+        if os.path.exists(logo_path):
+            logo = Image(logo_path, width=120, height=80)
+            # Ajustar sin deformar si la imagen es más grande:
+            logo._restrictSize(120, 80)   # limita ancho/alto máximo, preserva relación de aspecto
+        else:
+            # Si no existe el logo, crear un Paragraph de aviso pequeño para mantener estructura
+            logo = Paragraph(" ", normal_style)  # espacio en blanco para que la columna exista
 
-    # Guardar en BD
-    cur.execute("INSERT INTO reportes (fecha_inicio, fecha_fin, archivo) VALUES (%s, %s, %s)",
-                (fecha_inicio, fecha_fin, pdf_bytes))
-    mysql.connection.commit()
+        # Preparar el título como Paragraph (usar estilo Title o uno personalizado)
+        titulo_paragraph = Paragraph("<b>Reporte de Ventas</b><br/><small>Periodo: {}</small>".format(
+            f"{fecha_inicio} a {fecha_fin}"
+        ), styles["Title"])
 
-    flash("Reporte generado y guardado correctamente", "success")
-    return redirect(url_for("admin_bp.reportes"))
+        # Crear una tabla con 1 fila y 2 columnas: [logo, titulo]
+        header_table = Table([[logo, titulo_paragraph]], colWidths=[130, 420])  # ajustar colWidths según tu página
+
+        # Estilos: quitar borde, alinear texto a la izquierda y centrar verticalmente
+        header_table.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),    # centra verticalmente ambos items
+            ('LEFTPADDING', (0, 0), (0, 0), 0),        # quitar padding izquierdo de la celda del logo
+            ('RIGHTPADDING', (0, 0), (0, 0), 6),       # pequeño espacio entre logo y título
+            ('LEFTPADDING', (1, 0), (1, 0), 6),        # padding del lado izquierdo del título
+            ('ALIGN', (0, 0), (0, 0), 'LEFT'),         # logo alineado a la izquierda
+            ('ALIGN', (1, 0), (1, 0), 'LEFT'),         # título alineado a la izquierda dentro de su celda
+            ('GRID', (0,0), (-1,-1), 0, colors.white)  # sin grid visible (0 = sin borde)
+        ]))
+
+        # Agregar la tabla-header a elements
+        elements.append(header_table)
+        elements.append(Spacer(1, 12))
+
+        # Encabezados
+        data = [[
+            Paragraph("<b>Fecha</b>", styles["Normal"]),
+            Paragraph("<b>Cliente</b>", styles["Normal"]),
+            Paragraph("<b>Producto</b>", styles["Normal"]),
+            Paragraph("<b>Cant.</b>", styles["Normal"]),
+            Paragraph("<b>Precio</b>", styles["Normal"]),
+            Paragraph("<b>Desc.</b>", styles["Normal"]),
+            Paragraph("<b>P. Final</b>", styles["Normal"]),
+            Paragraph("<b>Subtotal</b>", styles["Normal"]),
+        ]]
+
+        total_general = 0
+
+        for v in ventas:
+            precio_original = f"${v[4]:,.0f}".replace(",", ".")
+            precio_final = f"${v[6]:,.0f}".replace(",", ".")
+            subtotal = f"${v[8]:,.0f}".replace(",", ".")
+            data.append([
+                Paragraph(str(v[1]), normal_style),
+                Paragraph(v[2], normal_style),        # 🔧 texto largo envuelto
+                Paragraph(v[3], normal_style),        # 🔧 texto largo envuelto
+                Paragraph(str(v[7]), normal_style),
+                Paragraph(precio_original, normal_style),
+                Paragraph(f"{v[5]}%", normal_style),
+                Paragraph(precio_final, normal_style),
+                Paragraph(subtotal, normal_style)
+            ])
+            total_general += v[8]
+
+        total_general_formatted = f"${total_general:,.0f}".replace(",", ".")
+        data.append([
+            "", "", "", "", "", "",
+            Paragraph("<b>TOTAL</b>", styles["Normal"]),
+            Paragraph(f"<b>{total_general_formatted}</b>", styles["Normal"])
+        ])
+
+        # 🔧 Ajuste de ancho de columnas (más espacio a cliente y producto)
+        table = Table(data, colWidths=[65, 100, 120, 40, 60, 50, 60, 70])
+
+        # Estilos
+        table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#EDB4CD")),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.gray),
+            ('BACKGROUND', (0, 1), (-1, -2), colors.whitesmoke),
+            ('BACKGROUND', (0, -1), (-1, -1), colors.HexColor("#EDB4CD")),
+            ('TEXTCOLOR', (0, -1), (-1, -1), colors.white),
+            ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
+        ]))
+
+        elements.append(table)
+        doc.build(elements)
+
+        pdf_bytes = buffer.getvalue()
+        buffer.close()
+
+        # Guardar en DB
+        cur.execute("""
+            INSERT INTO reportes (fecha_inicio, fecha_fin, archivo)
+            VALUES (%s, %s, %s)
+        """, (fecha_inicio, fecha_fin, pdf_bytes))
+        mysql.connection.commit()
+
+        flash("Reporte generado y guardado correctamente", "success")
+        return redirect(url_for("admin_bp.reportes"))
+
+    except Exception as e:
+        mysql.connection.rollback()
+        print("❌ ERROR AL GENERAR REPORTE:", e)
+        flash(f"Error al generar el reporte: {e}", "error")
+        return redirect(url_for("admin_bp.reportes"))
 
 
 @admin_bp.route('/descargar_reporte/<int:id>', methods=['GET'])
