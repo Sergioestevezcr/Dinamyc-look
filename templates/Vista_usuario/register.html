@@ -59,8 +59,7 @@
 			<ul class="nav-links">
 				<li class="house"><a href="{{ url_for('client_bp.index_cliente') }}"><i
 							class="fa-solid fa-house-chimney"></i></a></li>
-				<li><a href="#"><i class='bx bxs-shopping-bags'></i></a></li>
-				<li><a href="{{ url_for('auth_bp.login') }}"><i class='bx bx-log-in'></i></a></li>
+				<li class="house" title="Iniciar Sección"><a href="{{ url_for('auth_bp.login') }}"><i class="fa fa-user"></i></a></li>
 			</ul>
 		</nav>
 	</header>
@@ -150,7 +149,7 @@
 							<input required type="password" placeholder="Confirme la contraseña" name="Confirmar_clave"
 								class="input-form-crear-cuenta">
 						</label>
-						<input type="submit" value="Regitrarse" class="boton-registrarse">
+						<input type="submit" value="Crear Cuenta" class="boton-registrarse">
 					</form>
 				</div>
 			</div>

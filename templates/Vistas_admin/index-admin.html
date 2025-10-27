@@ -14,10 +14,6 @@
     <!-- Fuente de iconos Boxicons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <!-- Fuente de iconos google icons -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=payment_arrow_down" />
-
     <!-- Fuente de iconos FontAwesome -->
     <script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
 
@@ -70,6 +66,9 @@
                     <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
                                 class="fa-solid fa-user"></i><span>Clientes</span></a>
                     </li>
+                    <li><a href="{{ url_for('admin_bp.admin') }}">
+                            <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
+                    </li>
                     <li><a href="{{ url_for('admin_bp.ventas_view') }}"><i
                                 class='bx bxs-dollar-circle'></i><span>Ventas</span></a>
                     </li>
@@ -100,34 +99,51 @@
             </header>
 
             <!-- Tarjetas de estadísticas -->
-            <section class="stats-cards">
-                <!-- Tarjeta 1 -->
-                <div class="stat-card">
-                    <div class="stat-icon"><i class='bx bx-shopping-bag'></i></div>
-                    <div class="stat-info">
-                        <h3>Ventas Totales</h3>
-                        <div class="stat-value">{{ ventas }}</div>
+            <section class="dash1">
+                <div class="stats-cards">
+                    <!-- Tarjeta 1 -->
+                    <div class="stat-card imp">
+                        <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
+                        <div class="stat-info">
+                            <h3>Ventas Totales</h3>
+                            <div class="stat-value">{{ ventas }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 2 -->
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="stat-info">
+                            <h3>Ingresos Totales</h3>
+                            <div class="stat-value">${{ "{:,}".format(ingresos).replace(",", ".") }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 3 -->
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-tag"></i></div>
+                        <div class="stat-info">
+                            <h3>Productos Vendidos</h3>
+                            <div class="stat-value">{{ productosT }}</div>
+                        </div>
+                    </div>
+                    <!-- Tarjeta 4 -->
+                    <div class="stat-card imp">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-info">
+                            <h3>Usuarios</h3>
+                            <div class="stat-value">{{ usuariosT }}</div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Tarjeta 2 -->
-                <div class="stat-card">
-                    <div class="stat-icon"><span class="material-symbols-outlined">payment_arrow_down</span></div>
-                    <div class="stat-info">
-                        <h3>Ingresos Totales</h3>
-                        <div class="stat-value">${{ "{:,}".format(ingresos).replace(",", ".") }}</div>
-                    </div>
-                </div>
-
-                <!-- Tarjeta 3 -->
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fa-solid fa-tag"></i></div>
-                    <div class="stat-info">
-                        <h3>Productos Vendidos</h3>
-                        <div class="stat-value">{{ productosT }}</div>
+                <div class="graf-up">
+                    <div class="chart-box">
+                        <h3>Usuarios y Productos por Mes</h3>
+                        <canvas id="chartUsuariosProductos"></canvas>
                     </div>
                 </div>
             </section>
+
 
             <section class="chart-section">
                 <div class="charts-container">
@@ -148,7 +164,7 @@
             <section class="tablas-container">
                 <div class="recent-orders">
                     <div class="section-header">
-                        <h2>Productos Más Vendiado</h2>
+                        <h2>Productos Más Vendidos</h2>
                     </div>
 
                     <!-- Contenedor de la tabla -->
@@ -173,7 +189,7 @@
                         </table>
                     </div>
                 </div>
-                
+
                 <div class="recent-orders">
                     <div class="section-header">
                         <h2>Productos por Acabarse</h2>
@@ -214,127 +230,188 @@
     <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_paginacion_tabla.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        fetch("{{ url_for('admin_bp.ventas_por_mes') }}")
-            .then(response => response.json())
-            .then(data => {
-                // INICIO: Gráfico de INGRESOS
-                const ctxIngresos = document.getElementById('chartIngresos').getContext('2d');
-                new Chart(ctxIngresos, {
-                    type: 'line',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: 'Ingresos por mes',
-                            data: data.dataIngresos, // <-- Asegúrate de que esto venga del backend
-                            fill: true,
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            tension: 0.4,
-                            pointRadius: 5,
-                            pointHoverRadius: 7
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                backgroundColor: '#fff',
-                                titleColor: '#C1416D',
-                                bodyColor: '#333',
-                                borderColor: '#C1416D',
-                                borderWidth: 1
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Ingresos ($)',
-                                    font: {
-                                        size: 14
-                                    }
-                                },
-                                ticks: {
-                                    color: '#C1416D'
-                                },
-                                grid: {
-                                    color: 'rgba(193, 65, 109, 0.1)'
-                                }
-                            },
-                            x: {
-                                ticks: {
-                                    color: '#C1416D'
-                                },
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        }
-                    }
-                });
+    <script src="{{ url_for('static', filename='js/script_sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_paginacion_tabla.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-                // INICIO: Gráfico de VENTAS
-                const ctxVentas = document.getElementById('chartVentas').getContext('2d');
-                new Chart(ctxVentas, {
-                    type: 'bar',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: 'Ventas por mes',
-                            data: data.dataVentas,
-                            backgroundColor: 'rgba(193, 65, 109, 0.7)',
-                            borderRadius: 6
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                backgroundColor: '#fff',
-                                titleColor: '#C1416D',
-                                bodyColor: '#333',
-                                borderColor: '#C1416D',
-                                borderWidth: 1
-                            }
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Ejecutar en paralelo las peticiones al backend
+            Promise.all([
+                fetch("{{ url_for('admin_bp.ventas_por_mes') }}").then(r => r.json()),
+                fetch("{{ url_for('admin_bp.usuarios_productos_por_mes') }}").then(r => r.json())
+            ])
+                .then(([ventasData, usuariosProductosData]) => {
+
+                    // ==============================
+                    // 1️⃣ GRÁFICO DE INGRESOS POR MES
+                    // ==============================
+                    const ctxIngresos = document.getElementById('chartIngresos').getContext('2d');
+                    new Chart(ctxIngresos, {
+                        type: 'line',
+                        data: {
+                            labels: ventasData.labels,
+                            datasets: [{
+                                label: 'Ingresos por mes',
+                                data: ventasData.dataIngresos,
+                                fill: true,
+                                borderColor: 'rgba(138, 42, 71, 1)',
+                                backgroundColor: 'rgba(138, 42, 71, 0.2)',
+                                tension: 0.4,
+                                pointRadius: 5,
+                                pointHoverRadius: 7
+                            }]
                         },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Ventas',
-                                    font: {
-                                        size: 14
-                                    }
-                                },
-                                ticks: {
-                                    color: '#C1416D'
-                                },
-                                grid: {
-                                    color: 'rgba(193, 65, 109, 0.1)'
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    backgroundColor: '#fff',
+                                    titleColor: '#C1416D',
+                                    bodyColor: '#333',
+                                    borderColor: '#C1416D',
+                                    borderWidth: 1
                                 }
                             },
-                            x: {
-                                ticks: {
-                                    color: '#C1416D'
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: { display: true, text: 'Ingresos ($)', font: { size: 14 } },
+                                    ticks: { color: '#C1416D' },
+                                    grid: { color: 'rgba(116, 39, 62, 0.1)' }
                                 },
-                                grid: {
-                                    display: false
+                                x: {
+                                    ticks: { color: '#C1416D' },
+                                    grid: { display: false }
                                 }
                             }
                         }
-                    }
-                });
-            });
+                    });
+
+                    // ==============================
+                    // 2️⃣ GRÁFICO DE VENTAS POR MES
+                    // ==============================
+                    const ctxVentas = document.getElementById('chartVentas').getContext('2d');
+                    new Chart(ctxVentas, {
+                        type: 'bar',
+                        data: {
+                            labels: ventasData.labels,
+                            datasets: [{
+                                label: 'Ventas por mes',
+                                data: ventasData.dataVentas,
+                                backgroundColor: 'rgba(138, 42, 71, 0.7)',
+                                borderRadius: 6
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    backgroundColor: '#fff',
+                                    titleColor: '#C1416D',
+                                    bodyColor: '#333',
+                                    borderColor: '#C1416D',
+                                    borderWidth: 1
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: { display: true, text: 'Ventas', font: { size: 14 } },
+                                    ticks: { color: '#C1416D' },
+                                    grid: { color: 'rgba(193, 65, 109, 0.1)' }
+                                },
+                                x: {
+                                    ticks: { color: '#C1416D' },
+                                    grid: { display: false }
+                                }
+                            }
+                        }
+                    });
+
+                    // ================================================
+                    // 3️⃣ GRÁFICO DE USUARIOS NUEVOS Y PRODUCTOS VENDIDOS
+                    // ================================================
+                    const ctxUP = document.getElementById('chartUsuariosProductos').getContext('2d');
+                    new Chart(ctxUP, {
+                        type: 'bar',
+                        data: {
+                            labels: usuariosProductosData.labels,
+                            datasets: [
+                                {
+                                    label: 'Usuarios Nuevos',
+                                    data: usuariosProductosData.usuarios,
+                                    backgroundColor: 'rgba(237, 180, 205, 0.6)',
+                                    borderColor: 'rgba(212, 96, 141, 1)',
+                                    borderWidth: 1,
+                                    yAxisID: 'y1'
+                                },
+                                {
+                                    label: 'Productos Vendidos',
+                                    data: usuariosProductosData.productos,
+                                    backgroundColor: 'rgba(166, 48, 85, 0.6)',
+                                    borderColor: 'rgba(116, 39, 62, 1)',
+                                    borderWidth: 1,
+                                    yAxisID: 'y2'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            interaction: { mode: 'index', intersect: false },
+                            stacked: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom', //  coloca la leyenda debajo
+                                    align: 'center',    //  centra horizontalmente
+                                    fullSize: true,
+                                    labels: {
+                                        boxWidth: 20,   // ancho del cuadrito de color
+                                        boxHeight: 8,
+                                        padding: 10,    // espacio entre los textos
+                                        usePointStyle: true, // opcional, redondea los íconos
+                                        font: {
+                                            size: 12
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    backgroundColor: '#fff',
+                                    titleColor: '#C1416D',
+                                    bodyColor: '#333',
+                                    borderColor: '#C1416D',
+                                    borderWidth: 1
+                                }
+                            },
+                            scales: {
+                                y1: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: { display: true, text: 'Usuarios Nuevos' },
+                                    grid: { drawOnChartArea: false }
+                                },
+                                y2: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'right',
+                                    title: { display: true, text: 'Productos Vendidos' },
+                                    grid: { drawOnChartArea: false }
+                                },
+                                x: { grid: { display: false } }
+                            }
+                        }
+                    });
+
+
+                })
+                .catch(err => console.error("Error cargando datos de gráficas:", err));
+        });
     </script>
+
 </body>
 
 </html>

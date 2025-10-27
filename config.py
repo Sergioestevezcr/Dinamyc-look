@@ -6,9 +6,9 @@ class Config:
         'SECRET_KEY') or 'A_REALLY_SECRET_KEY_THAT_NO_ONE_KNOWS'
 
     # MySQL Configuration
-    MYSQL_HOST = '13.59.80.138'
-    MYSQL_USER = 'admin1'
-    MYSQL_PASSWORD = 'Is41l0'
+    MYSQL_HOST = 'localhost'
+    MYSQL_USER = 'root'
+    MYSQL_PASSWORD = ''
     MYSQL_DB = 'dinamyc_look2'
 
     # Email Configuration

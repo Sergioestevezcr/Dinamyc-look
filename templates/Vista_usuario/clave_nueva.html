@@ -39,10 +39,9 @@
         </div>
         <nav class="navbar" id="nav">
             <ul class="nav-links">
-                <li class="house" title="Inicio"><a href="{{ url_for('client_bp.index_cliente') }}"><i
-                            class="fa-solid fa-house-chimney"></i></a></li>
-                <li title="Iniciar Sesión"><a href="{{ url_for('auth_bp.login') }}"><i class='bx bx-log-in'></i></a>
-                </li>
+                <li class="house"><a href="{{ url_for('client_bp.index_cliente') }}"><i
+							class="fa-solid fa-house-chimney"></i></a></li>
+				<li class="house" title="Iniciar Sección"><a href="{{ url_for('auth_bp.login') }}"><i class="fa fa-user"></i></a></li>
             </ul>
         </nav>
     </header>
@@ -75,10 +74,6 @@
                     {% endfor %}
                     {% endif %}
                     {% endwith %}
-
-                    <div class="icons">
-                        <i class='bx bx-lock-alt'></i>
-                    </div>
 
                     <p class="text-iniciar-sesion">Ingresa tu nueva contraseña</p>
 

@@ -29,9 +29,10 @@ def cliente_required(f):
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        # 👇 Compara insensible a mayúsculas
+        #  Compara insensible a mayúsculas
         if "user_id" not in session or session.get("user_role", "").lower() != "admin":
             flash("Debes iniciar sesión como administrador para continuar.", "warning")
             return redirect(url_for("client_bp.index_cliente"))
         return f(*args, **kwargs)
     return decorated_function
+

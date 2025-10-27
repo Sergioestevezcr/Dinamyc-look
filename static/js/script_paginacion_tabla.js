@@ -311,12 +311,20 @@ class TablePagination {
             this.tbody.appendChild(row.cloneNode(true));
         });
         
-        // Restaurar eventos en las filas clonadas si es necesario
+        // CRÍTICO: Restaurar eventos en las filas clonadas
         this.restoreRowEvents();
     }
     
     restoreRowEvents() {
-        // Restaurar eventos de edición si existen
+        // Restaurar eventos para los enlaces "Ver Más" en la columna btn-mas
+        const verMasLinks = this.tbody.querySelectorAll('.btn-mas a');
+        verMasLinks.forEach(link => {
+            // Los enlaces <a> con href funcionan nativamente, 
+            // pero nos aseguramos de que no tengan eventos bloqueados
+            link.style.pointerEvents = 'auto';
+        });
+
+        // Restaurar eventos de edición si existen (para otras tablas)
         const editButtons = this.tbody.querySelectorAll('.edit-btn');
         editButtons.forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -460,7 +468,7 @@ document.addEventListener('DOMContentLoaded', function() {
             itemsPerPage: 10,
             maxVisiblePages: 5,
             itemsPerPageOptions: [5, 10, 25, 50],
-            searchSelector: '.buscar', // Selector del campo de búsqueda
+            searchSelector: '.buscar',
             noDataMessage: 'No se encontraron resultados'
         });
     });
@@ -470,7 +478,7 @@ document.addEventListener('DOMContentLoaded', function() {
             itemsPerPage: 10,
             maxVisiblePages: 5,
             itemsPerPageOptions: [5, 10, 25, 50],
-            searchSelector: '.buscar', // Selector del campo de búsqueda
+            searchSelector: '.buscar',
             noDataMessage: 'No se encontraron resultados'
         });
     });
@@ -481,7 +489,6 @@ document.addEventListener('rowEdit', function(e) {
     const { button, data } = e.detail;
     
     // Simular clic en el botón original para mantener la funcionalidad
-    // Esto es compatible con el script_pop-up.js existente
     if (window.openEditModal) {
         window.openEditModal(data);
     }

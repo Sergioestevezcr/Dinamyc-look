@@ -40,7 +40,7 @@
 
     <header class="header">
         <div class="nombre-empresa">
-            <a href="{{ url_for('client_bp.index_cliente') }}">Dinamy Look</a>
+            <a href="{{ url_for('client_bp.index_cliente') }}">Dinamyc Look</a>
         </div>
 
         <div class="barra-de-busqueda">
@@ -111,7 +111,7 @@
             </li>
             <li><a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
                         Compras</span></a></li>
-            <li><a href="{{ url_for('admin_bp.configuracion') }}"><i class='bx bxs-user'></i><span>
+            <li><a href="{{ url_for('admin_bp.configuracion') }}" class="active"><i class='bx bxs-user'></i><span>
                         Perfil</span></a></li>
         </ul>
     </section>
@@ -123,12 +123,12 @@
                     <div class="label-form-config">
                         <i class="fa-solid fa-user"></i>
                         <input type="text" id="edit-nombre" class="input-form" name="Nombre" placeholder="Nombre"
-                            value="{{ usuario.nombre }}" required>
+                            value="{{ usuario.nombre }}" required readonly>
                     </div>
                     <div class="label-form-config">
                         <i class="fa-solid fa-user"></i>
                         <input type="text" id="edit-apellido" class="input-form" name="Apellido" placeholder="Apellidos"
-                            value="{{ usuario.apellido }}" required>
+                            value="{{ usuario.apellido }}" required readonly>
                     </div>
                 </div>
 
@@ -136,7 +136,7 @@
                     <div class="label-form-config">
                         <i class="fas fa-id-card"></i>
                         <input type="number" id="edit-documento" class="input-form" name="Documento"
-                            placeholder="Número de Documento" value="{{ usuario.documento }}" required>
+                            placeholder="Número de Documento" value="{{ usuario.documento }}" required readonly>
                     </div>
                 </div>
 

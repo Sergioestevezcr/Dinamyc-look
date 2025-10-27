@@ -6,8 +6,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.utils import formataddr
 from werkzeug.security import generate_password_hash, check_password_hash
-from database import mysql
-# Importar decoradores y clase PDF
+from database import mysql # Importar decoradores y clase PDF
 from decorators import login_required, admin_required
 from flask import Blueprint, request, render_template, flash, redirect, url_for, session, current_app as app
 
@@ -94,7 +93,7 @@ def forgot_password():
                 mysql.connection.commit()
 
                 # URL de recuperación en PRODUCCIÓN
-                reset_url = f"https://dinamyclook.com/reset_password/{token}"
+                reset_url = f"http://127.0.0.1:5000/auth/reset_password/{token}"
 
                 # Crear mensaje
                 msg = MIMEMultipart()
@@ -178,23 +177,6 @@ def reset_password(token):
     except Exception as e:
         flash('Ocurrió un error. Intenta nuevamente.', 'error')
         return redirect(url_for('auth_bp.forgot_password'))
-
-
-# -------------------------------------- RUTA: Ver tokens activos (solo admin) -----------------------
-
-@auth_bp.route('/admin/token_status')
-@admin_required
-def token_status():
-    cur = mysql.connection.cursor()
-    cur.execute('''SELECT t.ID_Tokens, u.Nombre, u.Correo, t.Token, 
-                          t.Vencimiento, t.Estado, t.Creacion
-                   FROM tokens t
-                   JOIN usuarios u ON t.ID_UsuarioFK = u.ID_Usuario
-                   ORDER BY t.Creacion DESC
-                   LIMIT 50''')
-    tokens = cur.fetchall()
-    cur.close()
-    return render_template('Vistas_admin/token_status.html', tokens=tokens)
 
 # -------------------------------------- REGISTRO -----------------------------------------
 

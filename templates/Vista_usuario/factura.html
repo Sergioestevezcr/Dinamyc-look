@@ -40,7 +40,7 @@
 
     <header class="header">
         <div class="nombre-empresa">
-            <a href="{{ url_for('client_bp.index_cliente') }}">Dinamy Look</a>
+            <a href="{{ url_for('client_bp.index_cliente') }}">Dinamyc Look</a>
         </div>
 
         <div class="barra-de-busqueda">
@@ -115,6 +115,9 @@
         <section class="recent-orders">
 
             <section class="factura-container">
+                <a class="btn-descargar" href="{{ url_for('admin_bp.descargar_factura', id=factura[0][0]) }}">
+                    <i class='bx bxs-download'></i> Descargar
+                </a>
                 <h1>Factura #{{ id_venta }}</h1>
                 <div class="info-factura">
                     <p>Cliente: {{ nombre }} {{ apellido }}</p>

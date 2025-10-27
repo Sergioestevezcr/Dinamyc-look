@@ -105,10 +105,11 @@ body {
 
 /* Posiciona el último elemento del menú al fondo del panel */
 .sidebar-nav li:last-child {
-  position: absolute;
-  bottom: 0;
-  width: 260px;
-}
+    position: relative;
+    width: 100%;
+    margin-top: 40px;
+    bottom: auto;
+  }
 
 /* Efecto al pasar el cursor sobre los elementos del menú */
 .sidebar-nav a:hover {
@@ -157,6 +158,12 @@ body {
   display: none;
 }
 
+.dash1 {
+  display: flex;
+  gap:30px;
+  justify-content: space-evenly;
+}
+
 /* contenedor de gráfica */
 .chart-section {
   background-color: transparent;
@@ -172,8 +179,9 @@ body {
 }
 
 .chart-box {
-  background: linear-gradient(145deg, #fce5ef, #fbeaf1);
-  border-radius: 20px;
+  background: #fffafc;
+  border: 1px solid #f5d5e4;
+  border-radius: 5px;
   padding: 10px 15px;
   flex: 1 1 45%;
   max-width: 550px;
@@ -194,29 +202,40 @@ body {
   color: #000;
   font-weight: 600;
   background-color: #fffafc;
-  border-radius: 16px 16px 0 0;
+  border-radius: 5px 5px 0 0;
 }
 
 .chart-box canvas {
   width: 100% !important;
   height: auto !important;
-  border-radius: 0 0 16px 16px;
+  border-radius: 0 0 5px 5px;
   background-color: #fffafc;
   padding: 12px;
+}
+
+.graf-up {
+  position: relative;
+  right: 0;
+  width: 35%;
+}
+
+.graf-up canvas{
+  height: 210px !important;
 }
 
 /* Tarjetas en grid adaptable */
 .stats-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
+  width: 60%;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 15px;
   margin-bottom: 40px;
 }
 
 /* Tarjetas */
 .stat-card {
-  background-color: rgba(245, 213, 228, 0.5);
-  border-radius: 16px;
+  background-color: white;
+  border-radius: 5px;
   padding: 24px;
   display: flex;
   align-items: center;
@@ -225,14 +244,18 @@ body {
   height: 130px;
 }
 
+.stat-card.imp {
+  background-color: #a63055;
+  color: white;
+}
+
 .stat-card:hover {
   box-shadow: none;
   transform: translateY(5px);
 }
 
 .stat-icon {
-  background-color: #C1416D;
-  color: white;
+  color: #a63055;
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -242,8 +265,12 @@ body {
   margin-right: 20px;
 }
 
+.stat-card.imp .stat-icon, .stat-card.imp .stat-info h3{
+  color: white;
+}
+
 .stat-icon i {
-  font-size: 22px;
+  font-size: 28px;
 }
 
 .stat-info h3 {
@@ -265,7 +292,7 @@ body {
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
-  max-width: 75vw;
+  max-width: 80vw;
 }
 
 /* Encabezado de cada sección con título y controles */
@@ -618,6 +645,18 @@ body {
 
 .btn-atras:hover {
   background-color: #EDB4CD;
+}
+
+.btn-descargar {
+  display: flex;
+  align-items: center;
+  color: #892b47;
+  text-decoration: none;
+}
+
+.btn-descargar i {
+  font-size: 20px;
+  padding: 5px;
 }
 
 /********************************** FOOTER ********************************/
@@ -1038,7 +1077,7 @@ body {
 }
 
 .alert.info {
-  background-color: #9E3359;
+  background-color: #4c77ac;
 }
 
 .alert-close {
@@ -1080,14 +1119,39 @@ body {
 }
 
 /********************************** MEDIA CUERIES ********************************/
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1040px) {
+
+  .dash1 {
+    gap: 5px;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .graf-up {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: auto !important;
+    margin-bottom: 20px;
+  }
+
   .stats-cards {
-    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    margin-bottom: 20px;
   }
 }
 
 /* Ajustes responsivos para pantallas hasta 980px */
 @media screen and (max-width: 980px) {
+
+  .dash1 {
+    flex-direction: column;
+  }
+
+  .graf-up {
+    position: static;
+  }
 
   .stats-cards {
     grid-template-columns: repeat(1, 1fr);
@@ -1117,13 +1181,6 @@ body {
     width: 100%;
   }
 
-  .sidebar-nav li:last-child {
-    position: relative;
-    width: 100%;
-    margin-top: 140px;
-    bottom: auto;
-  }
-
   .tablas-container {
     display: flex;
     flex-direction: column;
@@ -1133,7 +1190,7 @@ body {
     flex-direction: column;
     gap: 15px;
     padding: 10px;
-    width: 100vw;
+    width: 100%;
   }
 
   .pagination-info {

@@ -77,6 +77,9 @@
             </header>
 
             <section class="factura-container">
+                <a class="btn-descargar" href="{{ url_for('admin_bp.descargar_factura', id=factura[0][0]) }}">
+                    <i class='bx bxs-download'></i> Descargar
+                </a>
                 <h1>Factura #{{ id_venta }}</h1>
                 <div class="info-factura">
                     <p>Cliente: {{ nombre }} {{ apellido }}</p>

@@ -899,6 +899,18 @@ body:has(.usuario-menu) .toggle-search {
     background-color: #C1416D;
 }
 
+.btn-descargar {
+    display: flex;
+    align-items: center;
+    color: #892b47;
+    text-decoration: none;
+}
+
+.btn-descargar i {
+    font-size: 20px;
+    padding: 5px;
+}
+
 /**************** Factura ******************/
 
 .factura-container {

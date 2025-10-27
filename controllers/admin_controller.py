@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image 
 from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from datetime import datetime, timedelta
 from database import mysql  # mysql está definido en database.py
 import io
@@ -17,8 +17,6 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp'}
 admin_bp = Blueprint('admin_bp', __name__)  # Creacion del blueprint
 
 # -------------------------------------- DASHBOARD -----------------------------------------
-
-
 @admin_bp.route('/')
 @admin_required
 def index():
@@ -27,9 +25,7 @@ def index():
     cur.execute('''SELECT 
                     COUNT(ID_Venta) AS Ventas_Totales, 
                     SUM(Total) AS Ingresos_Totales
-                    FROM ventas
-                    WHERE MONTH(Fecha) = MONTH(CURDATE())
-                    AND YEAR(Fecha) = YEAR(CURDATE())''')
+                    FROM ventas''')
     data_ventas = cur.fetchall()
 
     if data_ventas:
@@ -38,12 +34,14 @@ def index():
     else:
         ventas_count = 0
         ingresos = 0
+        
+    cur.execute('''SELECT 
+                    COUNT(ID_Usuario) AS Ventas_Totales
+                    FROM usuarios''')
+    usuariosT = cur.fetchone()[0] or 0
 
     cur.execute('''SELECT SUM(detalles_venta.Cantidad_p) AS Total_Cantidad_Mes_Actual
-                    FROM detalles_venta 
-                    JOIN ventas ON detalles_venta.ID_VentaFK = ventas.ID_Venta
-                    WHERE MONTH(ventas.Fecha) = MONTH(CURDATE())
-                    AND YEAR(ventas.Fecha) = YEAR(CURDATE())''')
+                    FROM detalles_venta''')
     productosT = cur.fetchone()[0] or 0
 
     cur.execute(
@@ -61,6 +59,7 @@ def index():
         ventas=ventas_count,
         ingresos=ingresos,
         productosT=productosT,
+        usuariosT=usuariosT,
         vendidos=mas_vendidos,
         acabados=xacabar,
         admin_name=session.get('user_name')
@@ -68,6 +67,57 @@ def index():
 
 
 # ------------------ Datos para la gráfica ------------------
+# -------------------------------------- NUEVO GRÁFICO: Usuarios nuevos y productos vendidos por mes -----------------------------------------
+@admin_bp.route('/usuarios_productos_por_mes')
+@admin_required
+def usuarios_productos_por_mes():
+    cur = mysql.connection.cursor()
+
+    # --- Usuarios nuevos por mes ---
+    cur.execute('''
+        SELECT 
+            DATE_FORMAT(Fecha_registro, '%b') AS mes,
+            COUNT(ID_Usuario) AS nuevos_usuarios
+        FROM usuarios
+        WHERE YEAR(Fecha_registro) = YEAR(CURDATE())
+        GROUP BY MONTH(Fecha_registro)
+        ORDER BY MONTH(Fecha_registro);
+    ''')
+    data_usuarios = cur.fetchall()
+
+    # --- Productos vendidos por mes ---
+    cur.execute('''
+        SELECT 
+            DATE_FORMAT(ventas.Fecha, '%b') AS mes,
+            SUM(detalles_venta.Cantidad_p) AS productos_vendidos
+        FROM ventas
+        JOIN detalles_venta ON ventas.ID_Venta = detalles_venta.ID_VentaFK
+        WHERE YEAR(ventas.Fecha) = YEAR(CURDATE())
+        GROUP BY MONTH(ventas.Fecha)
+        ORDER BY MONTH(ventas.Fecha);
+    ''')
+    data_productos = cur.fetchall()
+    cur.close()
+
+    # Crear un diccionario base con los meses encontrados
+    meses = sorted(list(set([fila[0] for fila in data_usuarios] + [fila[0] for fila in data_productos])),
+                   key=lambda m: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].index(m))
+
+    usuarios_por_mes = []
+    productos_por_mes = []
+
+    for mes in meses:
+        usuarios_mes = next((u[1] for u in data_usuarios if u[0] == mes), 0)
+        productos_mes = next((p[1] for p in data_productos if p[0] == mes), 0)
+        usuarios_por_mes.append(usuarios_mes)
+        productos_por_mes.append(productos_mes)
+
+    return jsonify({
+        "labels": meses,
+        "usuarios": usuarios_por_mes,
+        "productos": productos_por_mes
+    })
+
 
 @admin_bp.route('/ventas_por_mes')
 @admin_required
@@ -246,7 +296,7 @@ def update_producto(id):
         if file and file.filename and allowed_file(file.filename):
             filename = secure_filename(file.filename)
 
-            folder_name = marca.lower().replace(" ", "_")
+            folder_name = marca.replace(" ", "_")
             folder_path = os.path.join(
                 app.config['UPLOAD_FOLDER'], folder_name)
             os.makedirs(folder_path, exist_ok=True)
@@ -395,7 +445,6 @@ def asignar_promocion():
 
 # -------------------------------------- usuarios -----------------------------------------
 
-
 @admin_bp.route('/usuarios')
 @admin_required
 def usuarios():
@@ -493,6 +542,106 @@ def delete_usuario(id):
         flash('El usuario ya estaba inactivo o no existe', "warning")
 
     return redirect(url_for('admin_bp.usuarios'))
+
+# -------------------------------------- admin -----------------------------------------
+
+@admin_bp.route('/admin')
+@admin_required
+def admin():
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM usuarios WHERE Rol = "Admin" ORDER BY ID_usuario DESC')
+    data = cur.fetchall()
+
+    # Pasar datos ya modificados a la plantilla
+    return render_template('Vistas_admin/administradores.html', admins=data)
+
+
+@admin_bp.route('/add_admin', methods=['POST'])
+def add_admin():
+    if request.method == 'POST':
+        nombre = request.form['Nombre']
+        apellido = request.form['Apellido']
+        documento = request.form['Documento']
+        correo = request.form['Correo']
+        telefono = request.form['Telefono']
+        direccion = request.form['Direccion']
+        ciudad = request.form['Ciudad']
+        clave = request.form['Clave']
+        rol = "Admin"
+        estado = "Activo"
+
+        #  Hashear la contraseña
+        clave_hash = generate_password_hash(clave)
+
+        cur = mysql.connection.cursor()
+        cur.execute(' CALL insertarusuario(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                    (nombre, apellido, documento, correo, telefono, direccion, ciudad, clave_hash, rol, estado))
+
+        mysql.connection.commit()
+        cur.close()
+        flash('Usuario agregado correctamente', "success")
+        return redirect(url_for('admin_bp.admin'))
+
+
+@admin_bp.route('/edit_admin/<id>')
+def edit_admin(id):
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM usuarios WHERE id_usuario = %s', (id,))
+    data = cur.fetchone()
+    if data:
+        user_data = {
+            'id': data[0],
+            'nombre': data[1],
+            'apellido': data[2],
+            'documento': data[3],
+            'correo': data[4],
+            'telefono': data[5],
+            'direccion': data[6],
+            'ciudad': data[7],
+            'clave': data[8]
+        }
+        return jsonify(user_data)
+    return jsonify({'error': 'Usuario no encontrado'}), 404
+
+
+@admin_bp.route('/update_admin/<id>', methods=['POST'])
+def update_admin(id):
+    if request.method == 'POST':
+        nombre = request.form['Nombre']
+        apellido = request.form['Apellido']
+        documento = request.form['Documento']
+        correo = request.form['Correo']
+        telefono = request.form['Telefono']
+        direccion = request.form['Direccion']
+        ciudad = request.form['Ciudad']
+        clave = request.form['Clave']
+
+        clave_hash = generate_password_hash(clave)
+
+        cur = mysql.connection.cursor()
+        cur.execute('''UPDATE usuarios 
+                        SET Nombre = %s, Apellido = %s, N_Documento = %s,Correo = %s, 
+                            Telefono = %s, Direccion = %s, Ciudad = %s, Clave = %s 
+                        WHERE id_usuario = %s''',
+                    (nombre, apellido, documento, correo, telefono, direccion, ciudad, clave_hash, id))
+        mysql.connection.commit()
+        flash('Usuario actualizado correctamente', "success")
+        return redirect(url_for('admin_bp.admin'))
+
+
+@admin_bp.route('/delete_admin/<id>', methods=['POST'])
+def delete_admin(id):
+    cur = mysql.connection.cursor()
+    # Solo actualiza si el usuario está activo
+    cur.execute('CALL eliminarusuario(%s)', (id,))
+    mysql.connection.commit()
+
+    if cur.rowcount > 0:
+        flash('Usuario inactivado correctamente', "success")
+    else:
+        flash('El usuario ya estaba inactivo o no existe', "warning")
+
+    return redirect(url_for('admin_bp.admin'))
 # -------------------------------------- ventas -----------------------------------------
 
 
@@ -777,8 +926,8 @@ def generar_reporte():
             subtotal = f"${v[8]:,.0f}".replace(",", ".")
             data.append([
                 Paragraph(str(v[1]), normal_style),
-                Paragraph(v[2], normal_style),        # 🔧 texto largo envuelto
-                Paragraph(v[3], normal_style),        # 🔧 texto largo envuelto
+                Paragraph(v[2], normal_style),        #  texto largo envuelto
+                Paragraph(v[3], normal_style),        #  texto largo envuelto
                 Paragraph(str(v[7]), normal_style),
                 Paragraph(precio_original, normal_style),
                 Paragraph(f"{v[5]}%", normal_style),
@@ -930,7 +1079,175 @@ def factura(id_venta):
             id_venta=id_venta,
             total=total
         )
+        
+@admin_bp.route("/descargar_factura/<int:id>")
+@login_required
+def descargar_factura(id):
+    user_id = session.get("user_id")
+    if not user_id:
+        return "No autenticado", 401
 
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        SELECT Num_venta, Fecha, Nombre_Cliente, Apellido_Cliente, N_Documento,
+               Producto, Precio_Original, Descuento, Precio_Final,
+               Cantidad_p, SubTotal_Final, Total_Venta
+        FROM reporte
+        WHERE Num_venta = %s
+    """, (id,))
+    datos = cursor.fetchall()
+
+    if not datos:
+        return "Factura no encontrada", 404
+
+    # Datos del cliente
+    cliente_nombre = datos[0][2]
+    cliente_apellido = datos[0][3]
+    documento = datos[0][4]
+    fecha = datos[0][1].strftime("%Y-%m-%d")
+    total = sum(row[11] for row in datos)
+
+    # Crear PDF en memoria
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=letter,
+        rightMargin=40,
+        leftMargin=40,
+        topMargin=60,
+        bottomMargin=30
+    )
+
+    elements = []
+    styles = getSampleStyleSheet()
+
+    #  Paleta de colores
+    COLOR_PRINCIPAL = colors.HexColor("#C1416D")
+    COLOR_SECUNDARIO = colors.HexColor("#F4D6E4")
+    COLOR_TEXTO = colors.HexColor("#333333")
+    COLOR_CLARO = colors.HexColor("#FFFFFF")
+    COLOR_OSCURO = colors.HexColor("#ededed")
+    
+    # Estilos personalizados
+    title_style = ParagraphStyle(
+        name="TituloFactura",
+        fontSize=18,
+        alignment=1,
+        textColor=COLOR_TEXTO,
+        spaceAfter=20,
+        fontName="Helvetica-Bold"
+    )
+
+    normal_center = ParagraphStyle(
+        name="Center",
+        alignment=1,
+        textColor=COLOR_TEXTO,
+        fontSize=11
+    )
+    
+    normal_centert = ParagraphStyle(
+        name="Center",
+        alignment=1,
+        textColor=COLOR_CLARO,
+        fontSize=11
+    )
+
+    normal_left = ParagraphStyle(
+        name="Left",
+        alignment=0,
+        textColor=COLOR_TEXTO,
+        fontSize=10,
+        leading=12
+    )
+
+    bold_right = ParagraphStyle(
+        name="BoldRight",
+        alignment=2,
+        fontName="Helvetica-Bold",
+        textColor=COLOR_PRINCIPAL,
+        fontSize=11
+    )
+
+    #  Título
+    elements.append(Paragraph(f"Factura N.º {id}", title_style))
+    elements.append(Spacer(1, 12))
+
+    # Información del cliente
+    info_cliente = f"""
+    <b>Cliente:</b> {cliente_nombre} {cliente_apellido}<br/>
+    <b>C.C:</b> {documento}<br/>
+    <b>Fecha:</b> {fecha}<br/>
+    """
+    elements.append(Paragraph(info_cliente, normal_center))
+    elements.append(Spacer(1, 12))
+
+    # Datos de tabla
+    data = [
+        [
+            Paragraph("<b>Producto</b>", normal_centert,),
+            Paragraph("<b>Precio Original</b>", normal_centert),
+            Paragraph("<b>Descuento</b>", normal_centert),
+            Paragraph("<b>Precio Final</b>", normal_centert),
+            Paragraph("<b>Cant.</b>", normal_centert),
+            Paragraph("<b>Subtotal</b>", normal_centert)
+        ]
+    ]
+
+    # Filas de productos (usa Paragraph para que el texto se ajuste)
+    for row in datos:
+        data.append([
+            Paragraph(str(row[5]), normal_left),  # Producto largo se ajusta
+            Paragraph(f"${row[6]:,.0f}".replace(",", "."), normal_center),
+            Paragraph(f"{row[7]}%", normal_center),
+            Paragraph(f"${row[8]:,.0f}".replace(",", "."), normal_center),
+            Paragraph(str(row[9]), normal_center),
+            Paragraph(f"${row[10]:,.0f}".replace(",", "."), normal_center)
+        ])
+
+    # Fila total (sin etiquetas HTML)
+    data.append([
+        "", "", "", "",
+        Paragraph("<b>Total:</b>", bold_right),
+        Paragraph(f"<b>${total:,.0f}</b>".replace(",", "."), bold_right)
+    ])
+
+    # Anchos de columna ajustados
+    col_widths = [150, 80, 60, 80, 50, 80]
+
+    table = Table(data, colWidths=col_widths, repeatRows=1)
+    table.setStyle(TableStyle([
+        # Encabezado
+        ("BACKGROUND", (0, 0), (-1, 0), COLOR_PRINCIPAL),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, 0), 11),
+
+        # Alternancia de filas
+        ("ROWBACKGROUNDS", (0, 1), (-1, -2), [COLOR_CLARO, COLOR_OSCURO]),
+
+        # Fila total
+        ("BACKGROUND", (0, -1), (-1, -1), COLOR_SECUNDARIO),
+        ("TEXTCOLOR", (0, -1), (-1, -1), COLOR_PRINCIPAL),
+        ("FONTNAME", (0, -1), (-1, -1), "Helvetica-Bold"),
+
+        # Bordes y alineación
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+    ]))
+
+    elements.append(table)
+    doc.build(elements)
+    buffer.seek(0)
+
+    nombre_archivo = f"Factura_{id}_{fecha}.pdf"
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name=nombre_archivo,
+        mimetype="application/pdf"
+    )
 
 # -------------------------------------- CONFIGURACIÓN / PERFIL -----------------------------------------
 
@@ -939,6 +1256,9 @@ def factura(id_venta):
 def configuracion():
     id = session['user_id']
     rol = (session.get('user_role') or "").lower()   # cambio mínimo: minúsculas
+    
+    if id and rol == 'cliente':
+        flash('El Nombre, el Apellido y el N° de Documento no pueden ser editados', 'info')
 
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM usuarios WHERE ID_Usuario = %s', (id,))
