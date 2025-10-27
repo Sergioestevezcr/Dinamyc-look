@@ -1089,7 +1089,7 @@ body:has(.usuario-menu) .toggle-search {
 /*establece las propiedades del container que se desplaza en width se pone segun
 la cantidad de imagenes, cada imagen equivale a un 100% mas */
 .carruseles {
-    width: 400%;
+    width: 300%;
     height: 100%;
     display: flex;
     text-align: center;
@@ -1099,7 +1099,7 @@ la cantidad de imagenes, cada imagen equivale a un 100% mas */
 cogiendo el 100% de el .carruseles y dividiendo en la cantidad de imagenes 
 que contiene el carrusel de imagenes */
 .slider-section {
-    width: calc(100%/4);
+    width: calc(100%/3);
     height: 100%;
 }
 
@@ -1109,7 +1109,7 @@ o eliminar alguna imagen del carrusel*/
 .slider-section img {
     width: 100%;
     height: 100vh;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 0px;
     transition: all 0.3s ease-in-out;
     /* Añadir transición suave */
