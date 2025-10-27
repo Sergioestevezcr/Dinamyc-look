@@ -110,9 +110,11 @@ def conocenos():
 
 
 @client_bp.route("/toggle_favorito/<int:producto_id>", methods=["POST"])
+@login_required
 def toggle_favorito(producto_id):
     user_id = session.get("user_id")
-    if not user_id:
+
+    if not user_id: 
         return jsonify({"success": False, "error": "No autenticado"}), 401
 
     cursor = mysql.connection.cursor()
@@ -270,6 +272,7 @@ def detallesproducto(id):
     cur.close()
 
     if not productodetalles:
+        flash("Producto no encontrado", "warning")
         return "Producto no encontrado", 404
 
     return render_template("Vista_usuario/info_producto.html",
@@ -394,7 +397,7 @@ def carrito_finalizar():
     if not carrito:
         carrito = session.get("carrito", [])
         if not carrito:
-            flash("Tu carrito está vacío", "danger")
+            flash("Tu carrito está vacío", "warning")
             return redirect(url_for("client_bp.index_cliente"))
 
     total = sum([item[1] * item[2] if isinstance(item, tuple)
@@ -417,7 +420,6 @@ def carrito_finalizar():
                        VALUES (%s, %s, %s, %s)""", (id_venta, id_producto, cantidad, precio))
 
     cur.execute("DELETE FROM carrito_temp WHERE ID_UsuarioFK = %s", (user_id,))
-    session.pop("carrito", None)
     mysql.connection.commit()
     cur.close()
 
@@ -585,9 +587,9 @@ def render_marca(nombre_marca, template, var_name, var_name_lim=None):
     user_name = session.get("user_name")
     cur = mysql.connection.cursor()
 
-    # ----------- FUNCIÓN 1 (promos) -----------
-    cur.execute("""
-        SELECT
+    # ----------- FUNCIÓN 2 (marca) -----------
+    cur.execute(
+        """SELECT
             p.ID_Producto, 
             p.Nombre,
             p.Precio AS precio_original,
@@ -603,26 +605,29 @@ def render_marca(nombre_marca, template, var_name, var_name_lim=None):
         FROM productos p
         LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
         LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor 
-        LIMIT 8
-    """)
-    data_promos = cur.fetchall()
-    # -----------------------------------------
-
-    # ----------- FUNCIÓN 2 (marca) -----------
-    cur.execute(
-        """SELECT p.ID_Producto, p.Nombre, p.Precio, p.Imagen, pr.Marca
-            FROM productos p
-            JOIN proveedores pr ON p.ID_ProveedorFK = pr.ID_Proveedor
-            WHERE pr.Marca = %s""", (nombre_marca,))
+            WHERE prov.Marca = %s""", (nombre_marca,))
     data = cur.fetchall()
 
     data_lim = []
     if var_name_lim:
         cur.execute(
-            """SELECT p.ID_Producto, p.Nombre, p.Precio, p.Imagen, pr.Marca
-                FROM productos p
-                JOIN proveedores pr ON p.ID_ProveedorFK = pr.ID_Proveedor
-                WHERE pr.Marca = %s
+            """SELECT
+            p.ID_Producto, 
+            p.Nombre,
+            p.Precio AS precio_original,
+            p.Imagen, 
+            prov.Marca AS Marca,
+            CASE
+                WHEN pr.Fecha_Inicial <= CURDATE() 
+                    AND pr.Fecha_Final >= CURDATE()
+                    AND pr.Descuento IS NOT NULL
+                THEN p.Precio - (p.Precio * pr.Descuento / 100)
+                ELSE NULL
+            END AS precio_final
+        FROM productos p
+        LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
+        LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor 
+                WHERE prov.Marca = %s
                 LIMIT 6""", (nombre_marca,))
         data_lim = cur.fetchall()
 
@@ -648,6 +653,5 @@ def render_marca(nombre_marca, template, var_name, var_name_lim=None):
         user=user_name,
         favoritos=favoritos_marca,
         nombre=nombre,
-        data_promos=data_promos,        #  productos con promos
         data=data                       #  productos normales (por marca)
     )

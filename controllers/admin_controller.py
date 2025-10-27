@@ -707,11 +707,11 @@ def generar_reporte():
         elements = []
         styles = getSampleStyleSheet()
 
-        # 🔧 Evitar desbordes en texto largo
+        #  Evitar desbordes en texto largo
         normal_style = styles["Normal"]
         normal_style.wordWrap = 'CJK'  # activa el ajuste automático de texto
 
-         # 🔧 Ruta del logo (ajusta a tu carpeta real)
+         #  Ruta del logo (ajusta a tu carpeta real)
         logo_path = os.path.join(os.getcwd(), "static", "imagenes", "logo.png")
 
         buffer = io.BytesIO()
@@ -719,11 +719,11 @@ def generar_reporte():
         elements = []
         styles = getSampleStyleSheet()
 
-        # 🔧 Evitar desbordes en texto largo
+        #  Evitar desbordes en texto largo
         normal_style = styles["Normal"]
         normal_style.wordWrap = 'CJK'  # activa el ajuste automático de texto
 
-         # 🔧 Ruta del logo (ajusta a tu carpeta real)
+         #  Ruta del logo (ajusta a tu carpeta real)
         logo_path = os.path.join(os.getcwd(), "static", "imagenes", "logos", "logo.png")
 
         if os.path.exists(logo_path):
@@ -794,7 +794,7 @@ def generar_reporte():
             Paragraph(f"<b>{total_general_formatted}</b>", styles["Normal"])
         ])
 
-        # 🔧 Ajuste de ancho de columnas (más espacio a cliente y producto)
+        #  Ajuste de ancho de columnas (más espacio a cliente y producto)
         table = Table(data, colWidths=[65, 100, 120, 40, 60, 50, 60, 70])
 
         # Estilos
@@ -828,7 +828,7 @@ def generar_reporte():
 
     except Exception as e:
         mysql.connection.rollback()
-        print("❌ ERROR AL GENERAR REPORTE:", e)
+        print("ERROR AL GENERAR REPORTE:", e)
         flash(f"Error al generar el reporte: {e}", "error")
         return redirect(url_for("admin_bp.reportes"))
 
