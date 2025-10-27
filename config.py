@@ -15,8 +15,8 @@ class Config:
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
-    MAIL_USERNAME = 'vargasruizlauravalentina@gmail.com'
-    MAIL_PASSWORD = 'zewijiqsgfhgjbil'  # Use an app password for security
+    MAIL_USERNAME = 'dinamycloock@gmail.com'
+    MAIL_PASSWORD = 'rprf tkea dmyi hunc'  # Use an app password for security
 
     # File Upload Configuration
     UPLOAD_FOLDER = os.path.join(os.path.dirname(
