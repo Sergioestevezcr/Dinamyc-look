@@ -9,6 +9,8 @@ from datetime import datetime, timedelta
 from database import mysql  # mysql está definido en database.py
 import io
 import os
+import uuid
+
 
 # Importar decoradores y clase PDF
 from decorators import login_required, admin_required
@@ -23,20 +25,20 @@ def index():
     """Dashboard principal para administradores"""
     cur = mysql.connection.cursor()
     cur.execute('''SELECT 
-                    COUNT(ID_Venta) AS Ventas_Totales, 
+                    COUNT(ID_Venta) AS pedidos_Totales, 
                     SUM(Total) AS Ingresos_Totales
-                    FROM ventas''')
-    data_ventas = cur.fetchall()
+                    FROM pedidos''')
+    data_pedidos = cur.fetchall()
 
-    if data_ventas:
-        ventas_count = data_ventas[0][0] or 0
-        ingresos = data_ventas[0][1] or 0
+    if data_pedidos:
+        pedidos_count = data_pedidos[0][0] or 0
+        ingresos = data_pedidos[0][1] or 0
     else:
-        ventas_count = 0
+        pedidos_count = 0
         ingresos = 0
         
     cur.execute('''SELECT 
-                    COUNT(ID_Usuario) AS Ventas_Totales
+                    COUNT(ID_Usuario) AS pedidos_Totales
                     FROM usuarios''')
     usuariosT = cur.fetchone()[0] or 0
 
@@ -56,7 +58,7 @@ def index():
 
     return render_template(
         'Vistas_admin/index-admin.html',
-        ventas=ventas_count,
+        pedidos=pedidos_count,
         ingresos=ingresos,
         productosT=productosT,
         usuariosT=usuariosT,
@@ -67,7 +69,6 @@ def index():
 
 
 # ------------------ Datos para la gráfica ------------------
-# -------------------------------------- NUEVO GRÁFICO: Usuarios nuevos y productos vendidos por mes -----------------------------------------
 @admin_bp.route('/usuarios_productos_por_mes')
 @admin_required
 def usuarios_productos_por_mes():
@@ -88,13 +89,13 @@ def usuarios_productos_por_mes():
     # --- Productos vendidos por mes ---
     cur.execute('''
         SELECT 
-            DATE_FORMAT(ventas.Fecha, '%b') AS mes,
+            DATE_FORMAT(pedidos.Fecha, '%b') AS mes,
             SUM(detalles_venta.Cantidad_p) AS productos_vendidos
-        FROM ventas
-        JOIN detalles_venta ON ventas.ID_Venta = detalles_venta.ID_VentaFK
-        WHERE YEAR(ventas.Fecha) = YEAR(CURDATE())
-        GROUP BY MONTH(ventas.Fecha)
-        ORDER BY MONTH(ventas.Fecha);
+        FROM pedidos
+        JOIN detalles_venta ON pedidos.ID_Venta = detalles_venta.ID_VentaFK
+        WHERE YEAR(pedidos.Fecha) = YEAR(CURDATE())
+        GROUP BY MONTH(pedidos.Fecha)
+        ORDER BY MONTH(pedidos.Fecha);
     ''')
     data_productos = cur.fetchall()
     cur.close()
@@ -119,11 +120,11 @@ def usuarios_productos_por_mes():
     })
 
 
-@admin_bp.route('/ventas_por_mes')
+@admin_bp.route('/pedidos_por_mes')
 @admin_required
-def ventas_por_mes():
+def pedidos_por_mes():
     ingresos_mensuales = [0] * 12
-    ventas_mensuales = [0] * 12
+    pedidos_mensuales = [0] * 12
     meses = ['Ene.', 'Feb.', 'Mar.', 'Abr.', 'May.', 'Jun.',
              'Jul.', 'Ago.', 'Sep.', 'Oct.', 'Nov.', 'Dic.']
 
@@ -131,8 +132,8 @@ def ventas_por_mes():
     cur.execute("""
         SELECT MONTH(Fecha) AS mes, 
             SUM(Total) AS total_ingresos,
-            COUNT(*) AS total_ventas
-        FROM ventas
+            COUNT(*) AS total_pedidos
+        FROM pedidos
         GROUP BY mes
         ORDER BY mes """)
     resultados = cur.fetchall()
@@ -141,22 +142,20 @@ def ventas_por_mes():
     for fila in resultados:
         mes_idx = int(fila[0]) - 1
         ingresos_mensuales[mes_idx] = int(fila[1]) if fila[1] else 0
-        ventas_mensuales[mes_idx] = int(fila[2]) if fila[2] else 0
+        pedidos_mensuales[mes_idx] = int(fila[2]) if fila[2] else 0
 
     return jsonify({
         'labels': meses[:datetime.now().month],
         'dataIngresos': ingresos_mensuales[:datetime.now().month],
-        'dataVentas': ventas_mensuales[:datetime.now().month]
+        'datapedidos': pedidos_mensuales[:datetime.now().month]
     })
 # -------------------------------------- productos -----------------------------------------
-
-
 @admin_bp.route('/productos')
 @admin_required
 def productos():
     cur = mysql.connection.cursor()
 
-    # Productos con su precio final
+    # Listado de productos con marca, promo y precio_final calculado si hay descuento activo hoy
     cur.execute('''
         SELECT 
             p.ID_Producto, 
@@ -182,7 +181,7 @@ def productos():
     ''')
     productos_list = cur.fetchall()
 
-    # Lista de promociones futuras
+    # Promociones activas o futuras (para seleccionar en el modal)
     cur.execute('''
         SELECT 
             ID_Promocion, 
@@ -195,8 +194,10 @@ def productos():
     ''')
     promociones = cur.fetchall()
 
+    # Marcas / proveedores (para el select de marca)
     cur.execute("SELECT ID_Proveedor, Marca FROM proveedores")
     marcas = cur.fetchall()
+
     cur.close()
 
     return render_template(
@@ -210,117 +211,165 @@ def productos():
 @admin_bp.route('/add_producto', methods=['POST'])
 @admin_required
 def add_producto():
-    if request.method == 'POST':
-        nombre = request.form['Nombre']
-        descripcion = request.form['Descripcion']
-        precio = request.form['Precio']
-        categoria = request.form['Categoria']
-        stock = request.form['Stock']
-        idmarca = request.form['Marca']
-        id_promocion = request.form.get('ID_PromocionFK') or None
-        
-        cur = mysql.connection.cursor()
-        
-        cur.execute("SELECT Marca FROM proveedores WHERE ID_Proveedor = %s", (idmarca))
-        marca = cur.fetchone()[0]
+    # Datos básicos del formulario
+    nombre = request.form['Nombre']
+    descripcion = request.form['Descripcion']
+    precio = request.form['Precio']
+    categoria = request.form['Categoria']
+    stock = request.form['Stock']
+    idmarca = request.form['Marca']  # ID_Proveedor
+    id_promocion = request.form.get('ID_PromocionFK') or None
 
-        # Manejo de archivo
-        file = request.files.get('Imagen')
-        filename = None
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            folder_name = marca.replace(" ", "_")
-            folder_path = os.path.join(
-                app.config['UPLOAD_FOLDER'], folder_name)
-            os.makedirs(folder_path, exist_ok=True)
-            file.save(os.path.join(folder_path, filename))
-            filename = f"/{folder_name}/{filename}"
+    cur = mysql.connection.cursor()
 
-        cur.execute('''INSERT INTO productos 
-                        (Nombre, Descripcion, Categoria, Precio, Stock, Imagen, ID_ProveedorFK, ID_PromocionFK) 
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)''',
-                    (nombre, descripcion, categoria, precio, stock, filename, idmarca, id_promocion))
-        mysql.connection.commit()
-        cur.close()
+    # Obtener la marca (texto) a partir del proveedor, para armar carpeta de imágenes
+    cur.execute(
+        "SELECT Marca FROM proveedores WHERE ID_Proveedor = %s",
+        (idmarca,)
+    )
+    marca = cur.fetchone()[0]
 
-        flash('Producto agregado correctamente', "success")
-        return redirect(url_for('admin_bp.productos'))
+    # Manejo de imagen (opcional)
+    file = request.files.get('Imagen')
+    filename = None
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+
+        # Carpeta final: <UPLOAD_FOLDER>/<Nombre_Marca_sin_espacios>/
+        folder_name = marca.replace(" ", "_")
+        folder_path = os.path.join(current_app.config['UPLOAD_FOLDER'], folder_name)
+        os.makedirs(folder_path, exist_ok=True)
+
+        file.save(os.path.join(folder_path, filename))
+
+        # Guardamos la ruta relativa que vas a usar en las cards
+        filename = f"/{folder_name}/{filename}"
+
+    # Insertar el producto en la base de datos
+    cur.execute(
+        '''INSERT INTO productos 
+           (Nombre, Descripcion, Categoria, Precio, Stock, Imagen, ID_ProveedorFK, ID_PromocionFK) 
+           VALUES (%s, %s, %s, %s, %s, %s, %s, %s)''',
+        (nombre, descripcion, categoria, precio, stock, filename, idmarca, id_promocion)
+    )
+    mysql.connection.commit()
+    cur.close()
+
+    flash('Producto agregado correctamente', "success")
+    return redirect(url_for('admin_bp.productos'))
 
 
 @admin_bp.route('/edit_producto/<id>')
 @admin_required
 def edit_producto(id):
     cur = mysql.connection.cursor()
-    cur.execute('SELECT * FROM productos WHERE id_producto = %s', (id,))
+
+    # Pedimos columnas en orden controlado (NO SELECT *)
+    cur.execute('''
+        SELECT 
+            ID_Producto,
+            Nombre,
+            Descripcion,
+            Categoria,
+            Precio,
+            Stock,
+            ID_ProveedorFK,
+            ID_PromocionFK
+        FROM productos
+        WHERE ID_Producto = %s
+    ''', (id,))
     data = cur.fetchone()
     cur.close()
 
-    if data:
-        product_data = {
-            'id': data[0],
-            'nombre': data[1],
-            'descripcion': data[2],
-            'categoria': data[3],
-            'precio': data[5],
-            'stock': data[6],
-            'idmarca': data[7],
-            'promocion': data[8]
-        }
-        return jsonify(product_data)
-    return jsonify({'error': 'Producto no encontrado'}), 404
+    if not data:
+        return jsonify({'error': 'Producto no encontrado'}), 404
 
+    # data[x] coincide con el orden del SELECT de arriba
+    product_data = {
+        'id': data[0],
+        'nombre': data[1],
+        'descripcion': data[2],
+        'categoria': data[3],
+        'precio': data[4],
+        'stock': data[5],
+        'idmarca': data[6],
+        'promocion': data[7]
+    }
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return jsonify(product_data)
 
 
 @admin_bp.route('/update_producto/<id>', methods=['POST'])
 @admin_required
 def update_producto(id):
-    if request.method == 'POST':
-        nombre = request.form['Nombre']
-        descripcion = request.form['Descripcion']
-        precio = request.form['Precio']
-        categoria = request.form['Categoria']
-        stock = request.form['Stock']
-        idmarca = request.form['Marca']
-        id_promocion = request.form.get('ID_PromocionFK') or None
-        
-        cur = mysql.connection.cursor()
-        
-        cur.execute("SELECT Marca FROM proveedores WHERE ID_Proveedor = %s", (idmarca))
-        marca = cur.fetchone()[0]
+    nombre = request.form['Nombre']
+    descripcion = request.form['Descripcion']
+    precio = request.form['Precio']
+    categoria = request.form['Categoria']
+    stock = request.form['Stock']
+    idmarca = request.form['Marca']  # ID_Proveedor
+    id_promocion = request.form.get('ID_PromocionFK') or None
 
-        file = request.files.get('Imagen')
-        filename = None
-        if file and file.filename and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+    cur = mysql.connection.cursor()
 
-            folder_name = marca.replace(" ", "_")
-            folder_path = os.path.join(
-                app.config['UPLOAD_FOLDER'], folder_name)
-            os.makedirs(folder_path, exist_ok=True)
+    # De nuevo, sacamos la marca texto para la carpeta de imágenes
+    cur.execute(
+        "SELECT Marca FROM proveedores WHERE ID_Proveedor = %s",
+        (idmarca,)
+    )
+    marca = cur.fetchone()[0]
 
-            file.save(os.path.join(folder_path, filename))
-            filename = f"/{folder_name}/{filename}"
+    # ¿El admin subió una imagen nueva?
+    file = request.files.get('Imagen')
+    filename = None
+    if file and file.filename and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
 
-        if filename:
-            cur.execute('''UPDATE productos 
-                            SET Nombre=%s, Descripcion=%s, Categoria=%s, Precio=%s, 
-                            Stock=%s, Imagen=%s, ID_ProveedorFK=%s, ID_PromocionFK=%s
-                            WHERE id_producto=%s''',
-                        (nombre, descripcion, categoria, precio, stock, filename, idmarca, id_promocion, id))
-        else:
-            cur.execute('''UPDATE productos 
-                            SET Nombre=%s, Descripcion=%s, Categoria=%s, Precio=%s, 
-                            Stock=%s, Id_ProveedorFK=%s, ID_PromocionFK=%s
-                            WHERE id_producto=%s''',
-                        (nombre, descripcion, categoria, precio, stock, idmarca, id_promocion, id))
-        mysql.connection.commit()
-        cur.close()
+        folder_name = marca.replace(" ", "_")
+        folder_path = os.path.join(current_app.config['UPLOAD_FOLDER'], folder_name)
+        os.makedirs(folder_path, exist_ok=True)
 
-        flash('Producto actualizado correctamente', "success")
-        return redirect(url_for('admin_bp.productos'))
+        file.save(os.path.join(folder_path, filename))
+
+        # ruta relativa que guardamos en la DB
+        filename = f"/{folder_name}/{filename}"
+
+    if filename:
+        # Sí hay imagen nueva -> actualizamos todo incluyendo Imagen
+        cur.execute(
+            '''UPDATE productos 
+               SET Nombre=%s,
+                   Descripcion=%s,
+                   Categoria=%s,
+                   Precio=%s,
+                   Stock=%s,
+                   Imagen=%s,
+                   ID_ProveedorFK=%s,
+                   ID_PromocionFK=%s
+               WHERE ID_Producto=%s''',
+            (nombre, descripcion, categoria, precio, stock, filename, idmarca, id_promocion, id)
+        )
+    else:
+        # No cambiaron imagen -> no tocamos la columna Imagen
+        cur.execute(
+            '''UPDATE productos 
+               SET Nombre=%s,
+                   Descripcion=%s,
+                   Categoria=%s,
+                   Precio=%s,
+                   Stock=%s,
+                   ID_ProveedorFK=%s,
+                   ID_PromocionFK=%s
+               WHERE ID_Producto=%s''',
+            (nombre, descripcion, categoria, precio, stock, idmarca, id_promocion, id)
+        )
+
+    mysql.connection.commit()
+    cur.close()
+
+    flash('Producto actualizado correctamente', "success")
+    return redirect(url_for('admin_bp.productos'))
+
 
 # -------------------------------------- promociones/DESCUENTOS ----------------------------------------
 
@@ -642,57 +691,80 @@ def delete_admin(id):
         flash('El usuario ya estaba inactivo o no existe', "warning")
 
     return redirect(url_for('admin_bp.admin'))
-# -------------------------------------- ventas -----------------------------------------
-
-
-@admin_bp.route('/ventas')
+# -------------------------------------- pedidos -----------------------------------------
+@admin_bp.route('/pedidos')
 @admin_required
-def ventas_view():
+def pedidos_view():
     cur = mysql.connection.cursor()
 
-    # Usar la vista "reporte" para obtener los datos de ventas ya procesados
+    # Armamos los pedidos como los ve el admin.
+    # p = pedidos (venta)
+    # u = usuarios (cliente)
+    # dv = detalles_venta (para contar cuántos productos compró)
+    # pg = pagos (estado del pago, método)
+    #
+    # CLAVE: hacemos LEFT JOIN pagos usando la referencia.
+    #
     cur.execute('''
         SELECT
-            Num_venta,
-            Fecha,
-            Nombre_Cliente,
-            Apellido_Cliente,
-            SUM(SubTotal_Final) AS Total_Comprado,
-            SUM(Cantidad_p) AS Total_Productos
-        FROM reporte
-        GROUP BY Num_venta
-        ORDER BY Num_venta DESC;
+            p.ID_Venta                                  AS Num_venta,
+            p.Fecha                                     AS Fecha,
+            u.Nombre                                    AS Nombre_Cliente,
+            u.Apellido                                  AS Apellido_Cliente,
+            p.Total                                     AS Total_Comprado,
+            SUM(dv.Cantidad_p)                          AS Total_Productos,
+            COALESCE(pg.estado, 'PENDING')              AS estado_pago,
+            COALESCE(pg.metodo, 'MP')                   AS metodo_pago
+        FROM pedidos p
+        JOIN usuarios u 
+            ON u.ID_Usuario = p.ID_UsuarioFK
+        JOIN detalles_venta dv 
+            ON dv.ID_VentaFK = p.ID_Venta
+        LEFT JOIN pagos pg 
+            ON pg.referencia = p.ReferenciaPago
+        GROUP BY
+            p.ID_Venta,
+            p.Fecha,
+            u.Nombre,
+            u.Apellido,
+            p.Total,
+            pg.estado,
+            pg.metodo
+        ORDER BY p.ID_Venta DESC
     ''')
     data = cur.fetchall()
 
-    # Obtener la lista de usuarios que son clientes
-    cur.execute(
-        'SELECT ID_Usuario, Nombre, Apellido FROM usuarios WHERE Rol = "Cliente"')
+    # Lista de clientes para el modal "Nueva Venta"
+    cur.execute('''
+        SELECT ID_Usuario, Nombre, Apellido 
+        FROM usuarios 
+        WHERE Rol = "Cliente"
+    ''')
     usuarios_list = cur.fetchall()
 
-    # Obtener la lista de productos disponibles (stock > 0)
-    cur.execute(''' SELECT 
-                        p.ID_Producto, 
-                        p.Nombre, 
-                        p.Precio,
-                        COALESCE(pr.Descuento, 0) AS Descuento
-                    FROM productos p
-                    LEFT JOIN promociones pr 
-                        ON p.ID_PromocionFK = pr.ID_Promocion
-                        AND CURDATE() BETWEEN pr.Fecha_Inicial AND pr.Fecha_Final
-                    WHERE p.Stock > 0''')
+    # Lista de productos para el modal (stock > 0) con descuento activo si tiene
+    cur.execute('''
+        SELECT 
+            p.ID_Producto, 
+            p.Nombre, 
+            p.Precio,
+            COALESCE(pr.Descuento, 0) AS Descuento
+        FROM productos p
+        LEFT JOIN promociones pr 
+            ON p.ID_PromocionFK = pr.ID_Promocion
+            AND CURDATE() BETWEEN pr.Fecha_Inicial AND pr.Fecha_Final
+        WHERE p.Stock > 0
+    ''')
     productos_disponibles = cur.fetchall()
 
     cur.close()
 
     return render_template(
-        'Vistas_admin/ventas.html',
+        'Vistas_admin/pedidos.html',
         reportes=data,
         usuarios=usuarios_list,
         productos=productos_disponibles
     )
-
-
 @admin_bp.route('/add_venta', methods=['POST'])
 @admin_required
 def add_venta():
@@ -704,87 +776,158 @@ def add_venta():
 
             if not id_usuario:
                 flash('Debe seleccionar un cliente', "warning")
-                return redirect(url_for('admin_bp.ventas_view'))
+                return redirect(url_for('admin_bp.pedidos_view'))
 
             if not productos_data or not cantidades:
                 flash('Debe seleccionar al menos un producto', "warning")
-                return redirect(url_for('admin_bp.ventas_view'))
+                return redirect(url_for('admin_bp.pedidos_view'))
 
             cur = mysql.connection.cursor()
+
             total_venta = 0
             productos_venta = []
 
-            for i, producto_nombre in enumerate(productos_data):
-                if producto_nombre and i < len(cantidades) and cantidades[i] and int(cantidades[i]) > 0:
-                    nombre_producto = producto_nombre.split(' - $')[0].strip()
-                    cantidad_solicitada = int(cantidades[i])
+            # 1. Recorremos productos enviados desde el modal
+            for i, producto_raw in enumerate(productos_data):
+                if not producto_raw:
+                    continue
+                if i >= len(cantidades) or not cantidades[i]:
+                    continue
 
-                    # Buscar el producto
-                    cur.execute('''
-                        SELECT p.ID_Producto, p.Precio, p.Stock, p.Nombre, pr.Descuento
-                        FROM productos p
-                        LEFT JOIN promociones pr 
-                            ON p.ID_PromocionFK = pr.ID_Promocion
-                            AND CURDATE() BETWEEN pr.Fecha_Inicial AND pr.Fecha_Final
-                        WHERE p.Nombre = %s
-                    ''', (nombre_producto,))
+                cantidad_solicitada = int(cantidades[i])
+                if cantidad_solicitada <= 0:
+                    continue
 
-                    producto_info = cur.fetchone()
+                # "Shampoo X - $25000" -> "Shampoo X"
+                nombre_producto = producto_raw.split(' - $')[0].strip()
 
-                    if producto_info:
-                        producto_id = producto_info[0]
-                        precio = int(producto_info[1])
-                        stock_disponible = int(producto_info[2])
-                        nombre_producto = producto_info[3]
-                        descuento = producto_info[4] if producto_info[4] else 0
+                # buscamos el producto real en DB
+                cur.execute('''
+                    SELECT 
+                        p.ID_Producto, 
+                        p.Precio, 
+                        p.Stock, 
+                        p.Nombre, 
+                        pr.Descuento
+                    FROM productos p
+                    LEFT JOIN promociones pr 
+                        ON p.ID_PromocionFK = pr.ID_Promocion
+                        AND CURDATE() BETWEEN pr.Fecha_Inicial AND pr.Fecha_Final
+                    WHERE p.Nombre = %s
+                ''', (nombre_producto,))
+                producto_info = cur.fetchone()
 
-                        if cantidad_solicitada > stock_disponible:
-                            flash(
-                                f'Stock insuficiente para {nombre_producto}. Disponible: {stock_disponible}', "warning")
-                            return redirect(url_for('admin_bp.ventas_view'))
+                if not producto_info:
+                    flash(f'Producto "{nombre_producto}" no encontrado', "error")
+                    return redirect(url_for('admin_bp.pedidos_view'))
 
-                        precio_final = precio - (precio * descuento / 100)
-                        subtotal = precio_final * cantidad_solicitada
-                        total_venta += subtotal
+                producto_id        = producto_info[0]
+                precio_base        = int(producto_info[1])
+                stock_disponible   = int(producto_info[2])
+                nombre_producto_db = producto_info[3]
+                descuento          = producto_info[4] if producto_info[4] else 0
 
-                        productos_venta.append({
-                            'id': producto_id,
-                            'cantidad': cantidad_solicitada,
-                            'precio_original': precio,
-                            'descuento': descuento,
-                            'precio_final': precio_final,
-                            'subtotal': subtotal,
-                            'nombre': nombre_producto
-                        })
-                    else:
-                        flash(
-                            f'Producto "{nombre_producto}" no encontrado', "error")
-                        return redirect(url_for('admin_bp.ventas_view'))
+                if cantidad_solicitada > stock_disponible:
+                    flash(
+                        f'Stock insuficiente para {nombre_producto_db}. Disponible: {stock_disponible}',
+                        "warning"
+                    )
+                    return redirect(url_for('admin_bp.pedidos_view'))
+
+                precio_final = precio_base - (precio_base * descuento / 100.0)
+                subtotal = precio_final * cantidad_solicitada
+                total_venta += subtotal
+
+                productos_venta.append({
+                    'id': producto_id,
+                    'cantidad': cantidad_solicitada,
+                    'precio_original': precio_base,
+                    'descuento': descuento,
+                    'precio_final': precio_final,
+                    'subtotal': subtotal,
+                    'nombre': nombre_producto_db
+                })
 
             if not productos_venta:
                 flash('No hay productos válidos en la venta', "error")
-                return redirect(url_for('admin_bp.ventas_view'))
+                return redirect(url_for('admin_bp.pedidos_view'))
 
-            # Insertar en ventas
-            cur.execute(
-                '''INSERT INTO ventas (ID_UsuarioFK, Fecha, Total) VALUES (%s, NOW(), %s)''',
-                (id_usuario, total_venta)
-            )
-            venta_id = cur.lastrowid
+            # 2. Generar referencia única para este pedido/pago
+            referencia = uuid.uuid4().hex  # ej: 'a3b1c9...'
 
-            # Insertar detalles de venta y actualizar stock
+            # 3. Insertar cabecera de la venta en 'pedidos'
+            #    -> OJO: AÑADIMOS ReferenciaPago
+            cur.execute('''
+                INSERT INTO pedidos (ID_UsuarioFK, Fecha, Total, ReferenciaPago) 
+                VALUES (%s, NOW(), %s, %s)
+            ''', (id_usuario, total_venta, referencia))
+            venta_id = cur.lastrowid  # ID_Venta generado
+
+            # 4. Insertar cada línea en detalles_venta
             for producto in productos_venta:
                 cur.execute('''
                     INSERT INTO detalles_venta 
                         (ID_VentaFK, ID_ProductoFK, Cantidad_p, SubTotal) 
                     VALUES (%s, %s, %s, %s)
-                ''', (venta_id, producto['id'], producto['cantidad'], producto['subtotal']))
+                ''', (
+                    venta_id,
+                    producto['id'],
+                    producto['cantidad'],
+                    producto['subtotal']
+                ))
 
+                # bajar stock
                 cur.execute('''
                     UPDATE productos 
                     SET Stock = Stock - %s 
                     WHERE ID_Producto = %s
-                ''', (producto['cantidad'], producto['id']))
+                ''', (
+                    producto['cantidad'],
+                    producto['id']
+                ))
+
+            # 5. Crear registro en pagos asociado a esta venta
+            #
+            # Nota: tu tabla `pagos` NO tiene venta_id,
+            # pero SÍ tiene:
+            #   referencia,
+            #   user_id,
+            #   total_cents,
+            #   estado,
+            #   metodo,
+            #   direccion_entrega
+            #
+            # Vamos a usar:
+            #   metodo = 'COD'    porque esto lo está creando el admin a mano
+            #   estado = 'COD_PENDIENTE_ENVIO'
+            #   total_cents = total_venta * 100 (pasado a entero)
+            #
+            total_cents = int(round(total_venta * 100))
+
+            cur.execute('''
+                INSERT INTO pagos (
+                    referencia,
+                    user_id,
+                    total_cents,
+                    mp_preference_id,
+                    mp_payment_id,
+                    estado,
+                    raw_json,
+                    metodo,
+                    direccion_entrega
+                )
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ''', (
+                referencia,
+                id_usuario,
+                total_cents,
+                None,              # mp_preference_id (esto es para MP, aquí no aplica)
+                None,              # mp_payment_id (esto es para MP)
+                'COD_PENDIENTE_ENVIO',  # estado inicial para contraentrega
+                None,              # raw_json (puedes guardar info extra si quieres)
+                'COD',             # método de pago: Contraentrega
+                None               # dirección_entrega (puedes llenarla luego)
+            ))
 
             mysql.connection.commit()
             flash('Venta registrada correctamente.', "success")
@@ -795,9 +938,12 @@ def add_venta():
             print(f"Error detallado: {str(e)}")
 
         finally:
-            cur.close()
+            try:
+                cur.close()
+            except Exception:
+                pass
 
-        return redirect(url_for('admin_bp.ventas_view'))
+        return redirect(url_for('admin_bp.pedidos_view'))
 
 # -------------------------------------- REPORTES -----------------------------------------
 
@@ -838,7 +984,7 @@ def generar_reporte():
                 dv.Cantidad_p AS Cantidad_p,
                 dv.SubTotal AS SubTotal_Final,
                 v.Total AS Total_Venta
-            FROM ventas v
+            FROM pedidos v
             JOIN usuarios u ON u.ID_Usuario = v.ID_UsuarioFK
             JOIN detalles_venta dv ON dv.ID_VentaFK = v.ID_Venta
             JOIN productos p ON p.ID_Producto = dv.ID_ProductoFK
@@ -849,7 +995,7 @@ def generar_reporte():
             ORDER BY v.Fecha ASC
         """, (fecha_inicio, fecha_fin))
 
-        ventas = cur.fetchall()
+        pedidos = cur.fetchall()
 
         buffer = io.BytesIO()
         doc = SimpleDocTemplate(buffer, pagesize=letter)
@@ -884,7 +1030,7 @@ def generar_reporte():
             logo = Paragraph(" ", normal_style)  # espacio en blanco para que la columna exista
 
         # Preparar el título como Paragraph (usar estilo Title o uno personalizado)
-        titulo_paragraph = Paragraph("<b>Reporte de Ventas</b><br/><small>Periodo: {}</small>".format(
+        titulo_paragraph = Paragraph("<b>Reporte de pedidos</b><br/><small>Periodo: {}</small>".format(
             f"{fecha_inicio} a {fecha_fin}"
         ), styles["Title"])
 
@@ -920,7 +1066,7 @@ def generar_reporte():
 
         total_general = 0
 
-        for v in ventas:
+        for v in pedidos:
             precio_original = f"${v[4]:,.0f}".replace(",", ".")
             precio_final = f"${v[6]:,.0f}".replace(",", ".")
             subtotal = f"${v[8]:,.0f}".replace(",", ".")

@@ -25,9 +25,9 @@ Dinamyc-look/
 │   ├── cart_model.py       # Modelo para las tablas 'carrito_temp' y 'favoritos':
 │   │   # - Métodos para el carrito (get_user_cart_items, add_or_update_cart_item, update_cart_item_quantity, remove_cart_item, clear_user_cart)
 │   │   # - Métodos para favoritos (get_user_favorites, toggle_favorite, get_favorite_products_details)
-│   ├── sale_model.py       # Modelo para las tablas 'ventas', 'detalles_venta' y vistas de reporte:
+│   ├── sale_model.py       # Modelo para las tablas 'pedidos', 'detalles_venta' y vistas de reporte:
 │   │   # - Métodos para dashboard admin (get_monthly_summary, get_top_selling_products, get_products_running_low)
-│   │   # - Métodos para ventas (get_sales_by_month, get_all_sales_summary, get_clients_for_sales, get_products_for_sales, process_new_sale, get_sale_details_for_invoice)
+│   │   # - Métodos para pedidos (get_sales_by_month, get_all_sales_summary, get_clients_for_sales, get_products_for_sales, process_new_sale, get_sale_details_for_invoice)
 │   │   # - Métodos para reportes (get_all_reports, generate_and_save_report, get_report_file)
 │   └── __init__.py         # Puedes dejarlo vacío o usarlo para importar modelos aquí para facilitar el acceso
 │
@@ -67,7 +67,7 @@ Dinamyc-look/
 │   ├── admin_controller.py     # Blueprint para las vistas de administrador (rutas bajo '/admin')
 │   │   # - / (redireccionado desde app.py a /admin o directamente en /admin)
 │   │   # - /token_status
-│   │   # - /ventas_por_mes (API para gráfica)
+│   │   # - /pedidos_por_mes (API para gráfica)
 │   │   # - /productos
 │   │   # - /add_producto (POST)
 │   │   # - /edit_producto/<id>
@@ -81,7 +81,7 @@ Dinamyc-look/
 │   │   # - /add_usuario (POST)
 │   │   # - /edit_usuario/<id>
 │   │   # - /update_usuario/<id> (POST)
-│   │   # - /ventas
+│   │   # - /pedidos
 │   │   # - /add_venta (POST)
 │   │   # - /factura/<id_venta> (para admin)
 │   │   # - /configuracion (para admin)
@@ -126,7 +126,7 @@ Dinamyc-look/
 │       ├── productos.html
 │       ├── reportes.html
 │       ├── usuarios.html
-│       ├── ventas.html
+│       ├── pedidos.html
 │       └── token_status.html # Mover esta también aquí
 │
 ├── static/                 # Carpeta para archivos estáticos:

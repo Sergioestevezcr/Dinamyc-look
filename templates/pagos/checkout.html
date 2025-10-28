@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Checkout | Dinamyc Look</title>
+  <style>
+    body {
+      font-family: system-ui, Roboto, sans-serif;
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1rem;
+      color: #2b2b2b;
+    }
+
+    h1,h2,h3 {
+      color: #6b1a30;
+      font-weight: 600;
+      margin: 0 0 .5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+      font-size: .9rem;
+    }
+    th {
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: .5rem;
+    }
+    td {
+      vertical-align: top;
+      padding: .5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .producto-col {
+      display: flex;
+      gap: .5rem;
+      align-items: flex-start;
+    }
+    .producto-img {
+      width: 50px;
+      height: 50px;
+      border-radius: .5rem;
+      object-fit: cover;
+      border: 1px solid #ddd;
+    }
+    .producto-info small {
+      color: #777;
+      font-size: .7rem;
+    }
+
+    .total-box {
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: right;
+      color: #2b2b2b;
+      margin-bottom: 1.5rem;
+    }
+
+    .metodo-card {
+      border: 1px solid #ddd;
+      border-radius: .75rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .metodo-card h3 {
+      margin: 0 0 .5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #2b2b2b;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .metodo-card p {
+      margin: 0 0 .75rem;
+      font-size: .9rem;
+      color: #444;
+      line-height: 1.4;
+    }
+
+    label {
+      display: block;
+      font-size: .8rem;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: .4rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: .7rem .8rem;
+      border: 1px solid #ccc;
+      border-radius: .5rem;
+      font-size: .9rem;
+      margin-bottom: .75rem;
+    }
+
+    button.mercado-btn {
+      width: 100%;
+      background-color: #7a1d36;
+      color: #fff;
+      border: none;
+      border-radius: .5rem;
+      padding: .8rem 1rem;
+      font-size: .9rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    button.cod-btn {
+      width: 100%;
+      background-color: #444;
+      color: #fff;
+      border: none;
+      border-radius: .5rem;
+      padding: .8rem 1rem;
+      font-size: .9rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>Revisa tu pedido 🛍️</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Cant.</th>
+        <th>Precio</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in carrito_rows %}
+      {# r = (ID_Carrito, Producto, Precio, Cantidad, Subtotal, Imagen) #}
+      <tr>
+        <td>
+          <div class="producto-col">
+            <img src="{{ r[5] }}" class="producto-img">
+            <div class="producto-info">
+              <strong>{{ r[1] }}</strong><br>
+              <small>#{{ r[0] }}</small>
+            </div>
+          </div>
+        </td>
+        <td>{{ r[3] }}</td>
+        <td>$ {{ "{:,.0f}".format(r[2]) }} COP</td>
+        <td>$ {{ "{:,.0f}".format(r[4]) }} COP</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="total-box">
+    Total a pagar: $ {{ "{:,.0f}".format(total_pesos) }} COP
+  </div>
+
+  <h2>¿Cómo quieres pagar?</h2>
+
+  <!-- MÉTODO 1: MERCADO PAGO -->
+  <div class="metodo-card">
+    <h3>💳 Pagar ahora con Mercado Pago</h3>
+    <p>
+      Pagas en línea con tarjeta, PSE, etc. Confirmamos tu pago al instante.
+    </p>
+
+    <form action="/checkout/pagar" method="POST">
+      <input type="hidden" name="reference" value="{{ reference }}">
+      <button type="submit" class="mercado-btn">
+        Ir a pagar con Mercado Pago
+      </button>
+    </form>
+  </div>
+
+  <!-- MÉTODO 2: CONTRAENTREGA -->
+  <div class="metodo-card">
+    <h3>🚚 Pago contraentrega</h3>
+    <p>
+      Te llevamos el pedido a la dirección que nos des y pagas en efectivo cuando lo recibes.
+    </p>
+
+    <form action="/checkout/contraentrega" method="POST">
+      <input type="hidden" name="reference" value="{{ reference }}">
+
+      <label for="direccion_entrega">Dirección de entrega</label>
+      <input
+        type="text"
+        id="direccion_entrega"
+        name="direccion_entrega"
+        placeholder="Calle 123 #45-67, Apto 202, Barrio X"
+        required
+      >
+
+      <button type="submit" class="cod-btn">
+        Confirmar pedido contraentrega
+      </button>
+    </form>
+  </div>
+
+</body>
+</html>

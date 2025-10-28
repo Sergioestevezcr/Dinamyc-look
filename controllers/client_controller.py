@@ -403,7 +403,7 @@ def carrito_finalizar():
     total = sum([item[1] * item[2] if isinstance(item, tuple)
                  else item["precio"] * item["cantidad"] for item in carrito])
     cur.execute(
-        "INSERT INTO ventas (ID_UsuarioFK, Fecha, Total) VALUES (%s, NOW(), %s)", (user_id, total))
+        "INSERT INTO pedidos (ID_UsuarioFK, Fecha, Total) VALUES (%s, NOW(), %s)", (user_id, total))
     id_venta = cur.lastrowid
 
     for item in carrito:

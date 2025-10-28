@@ -4,12 +4,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dinamyc Look - Ventas</title>
+    <title>Dinamyc Look - pedidos</title>
+
+    <!-- estilos globales admin -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_admin/style_index_admin.css') }}">
+
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
+
+    <!-- favicons -->
     <link rel="apple-touch-icon" sizes="180x180"
-        href="{{ url_for('static', filename='imagenes/favicons/apple-touch-icon.icO') }}">
+        href="{{ url_for('static', filename='imagenes/favicons/apple-touch-icon.ico') }}">
     <link rel="icon" type="image/png" sizes="32x32"
         href="{{ url_for('static', filename='imagenes/favicons/favicon-32x32.ico') }}">
     <link rel="icon" type="image/png" sizes="16x16"
@@ -20,7 +25,7 @@
 </head>
 
 <body>
-    <!-- Bloque para mostrar mensajes flash -->
+    <!-- mensajes flash -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     {% for category, message in messages %}
@@ -34,7 +39,7 @@
     {% endwith %}
 
     <div class="container">
-        <!-- Barra lateral de navegación -->
+        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2 class="company-name">Dinamyc Look</h2>
@@ -42,53 +47,87 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
+
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="{{ url_for('admin_bp.index') }}"><i
-                                class='bx bxs-dashboard'></i><span>Dashboard</span></a></li>
-                    <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
-                                class="fa-solid fa-user"></i><span>Clientes</span></a>
+                    <li>
+                        <a href="{{ url_for('admin_bp.index') }}">
+                            <i class='bx bxs-dashboard'></i><span>Dashboard</span>
+                        </a>
                     </li>
-                    <li><a href="{{ url_for('admin_bp.admin') }}">
-                        <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
+
+                    <li>
+                        <a href="{{ url_for('admin_bp.usuarios') }}">
+                            <i class="fa-solid fa-user"></i><span>Clientes</span>
+                        </a>
                     </li>
-                    <li><a href="{{ url_for('admin_bp.ventas_view') }}" class="active"><i
-                                class='bx bxs-dollar-circle'></i><span>Ventas</span></a></li>
-                    <li><a href="{{ url_for('admin_bp.productos') }}"><i
-                                class="fas fa-tags"></i><span>Productos</span></a></li>
-                    <li><a href="{{ url_for('admin_bp.promociones') }}"><i
-                                class="fas fa-percent"></i><span>Promociones</span></a></li>
-                    <li><a href="{{ url_for('admin_bp.reportes') }}"><i
-                                class="fa-solid fa-receipt"></i><span>Reportes</span></a>
+
+                    <li>
+                        <a href="{{ url_for('admin_bp.admin') }}">
+                            <i class="fa-solid fa-user-gear"></i><span>Admin</span>
+                        </a>
                     </li>
-                    <li><a href="{{ url_for('admin_bp.configuracion') }}"><i
-                                class="fa-solid fa-gear"></i><span>Configuración</span></a></li>
-                    <li><a href="{{ url_for('auth_bp.logout') }}"><i class='bx bx-log-out'></i><span>Cerrar
-                                sesión</span></a>
+
+                    <li>
+                        <a href="{{ url_for('admin_bp.pedidos_view') }}" class="active">
+                            <i class='bx bxs-dollar-circle'></i><span>Pedidos</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('admin_bp.productos') }}">
+                            <i class="fas fa-tags"></i><span>Productos</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('admin_bp.promociones') }}">
+                            <i class="fas fa-percent"></i><span>Promociones</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('admin_bp.reportes') }}">
+                            <i class="fa-solid fa-receipt"></i><span>Reportes</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('admin_bp.configuracion') }}">
+                            <i class="fa-solid fa-gear"></i><span>Configuración</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('auth_bp.logout') }}">
+                            <i class='bx bx-log-out'></i><span>Cerrar sesión</span>
+                        </a>
                     </li>
                 </ul>
             </nav>
         </aside>
 
-        <!-- Área principal -->
+        <!-- Main content -->
         <main class="main-content">
             <header class="main-header">
                 <button class="menu-toggle" id="open_btn"><i class='bx bx-menu'></i></button>
-                <h1>Ventas</h1>
+                <h1>Pedidos</h1>
             </header>
 
-            <!-- Barra de búsqueda -->
+            <!-- Buscador -->
             <div class="barra-de-busqueda">
-                <input class="buscar" type="text" placeholder="Buscar ventas">
+                <input class="buscar" type="text" placeholder="Buscar Pedidos">
                 <div class="btn">
                     <button type="submit"><i class='bx bx-search'></i></button>
                 </div>
             </div>
 
-            <!-- Sección de tabla con ventas -->
+            <!-- Tabla Pedidos -->
             <section class="recent-orders">
                 <div class="section-header">
-                    <div class="add-btn">Nueva Venta <i class="fa-regular fa-square-plus"></i></div>
+                    <div class="add-btn">
+                        Nueva Venta <i class="fa-regular fa-square-plus"></i>
+                    </div>
                 </div>
 
                 <div class="table-container">
@@ -100,59 +139,108 @@
                                 <th>Cliente</th>
                                 <th>Total Comprado</th>
                                 <th>Total Productos</th>
+                                <th>Estado</th>
                                 <th></th>
                             </tr>
                         </thead>
+
                         <tbody>
                             {% for row in reportes %}
+                            {# 
+                                row[0] = ID_Venta / No. Venta
+                                row[1] = Fecha
+                                row[2] = Nombre cliente
+                                row[3] = Apellido cliente
+                                row[4] = TotalCompra $
+                                row[5] = TotalProductos (cantidad de ítems)
+                                row[6] = estado interno del pago ("APPROVED", "PENDING", "COD_PENDIENTE_ENVIO", "REJECTED"...)
+                                row[7] = metodo de pago ("MP" para Mercado Pago, "COD" para contraentrega)
+                            #}
+
                             <tr>
+                                <!-- No. Venta -->
                                 <td>{{ row[0] }}</td>
+
+                                <!-- Fecha -->
                                 <td>{{ row[1] }}</td>
+
+                                <!-- Cliente -->
                                 <td>{{ row[2] }} {{ row[3] }}</td>
+
+                                <!-- Total comprado -->
                                 <td>${{ "{:,}".format(row[4]).replace(",", ".") }}</td>
+
+                                <!-- Total productos -->
                                 <td>{{ row[5] }}</td>
-                                <td class="btn-mas"><a href="{{ url_for('admin_bp.factura', id_venta=row[0]) }}">Ver
-                                        Más</a></td>
+
+                                <!-- Estado -->
+                                <td>
+                                    {% if row[7] == 'COD' %}
+                                        <span class="estado-badge estado-contraentrega">Contraentrega</span>
+
+                                    {% elif row[6] == 'APPROVED' %}
+                                        <span class="estado-badge estado-pagado">Pagado</span>
+
+                                    {% elif row[6] in ['PENDING', 'PENDING_MP', 'COD_PENDIENTE_ENVIO'] %}
+                                        <span class="estado-badge estado-pendiente">Pendiente</span>
+
+                                    {% elif row[6] == 'REJECTED' %}
+                                        <span class="estado-badge estado-rechazado">Rechazado</span>
+
+                                    {% else %}
+                                        <span class="estado-badge estado-pendiente">{{ row[6] }}</span>
+                                    {% endif %}
+                                </td>
+
+                                <!-- Acción -->
+                                <td class="btn-mas">
+                                    <a href="{{ url_for('admin_bp.factura', id_venta=row[0]) }}">Ver Más</a>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
+
                     </table>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- Modal para agregar nueva venta -->
+    <!-- Modal Nueva Venta -->
     <div id="addModal" class="modal-background">
-        <div class="modal-content" id="modal-ventas">
-            <h2 class="modal-header">Registrar Nueva Venta</h2>
-            <form id="addForm" action="{{ url_for('admin_bp.add_venta') }}" method="POST">
+        <div class="modal-content" id="modal-pedidos">
+            <h2 class="modal-header">Registrar Nuevo Pedido</h2>
 
-                <!-- Cliente con datalist -->
+            <form id="addForm" action="{{ url_for('admin_bp.add_venta') }}" method="POST">
+                <!-- Cliente -->
                 <div class="form-group">
                     <div class="label-form">
                         <i class="fa-solid fa-user"></i>
-                        <!-- Input visible (lo que el usuario escribe y ve) -->
-                        <input list="usuarios-list" id="usuario-nombre" class="input-form" placeholder="Cliente"
-                            required>
-                        <!-- Input oculto (aquí guardamos el ID real para enviar al backend) -->
+
+                        <!-- Lo que el admin escribe/busca -->
+                        <input list="usuarios-list" id="usuario-nombre" class="input-form" placeholder="Cliente" required>
+
+                        <!-- Lo que realmente mandamos al backend -->
                         <input type="hidden" name="ID_Usuario" id="usuario-id">
+
                         <datalist id="usuarios-list">
                             {% for usuario in usuarios %}
-                            <!-- value = nombre visible
-                                    data-id = ID real del usuario -->
-                            <option value="{{ usuario[1] }} {{ usuario[2] }}" data-id="{{ usuario[0] }}"></option>
+                            <option
+                                value="{{ usuario[1] }} {{ usuario[2] }}"
+                                data-id="{{ usuario[0] }}">
+                            </option>
                             {% endfor %}
                         </datalist>
                     </div>
                 </div>
 
-                <!-- Sección de productos -->
+                <!-- Productos -->
                 <div class="productos-section">
                     <h3>Productos de la Venta</h3>
+
                     <div id="productos-container">
                         <div class="producto-item">
-                            <!-- Producto con datalist -->
+                            <!-- Producto -->
                             <div class="form-group g1">
                                 <div class="label-form">
                                     <i class="fas fa-box"></i>
@@ -161,11 +249,14 @@
                                     <datalist id="productos-list">
                                         {% for producto in productos %}
                                         <option value="{{ producto[1] }} - ${{ producto[2] | int }}"
-                                            data-precio="{{ producto[2] }}" data-descuento="{{ producto[3] }}">
+                                            data-precio="{{ producto[2] }}"
+                                            data-descuento="{{ producto[3] }}">
                                         {% endfor %}
                                     </datalist>
                                 </div>
                             </div>
+
+                            <!-- Cantidad -->
                             <div class="form-group">
                                 <div class="label-form">
                                     <i class="fas fa-sort-numeric-up"></i>
@@ -173,24 +264,31 @@
                                         placeholder="Cantidad" min="1" onchange="updateSubtotal(this)">
                                 </div>
                             </div>
+
+                            <!-- Precio unitario -->
                             <div class="form-group">
                                 <div class="label-form">
                                     <i class="fas fa-dollar-sign"></i>
                                     <input type="text" class="input-form precio-display" placeholder="Precio" readonly>
                                 </div>
                             </div>
+
+                            <!-- Subtotal -->
                             <div class="form-group">
                                 <div class="label-form">
                                     <i class="fas fa-calculator"></i>
-                                    <input type="text" class="input-form subtotal-display" placeholder="Subtotal"
-                                        readonly>
+                                    <input type="text" class="input-form subtotal-display" placeholder="Subtotal" readonly>
                                 </div>
                             </div>
+
+                            <!-- Quitar producto -->
                             <button type="button" class="btn-remove-producto" onclick="removeProducto(this)">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
                     </div>
+
+                    <!-- Agregar otra línea de producto -->
                     <button type="button" id="add-producto-btn" class="btn-add-producto">
                         <i class="fas fa-plus"></i> Agregar Producto
                     </button>
@@ -201,13 +299,13 @@
                     <div class="form-group">
                         <div class="label-form">
                             <i class="fas fa-money-bill-wave"></i>
-                            <input type="text" id="total-venta" class="input-form" placeholder="Total de la Venta"
-                                readonly>
+                            <input type="text" id="total-venta" class="input-form"
+                                placeholder="Total de la Venta" readonly>
                         </div>
                     </div>
                 </div>
 
-                <!-- Botones de acción -->
+                <!-- Acciones -->
                 <div class="button-group">
                     <button type="button" class="btn-modal cancel-button" id="cancelAddBtn">Cancelar</button>
                     <button type="submit" class="btn-modal submit-button">Registrar Venta</button>
@@ -220,10 +318,11 @@
         <p>&copy; 2024 Dinamyc Look | Todos los derechos reservados</p>
     </footer>
 
+    <!-- scripts -->
     <script src="{{ url_for('static', filename='js/script_sidebar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_pop-up.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/script_ventas.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_pedidos.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_paginacion_tabla.js') }}"></script>
 </body>
 

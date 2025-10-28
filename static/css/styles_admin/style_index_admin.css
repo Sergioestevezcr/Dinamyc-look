@@ -132,6 +132,37 @@ body {
 
 /********************************** CONTENT ********************************/
 
+/* mini badges para estado */
+.estado-badge {
+  display: inline-block;
+  font-size: .75rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: .4rem .6rem;
+  border-radius: .5rem;
+  text-transform: capitalize;
+  white-space: nowrap;  
+}
+.estado-pagado {
+  background: #d1fae5;        /* verde claro */
+  color: #065f46;             /* verde oscuro */
+  border: 1px solid #10b981;
+}
+.estado-pendiente {
+  background: #fef3c7;        /* amarillo claro */
+  color: #92400e;             /* café/ámbar */
+  border: 1px solid #f59e0b;
+}
+.estado-rechazado {
+  background: #fee2e2;        /* rojo claro */
+  color: #991b1b;             /* rojo oscuro */
+  border: 1px solid #ef4444;
+}
+.estado-contraentrega {
+  background: #e5e7eb;        /* gris claro */
+  color: #1f2937;             /* gris oscuro */
+  border: 1px solid #6b7280;
+}
 /* Área principal de contenido */
 .main-content {
   flex: 1;
@@ -706,7 +737,7 @@ body {
   position: relative;
 }
 
-#modal-ventas {
+#modal-pedidos {
   max-width: 600px;
 }
 
@@ -856,7 +887,7 @@ body {
   margin-bottom: -15px;
 }
 
-/* Estilos específicos para el formulario de ventas */
+/* Estilos específicos para el formulario de pedidos */
 .productos-section {
   padding: 10px;
   border: 1px solid #e0e0e0;
@@ -1384,3 +1415,4 @@ body {
     top: 10px;
   }
 }
+

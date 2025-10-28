@@ -16,7 +16,7 @@ carrito.innerHTML = `
     <div id="carrito-items"></div> <!-- Aquí se agregarán los productos -->
     <div id="carrito-footer">
         <p>Total: $<span id="carrito-total">0</span></p> <!-- Total dinámico -->
-        <form id="form-finalizar" method="POST" action="/carrito_finalizar">
+        <form id="form-finalizar" method="GET" action="/checkout">
             <button type="submit" id="finalizar-compra">Finalizar Compra</button>
         </form>
     </div>
