@@ -31,6 +31,27 @@ def index_cliente():
       LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
       LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor LIMIT 8''')
     data = cur.fetchall()
+    
+    cur.execute('''SELECT 
+        p.ID_Producto, 
+        p.Nombre,
+        p.Descripcion,
+        p.Precio AS precio_original,
+        p.Imagen, 
+        prov.Marca AS Marca,
+        CASE
+            WHEN pr.Fecha_Inicial <= CURDATE() 
+                AND pr.Fecha_Final >= CURDATE()
+                AND pr.Descuento IS NOT NULL
+            THEN p.Precio - (p.Precio * pr.Descuento / 100)
+            ELSE NULL
+        END AS precio_final
+    FROM productos p
+    LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
+    LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor
+    WHERE p.Nombre LIKE %s
+        OR p.Nombre LIKE %s LIMIT 3''', ('%%combo%%', "%%kit%%"))
+    productosect = cur.fetchall()
 
     favoritos_list = []
     nombre = None
@@ -49,6 +70,7 @@ def index_cliente():
 
     return render_template('Vista_usuario/index_usuario.html',
                            productos2=data,
+                           productosect=productosect,
                            user=user_name,
                            favoritos=favoritos_list,
                            nombre=nombre)
@@ -587,7 +609,7 @@ def render_marca(nombre_marca, template, var_name, var_name_lim=None):
     user_name = session.get("user_name")
     cur = mysql.connection.cursor()
 
-    # ----------- FUNCIÓN 2 (marca) -----------
+    # ----------- FUNCIÓN 1 (productos por marca) -----------
     cur.execute(
         """SELECT
             p.ID_Producto, 
@@ -605,32 +627,66 @@ def render_marca(nombre_marca, template, var_name, var_name_lim=None):
         FROM productos p
         LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
         LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor 
-            WHERE prov.Marca = %s""", (nombre_marca,))
+        WHERE prov.Marca = %s""", (nombre_marca,)
+    )
     data = cur.fetchall()
 
+    # ----------- FUNCIÓN 2 (productos limitados) -----------
     data_lim = []
     if var_name_lim:
         cur.execute(
             """SELECT
-            p.ID_Producto, 
-            p.Nombre,
-            p.Precio AS precio_original,
-            p.Imagen, 
-            prov.Marca AS Marca,
-            CASE
-                WHEN pr.Fecha_Inicial <= CURDATE() 
-                    AND pr.Fecha_Final >= CURDATE()
-                    AND pr.Descuento IS NOT NULL
-                THEN p.Precio - (p.Precio * pr.Descuento / 100)
-                ELSE NULL
-            END AS precio_final
-        FROM productos p
-        LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
-        LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor 
-                WHERE prov.Marca = %s
-                LIMIT 6""", (nombre_marca,))
+                p.ID_Producto, 
+                p.Nombre,
+                p.Precio AS precio_original,
+                p.Imagen, 
+                prov.Marca AS Marca,
+                CASE
+                    WHEN pr.Fecha_Inicial <= CURDATE() 
+                        AND pr.Fecha_Final >= CURDATE()
+                        AND pr.Descuento IS NOT NULL
+                    THEN p.Precio - (p.Precio * pr.Descuento / 100)
+                    ELSE NULL
+                END AS precio_final
+            FROM productos p
+            LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
+            LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor 
+            WHERE prov.Marca = %s
+            LIMIT 6""", (nombre_marca,)
+        )
         data_lim = cur.fetchall()
 
+    # ----------- NUEVA FUNCIÓN (combos o kits solo para ciertas marcas) -----------
+    combos_kits = []
+    marcas_con_combos = ["EPA Colombia", "OMG", "La Receta", "Milagros"]
+
+    if nombre_marca in marcas_con_combos:
+        cur.execute(
+            '''SELECT 
+                p.ID_Producto, 
+                p.Nombre,
+                p.Descripcion,
+                p.Precio AS precio_original,
+                p.Imagen, 
+                prov.Marca AS Marca,
+                CASE
+                    WHEN pr.Fecha_Inicial <= CURDATE() 
+                        AND pr.Fecha_Final >= CURDATE()
+                        AND pr.Descuento IS NOT NULL
+                    THEN p.Precio - (p.Precio * pr.Descuento / 100)
+                    ELSE NULL
+                END AS precio_final
+            FROM productos p
+            LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
+            LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor
+            WHERE (p.Nombre LIKE %s OR p.Nombre LIKE %s)
+              AND prov.Marca = %s
+            LIMIT 3''',
+            ('%%combo%%', '%%kit%%', nombre_marca)
+        )
+        combos_kits = cur.fetchall()
+
+    # ----------- FAVORITOS Y USUARIO -----------
     favoritos_marca = []
     nombre = None
 
@@ -643,15 +699,15 @@ def render_marca(nombre_marca, template, var_name, var_name_lim=None):
         favoritos_marca = [row[0] for row in cur.fetchall()]
 
     cur.close()
-    # -----------------------------------------
 
-    # Retornar template con Todo
+    # ----------- RETORNO DEL TEMPLATE -----------
     return render_template(
         template,
-        **{var_name: data},             # productos por marca
+        **{var_name: data},
         **({var_name_lim: data_lim} if var_name_lim else {}),
+        productosectm=combos_kits,  # solo se llena para las 4 marcas
         user=user_name,
         favoritos=favoritos_marca,
         nombre=nombre,
-        data=data                       #  productos normales (por marca)
+        data=data
     )

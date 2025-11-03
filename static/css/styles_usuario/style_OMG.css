@@ -178,6 +178,10 @@
     color: #64256A; 
 }
 
+#text-marca3 {
+    color: #64256A;
+}
+
 .image-container3 img{
     box-shadow: 0 4px 8px rgba(12, 40, 11, 0.2); 
 }
@@ -186,17 +190,15 @@
     box-shadow: 0 6px 12px rgba(12, 40, 11, 0.3); 
 }
 
-#btn-add3 {
+.ver-mas-btn {
+    color: #64256A;
+}
+
+.ver-mas3 {
     background-color: #952FA4;
     color: #FFFFFF;
     box-shadow: 0 2px 5px rgba(12, 40, 11, 0.2); 
 }
-
-#btn-add3:hover {
-    background-color: #762781;
-    box-shadow: 0 4px 8px rgba(12, 40, 11, 0.3); 
-}
-
 /*********************************** SECCION detalles (4) ***********************************/
 
 .section4-product {

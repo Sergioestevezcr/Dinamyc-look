@@ -138,21 +138,17 @@
 		<div class="carruseles" id="slider">
 			<!-- las section son las imagenes que va a ontener el carrusel -->
 			<section class="slider-section">
-				<img src="{{ url_for('static', filename= 'imagenes/img_referencia_1.jpg') }}"
+				<img src="{{ url_for('static', filename= '../../../../static/imagenes/OMG/OMG 1.webp') }}"
 					alt="descripcion de la imagen ">
 			</section>
 
 			<section class="slider-section">
-				<img src="{{ url_for('static', filename= 'imagenes/img_referencia_2.jpg') }}"
+				<img src="{{ url_for('static', filename= '../../../../static/imagenes/OMG/OMG 2.webp') }}"
 					alt="descripcion de la imagen ">
 			</section>
 
 			<section class="slider-section">
-				<img src="{{ url_for('static', filename= 'imagenes/img_referencia_3.jpg') }}">
-			</section>
-			<section class="slider-section">
-				<img src="{{ url_for('static', filename= 'imagenes/img_referencia_4.jpg') }}"
-					alt="descripcion de la imagen">
+				<img src="{{ url_for('static', filename= '../../../../static/imagenes/OMG/OMG 3.webp') }}">
 			</section>
 		</div>
 		<!-- estas etiquetas son los botones para mover las imagenes hacia la derecha o izquierda -->
@@ -214,43 +210,28 @@
 		<h1 id="t3">Combos Top</h1>
 		<p id="p3">para que brilles sin stop</p>
 		<div class="container-product-cards3">
-			<div class="product-card3">
-				<div class="image-container3">
-					<img src="../../imagenes/anyeluz/DUO-ROMERO.jpg" alt="Producto">
+				{% for producto in productosectm %}
+				<div class="product-card3 {% if loop.index is even %}inverse{% endif %}">
+					<div class="image-container3">
+						<img src="{{ url_for('static', filename='imagenes/' ~ producto[4]) }}" alt="Producto">
+					</div>
+					<div class="text-card3 {% if loop.index is even %}inverse-text{% endif %}">
+						<h3>{{ producto[1] }}</h3>
+						<p id="text-marca3">{{ producto[5] }}</p>
+						<div class="descripcion-corta">
+							{{ producto[2][:400] }}...
+						</div>
+						<div class="descripcion-completa ocultar">
+							{{ producto[2] }}
+						</div>
+						<button class="ver-mas-btn">Ver más</button>
+						<div>
+							<a href="{{ url_for('client_bp.detallesproducto', id=producto[0]) }}" class="ver-mas3">Más Detalles</a>
+						</div>
+					</div>
 				</div>
-				<div class="text-card3">
-					<h3>Nombre del combo N1</h3>
-					<p class="descrption">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque laoreet
-						tortor viverra dolor viverra egestas. Etiam efficitur justo et dictum molestie. Integer sed
-						egestas tortor.</p>
-					<a class="btn-add" id="btn-add3" href="#">Ver Más</a>
-				</div>
+				{% endfor %}
 			</div>
-			<div class="product-card3" id="inverse">
-				<div class="image-container3">
-					<img src="../../imagenes/anyeluz/DUO-ROMERO.jpg" alt="Producto">
-				</div>
-				<div class="text-card3" id="inverse-text">
-					<h3>Nombre del combo N2</h3>
-					<p class="descrption">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque laoreet
-						tortor viverra dolor viverra egestas. Etiam efficitur justo et dictum molestie. Integer sed
-						egestas tortor.</p>
-					<a class="btn-add" id="btn-add3" href="#">Ver Más</a>
-				</div>
-			</div>
-			<div class="product-card3">
-				<div class="image-container3">
-					<img src="../../imagenes/anyeluz/DUO-ROMERO.jpg" alt="Producto">
-				</div>
-				<div class="text-card3">
-					<h3>Nombre del combo N3</h3>
-					<p class="descrption">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque laoreet
-						tortor viverra dolor viverra egestas. Etiam efficitur justo et dictum molestie. Integer sed
-						egestas tortor.</p>
-					<a class="btn-add" id="btn-add3" href="#">Ver Más</a>
-				</div>
-			</div>
-		</div>
 	</section>
 	<!------------------------------------- Footer -------------------------------------->
 	<footer class="footer">
@@ -291,6 +272,30 @@
 	<script src="{{ url_for('static', filename= 'js/script_carrito.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
+	<script>
+        // --- VER MÁS / VER MENOS EN DESCRIPCIONES ---
+        document.addEventListener("DOMContentLoaded", function () {
+            const botones = document.querySelectorAll(".ver-mas-btn");
+
+            botones.forEach((btn) => {
+                btn.addEventListener("click", function () {
+                    const descripcionCompleta = this.previousElementSibling;
+                    const corta = descripcionCompleta.previousElementSibling;
+
+                    if (descripcionCompleta.classList.contains("mostrar")) {
+                        descripcionCompleta.classList.remove("mostrar");
+                        corta.style.display = "block";
+                        this.textContent = "Ver más";
+                    } else {
+                        descripcionCompleta.classList.add("mostrar");
+                        corta.style.display = "none";
+                        this.textContent = "Ver menos";
+                    }
+                });
+            });
+        });
+
+    </script>
 </body>
 
 </html>

@@ -145,6 +145,14 @@
     background-color: rgba(255, 228, 233, 0.4);
 }
 
+#text-precio .precio-original {
+    color: rgba(189, 19, 81, .4);
+}
+
+#text-precio .precio-descuento {
+    color: #BD1351;
+}
+
 #text-marca {
     color: rgba(123, 32, 51, 0.6);
 }
@@ -152,6 +160,14 @@
 #text-precio2 {
     color: #DF1F60;
     background-color: rgba(255, 228, 233, 0.6);
+}
+
+#text-precio2 .precio-original {
+    color: rgba(189, 19, 81, 0.5);
+}
+
+#text-precio2 .precio-descuento {
+    color: #DF1F60;
 }
 
 #text-marca2 {
@@ -311,6 +327,14 @@
     box-shadow: rgba(189, 19, 81, 0.6); 
 }
 
+.product-card3 h3 {
+    color: #871445;
+}
+
+#text-marca3 {
+    color: #871445;
+}
+
 .image-container3 img{
     box-shadow: 0 4px 8px rgba(75, 6, 33, 0.2); 
 }
@@ -319,15 +343,14 @@
     box-shadow: 0 6px 12px rgba(75, 6, 33, 0.3); 
 }
 
-#btn-add3 {
-    background-color: #DF1F60;
-    color: #FFFFFF;
-    box-shadow: 0 2px 5px rgba(75, 6, 33, 0.2); 
+.ver-mas-btn {
+    color: #871445;
 }
 
-#btn-add3:hover {
-    background-color: #BD1351;
-    box-shadow: 0 4px 8px rgba(75, 6, 33, 0.3); 
+.ver-mas3 {
+    background-color: #DF1F60;
+    color: #FFFFFF;
+    box-shadow: 0 2px 5px rgba(75, 6, 33, 0.2);
 }
 
 button.btn-fav i.bx.bxs-star,

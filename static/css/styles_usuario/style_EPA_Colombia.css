@@ -132,6 +132,10 @@
     color: #1F4A1D; 
 }
 
+#text-marca3 {
+    color: #1F4A1D;
+}
+
 .image-container3 img{
     box-shadow: 0 4px 8px rgba(12, 40, 11, 0.2); 
 }
@@ -140,16 +144,16 @@
     box-shadow: 0 6px 12px rgba(12, 40, 11, 0.3); 
 }
 
-#btn-add3 {
+.ver-mas-btn {
+    color: #1f4A1D;
+}
+
+.ver-mas3 {
     background-color: #328F2A;
     color: #FFFFFF;
     box-shadow: 0 2px 5px rgba(12, 40, 11, 0.2); 
 }
 
-#btn-add3:hover {
-    background-color: #2A7124;
-    box-shadow: 0 4px 8px rgba(12, 40, 11, 0.3); 
-}
 
 /*********************************** SECCION DOS (4) ***********************************/
 .section4-product {
