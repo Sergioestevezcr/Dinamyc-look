@@ -4,6 +4,7 @@ import os
 from database import mysql
 from config import Config
 
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def create_app():
@@ -28,12 +29,14 @@ def create_app():
     from controllers.auth_controller import auth_bp
     from controllers.admin_controller import admin_bp
     from controllers.diagnostic_controller import diagnostic_bp
+    from controllers.payment_controller import payment_bp
 
     # Cada blueprint con su url_prefix para evitar conflictos
     flask_app.register_blueprint(client_bp, url_prefix="/")
     flask_app.register_blueprint(auth_bp, url_prefix="/auth")
     flask_app.register_blueprint(admin_bp, url_prefix="/admin")
     flask_app.register_blueprint(diagnostic_bp, url_prefix="/diagnostic")
+    flask_app.register_blueprint(payment_bp, url_prefix="/")
 
     # ---------------- Handlers de error ----------------
     @flask_app.errorhandler(404)

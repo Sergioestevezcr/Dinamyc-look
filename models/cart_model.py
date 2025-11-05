@@ -58,7 +58,7 @@ class CartModel:
 
         total = sum([item[1] * item[2] for item in carrito])
         cur.execute(
-            "INSERT INTO ventas (ID_UsuarioFK, Fecha, Total) VALUES (%s, NOW(), %s)", (user_id, total))
+            "INSERT INTO pedidos (ID_UsuarioFK, Fecha, Total) VALUES (%s, NOW(), %s)", (user_id, total))
         id_venta = cur.lastrowid
 
         for nombre, precio, cantidad in carrito:

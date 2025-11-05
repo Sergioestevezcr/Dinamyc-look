@@ -53,8 +53,8 @@
                                 class='bx bxs-dashboard'></i><span>Dashboard</span></a></li>
                     <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
                                 class="fa-solid fa-user"></i><span>Clientes</span></a></li>
-                    <li><a href="{{ url_for('admin_bp.ventas_view') }}" class="active"><i
-                                class='bx bxs-dollar-circle'></i><span>Ventas</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.pedidos_view') }}" class="active"><i
+                                class='bx bxs-dollar-circle'></i><span>Pedidos</span></a></li>
                     <li><a href="{{ url_for('admin_bp.productos') }}"><i
                                 class="fas fa-tags"></i><span>Productos</span></a></li>
                     <li><a href="{{ url_for('admin_bp.promociones') }}"><i
@@ -73,7 +73,7 @@
         <main class="main-content">
             <header class="main-header">
                 <button class="menu-toggle" id="open_btn"><i class='bx bx-menu'></i></button>
-                <a href="{{ url_for('admin_bp.ventas_view') }}" class="btn-atras">Volver</a>
+                <a href="{{ url_for('admin_bp.pedidos_view') }}" class="btn-atras">Volver</a>
             </header>
 
             <section class="factura-container">

@@ -1,6 +1,6 @@
 // Espera a que todo el contenido del DOM esté cargado antes de ejecutar el código
 document.addEventListener('DOMContentLoaded', function() {
-    // Referencias a elementos del DOM que se usan en el formulario de ventas
+    // Referencias a elementos del DOM que se usan en el formulario de pedidos
     const addBtn = document.querySelector('.add-btn');
     const addModal = document.getElementById('addModal');
     const cancelAddBtn = document.getElementById('cancelAddBtn');

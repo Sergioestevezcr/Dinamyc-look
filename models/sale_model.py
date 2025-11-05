@@ -24,16 +24,16 @@ class SaleModel:
     @staticmethod
     def get_admin_dashboard_data():
         cur = mysql.connection.cursor()
-        cur.execute('SELECT COUNT(ID_Venta) AS Ventas_Totales, SUM(Total) AS Ingresos_Totales FROM ventas WHERE MONTH(Fecha) = MONTH(CURDATE()) AND YEAR(Fecha) = YEAR(CURDATE())')
-        data_ventas = cur.fetchone()
-        ventas = data_ventas[0] or 0
-        ingresos = data_ventas[1] or 0
+        cur.execute('SELECT COUNT(ID_Venta) AS pedidos_Totales, SUM(Total) AS Ingresos_Totales FROM pedidos WHERE MONTH(Fecha) = MONTH(CURDATE()) AND YEAR(Fecha) = YEAR(CURDATE())')
+        data_pedidos = cur.fetchone()
+        pedidos = data_pedidos[0] or 0
+        ingresos = data_pedidos[1] or 0
 
-        cur.execute('''SELECT SUM(detalles_venta.Cantidad_p) AS Total_Cantidad_Mes_Actual FROM Detalles_venta JOIN ventas ON detalles_venta.ID_VentaFK = ventas.ID_Venta WHERE MONTH(ventas.Fecha) = MONTH(CURDATE()) AND YEAR(ventas.Fecha) = YEAR(CURDATE())''')
+        cur.execute('''SELECT SUM(detalles_venta.Cantidad_p) AS Total_Cantidad_Mes_Actual FROM Detalles_venta JOIN pedidos ON detalles_venta.ID_VentaFK = pedidos.ID_Venta WHERE MONTH(pedidos.Fecha) = MONTH(CURDATE()) AND YEAR(pedidos.Fecha) = YEAR(CURDATE())''')
         productos_totales = cur.fetchone()[0]
 
         cur.execute(
-            'SELECT Producto, Marca, Total_Ventas FROM masvendido ORDER BY masvendido.Total_Ventas DESC LIMIT 10')
+            'SELECT Producto, Marca, Total_pedidos FROM masvendido ORDER BY masvendido.Total_pedidos DESC LIMIT 10')
         mas_vendidos = cur.fetchall()
 
         cur.execute(
@@ -41,14 +41,14 @@ class SaleModel:
         por_acabar = cur.fetchall()
 
         cur.close()
-        return ventas, ingresos, productos_totales, mas_vendidos, por_acabar
+        return pedidos, ingresos, productos_totales, mas_vendidos, por_acabar
 
     @staticmethod
     def get_monthly_sales_data():
         cur = mysql.connection.cursor()
         cur.execute("""
-            SELECT MONTH(Fecha) AS mes, SUM(Total) AS total_ingresos, COUNT(*) AS total_ventas
-            FROM ventas
+            SELECT MONTH(Fecha) AS mes, SUM(Total) AS total_ingresos, COUNT(*) AS total_pedidos
+            FROM pedidos
             GROUP BY mes
             ORDER BY mes
         """)

@@ -66,8 +66,8 @@
                     <li><a href="{{ url_for('admin_bp.admin') }}">
                             <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
                     </li>
-                    <li><a href="{{ url_for('admin_bp.ventas_view') }}"><i
-                                class='bx bxs-dollar-circle'></i><span>Ventas</span></a>
+                    <li><a href="{{ url_for('admin_bp.pedidos_view') }}"><i
+                                class='bx bxs-dollar-circle'></i><span>Pedidos</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.productos') }}"><i
                                 class="fas fa-tags"></i><span>Productos</span></a></li>
@@ -102,8 +102,8 @@
                     <div class="stat-card imp">
                         <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
                         <div class="stat-info">
-                            <h3>Ventas Totales</h3>
-                            <div class="stat-value">{{ ventas }}</div>
+                            <h3>pedidos Totales</h3>
+                            <div class="stat-value">{{ pedidos }}</div>
                         </div>
                     </div>
 
@@ -152,8 +152,8 @@
 
                     <!-- Gráfico de barras -->
                     <div class="chart-box">
-                        <h3>Ventas por Mes</h3>
-                        <canvas id="chartVentas"></canvas>
+                        <h3>pedidos por Mes</h3>
+                        <canvas id="chartpedidos"></canvas>
                     </div>
                 </div>
             </section>
@@ -236,10 +236,10 @@
         document.addEventListener("DOMContentLoaded", () => {
             // Ejecutar en paralelo las peticiones al backend
             Promise.all([
-                fetch("{{ url_for('admin_bp.ventas_por_mes') }}").then(r => r.json()),
+                fetch("{{ url_for('admin_bp.pedidos_por_mes') }}").then(r => r.json()),
                 fetch("{{ url_for('admin_bp.usuarios_productos_por_mes') }}").then(r => r.json())
             ])
-                .then(([ventasData, usuariosProductosData]) => {
+                .then(([pedidosData, usuariosProductosData]) => {
 
                     // ==============================
                     // 1️⃣ GRÁFICO DE INGRESOS POR MES
@@ -248,10 +248,10 @@
                     new Chart(ctxIngresos, {
                         type: 'line',
                         data: {
-                            labels: ventasData.labels,
+                            labels: pedidosData.labels,
                             datasets: [{
                                 label: 'Ingresos por mes',
-                                data: ventasData.dataIngresos,
+                                data: pedidosData.dataIngresos,
                                 fill: true,
                                 borderColor: 'rgba(138, 42, 71, 1)',
                                 backgroundColor: 'rgba(138, 42, 71, 0.2)',
@@ -288,16 +288,16 @@
                     });
 
                     // ==============================
-                    // 2️⃣ GRÁFICO DE VENTAS POR MES
+                    // 2️⃣ GRÁFICO DE pedidos POR MES
                     // ==============================
-                    const ctxVentas = document.getElementById('chartVentas').getContext('2d');
-                    new Chart(ctxVentas, {
+                    const ctxpedidos = document.getElementById('chartpedidos').getContext('2d');
+                    new Chart(ctxpedidos, {
                         type: 'bar',
                         data: {
-                            labels: ventasData.labels,
+                            labels: pedidosData.labels,
                             datasets: [{
-                                label: 'Ventas por mes',
-                                data: ventasData.dataVentas,
+                                label: 'pedidos por mes',
+                                data: pedidosData.datapedidos,
                                 backgroundColor: 'rgba(138, 42, 71, 0.7)',
                                 borderRadius: 6
                             }]
@@ -317,7 +317,7 @@
                             scales: {
                                 y: {
                                     beginAtZero: true,
-                                    title: { display: true, text: 'Ventas', font: { size: 14 } },
+                                    title: { display: true, text: 'pedidos', font: { size: 14 } },
                                     ticks: { color: '#C1416D' },
                                     grid: { color: 'rgba(193, 65, 109, 0.1)' }
                                 },
