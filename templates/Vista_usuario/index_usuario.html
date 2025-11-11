@@ -71,7 +71,8 @@
 								Favoritos</span></a>
 						<a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
 								Compras</span></a>
-						<a href="{{ url_for('admin_bp.configuracion') }}" class="active"><i class='bx bxs-user'></i><span>
+						<a href="{{ url_for('admin_bp.configuracion') }}" class="active"><i
+								class='bx bxs-user'></i><span>
 								Perfil</span></a>
 						<a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
 							sesión</a>
@@ -151,20 +152,20 @@
 							<h3>{{ producto[1] }}</h3>
 							<p id="text-marca">{{ producto[4] }}</p>
 							<div class="text-cardown">
-							<p class="text-precio" id="text-precio">
-								{% if producto[5] %} {# precio_final existe #}
-								<span class="precio-original">
+								<p class="text-precio" id="text-precio">
+									{% if producto[5] %} {# precio_final existe #}
+									<span class="precio-original">
+										${{ "{:,}".format(producto[2]).replace(",", ".") }}
+									</span><br>
+									<span class="precio-descuento">
+										${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
+									</span>
+									{% else %}
 									${{ "{:,}".format(producto[2]).replace(",", ".") }}
-								</span><br>
-								<span class="precio-descuento">
-									${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
-								</span>
-								{% else %}
-								${{ "{:,}".format(producto[2]).replace(",", ".") }}
-								{% endif %}
-							</p>
-							<button class="btn-add" id="btn-add" type="button">Agregar <i
-									class='bx bx-shopping-bag'></i></button>
+									{% endif %}
+								</p>
+								<button class="btn-add" id="btn-add" type="button">Agregar <i
+										class='bx bx-shopping-bag'></i></button>
 							</div>
 						</div>
 					</a>
@@ -196,20 +197,20 @@
 								<h3>{{ producto[1] }}</h3>
 								<p id="text-marca">{{ producto[4] }}</p>
 								<div class="text-cardown">
-								<p class="text-precio" id="text-precio">
-									{% if producto[5] %} {# precio_final existe #}
-									<span class="precio-original">
+									<p class="text-precio" id="text-precio">
+										{% if producto[5] %} {# precio_final existe #}
+										<span class="precio-original">
+											${{ "{:,}".format(producto[2]).replace(",", ".") }}
+										</span><br>
+										<span class="precio-descuento">
+											${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
+										</span>
+										{% else %}
 										${{ "{:,}".format(producto[2]).replace(",", ".") }}
-									</span><br>
-									<span class="precio-descuento">
-										${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
-									</span>
-									{% else %}
-									${{ "{:,}".format(producto[2]).replace(",", ".") }}
-									{% endif %}
-								</p>
-								<button class="btn-add" id="btn-add2" type="button">Agregar <i
-										class='bx bx-shopping-bag'></i></button>
+										{% endif %}
+									</p>
+									<button class="btn-add" id="btn-add2" type="button">Agregar <i
+											class='bx bx-shopping-bag'></i></button>
 								</div>
 							</div>
 						</a>
@@ -224,41 +225,27 @@
 			<h1 id="t3">Combos Top</h1>
 			<p id="p3">para que brilles sin stop</p>
 			<div class="container-product-cards3">
-				<div class="product-card3">
+				{% for producto in productosect %}
+				<div class="product-card3 {% if loop.index is even %}inverse{% endif %}">
 					<div class="image-container3">
-						<img src="../../static/imagenes/La_Receta/La receta Kit 1 Dúo Antigrasa La Receta (2 Productos).webp" alt="Producto">
+						<img src="{{ url_for('static', filename='imagenes/' ~ producto[4]) }}" alt="Producto">
 					</div>
-					<div class="text-card3">
-						<h3>Kit Para Cabello Graso La Receta</h3>
-						<p class="descrption">¡Renueva tu cabello en 14 días!!
-Olvídate del cabello, oleoso, pesado y sin vida. El Kit Para Cabello Graso de La Receta, con sus productos a base de romero, Sal marina y aceites naturales, te ofrece una solución definitiva.
-Un estudio clínico del Shampoo de Romero La Receta comprobó que: reduce la oleosidad en un 33.6% y el 100% de las participantes experimentaron una limpieza profunda y duradera. Este kit no solo elimina la grasa, sino que también fortalece la fibra capilar, aporta volumen y deja tu cabello radiante y saludable. Experimenta la transformación que tu cabello necesita.
-Contiene Shampoo De Romero, Acondicionador La Receta, Exfoliante Capilar y Cartuchera *Puede presentar variaciones en su presentación conservando el mismo contenido según disponibilidad..</p>
-						<a class="btn-add" id="btn-add3" href="https://dinamyclook.com/detallesproducto/69">Ver Más</a>
+					<div class="text-card3 {% if loop.index is even %}inverse-text{% endif %}">
+						<h3>{{ producto[1] }}</h3>
+						<p id="text-marca3">{{ producto[5] }}</p>
+						<div class="descripcion-corta">
+							{{ producto[2][:400] }}...
+						</div>
+						<div class="descripcion-completa ocultar">
+							{{ producto[2] }}
+						</div>
+						<button class="ver-mas-btn">Ver más</button>
+						<div>
+							<a href="{{ url_for('client_bp.detallesproducto', id=producto[0]) }}" class="ver-mas3">Más Detalles</a>
+						</div>
 					</div>
 				</div>
-				<div class="product-card3" id="inverse">
-					<div class="image-container3">
-						<img src="../../static/imagenes/OMG/OMG 1 Kit Piernas Perfectas OMG (3 Productos).webp" alt="Producto">
-					</div>
-					<div class="text-card3" id="inverse-text">
-						<h3>Kit Piernas Perfectas OMG (3 Productos)</h3>
-						<p class="descrption">Con este kit tu experiencia de depilación estará completa, tendrás una piel hidratada, dejando atrás las irritaciones, foliculitis y resequedad causada por la depilación, además tus vellos crecerán cada vez más débiles y tardarán más.
-Contiene: Depilador en Spray 60 ml, Mantequilla Corporal Hidratante 220 grs y Mantequilla Corporal Exfoliante 220 grs</p>
-						<a class="btn-add" id="btn-add3" href="https://dinamyclook.com/detallesproducto/70">Ver Más</a>
-					</div>
-				</div>
-				<div class="product-card3">
-					<div class="image-container3">
-						<img src="../../static/imagenes/EPA_Colombia/MiniComboCirugia1.webp" alt="Producto">
-					</div>
-					<div class="text-card3">
-						<h3>Mini combo cirugia</h3>
-						<p class="descrption">
-Descubre nuestro Mini-Combo Cirugía Capilar Epa Colombia, el tratamiento capilar revolucionario para aquellos que desean transformar su cabello con decoloración, mechas, rayitos, balayage o tintes claros. Esta keratina alisadora está diseñada especialmente para proporcionar un alisado impecable, sin comprometer la salud de tu cabello. Además, nuestra fórmula está libre de formol y amoniaco, brindando una experiencia segura y confiable..</p>
-						<a class="btn-add" id="btn-add3" href="https://dinamyclook.com/detallesproducto/68">Ver Más</a>
-					</div>
-				</div>
+				{% endfor %}
 			</div>
 		</section>
 
@@ -289,21 +276,21 @@ Descubre nuestro Mini-Combo Cirugía Capilar Epa Colombia, el tratamiento capila
 								<h3>{{ producto[1] }}</h3>
 								<p id="text-marca">{{ producto[4] }}</p>
 								<div class="text-cardown">
-								<p class="text-precio" id="text-precio">
-									{% if producto[5] %} {# precio_final existe #}
-									<span class="precio-original">
+									<p class="text-precio" id="text-precio">
+										{% if producto[5] %} {# precio_final existe #}
+										<span class="precio-original">
+											${{ "{:,}".format(producto[2]).replace(",", ".") }}
+										</span><br>
+										<span class="precio-descuento">
+											${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
+										</span>
+										{% else %}
 										${{ "{:,}".format(producto[2]).replace(",", ".") }}
-									</span><br>
-									<span class="precio-descuento">
-										${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
-									</span>
-									{% else %}
-									${{ "{:,}".format(producto[2]).replace(",", ".") }}
-									{% endif %}
-								</p>
-								<button class="btn-add" id="btn-add4" type="button">
-									Agregar <i class='bx bx-shopping-bag'></i>
-								</button>
+										{% endif %}
+									</p>
+									<button class="btn-add" id="btn-add4" type="button">
+										Agregar <i class='bx bx-shopping-bag'></i>
+									</button>
 								</div>
 							</div>
 						</a>
@@ -352,6 +339,30 @@ Descubre nuestro Mini-Combo Cirugía Capilar Epa Colombia, el tratamiento capila
 	<script src="{{ url_for('static', filename='js/script_carrito.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
+	<script>
+        // --- VER MÁS / VER MENOS EN DESCRIPCIONES ---
+        document.addEventListener("DOMContentLoaded", function () {
+            const botones = document.querySelectorAll(".ver-mas-btn");
+
+            botones.forEach((btn) => {
+                btn.addEventListener("click", function () {
+                    const descripcionCompleta = this.previousElementSibling;
+                    const corta = descripcionCompleta.previousElementSibling;
+
+                    if (descripcionCompleta.classList.contains("mostrar")) {
+                        descripcionCompleta.classList.remove("mostrar");
+                        corta.style.display = "block";
+                        this.textContent = "Ver más";
+                    } else {
+                        descripcionCompleta.classList.add("mostrar");
+                        corta.style.display = "none";
+                        this.textContent = "Ver menos";
+                    }
+                });
+            });
+        });
+
+    </script>
 </body>
 
 </html>

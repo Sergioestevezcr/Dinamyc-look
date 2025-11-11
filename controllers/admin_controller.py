@@ -20,7 +20,6 @@ admin_bp = Blueprint('admin_bp', __name__)  # Creacion del blueprint
 
 # -------------------------------------- DASHBOARD -----------------------------------------
 @admin_bp.route('/')
-@admin_required
 def index():
     """Dashboard principal para administradores"""
     cur = mysql.connection.cursor()
@@ -70,7 +69,6 @@ def index():
 
 # ------------------ Datos para la gráfica ------------------
 @admin_bp.route('/usuarios_productos_por_mes')
-@admin_required
 def usuarios_productos_por_mes():
     cur = mysql.connection.cursor()
 

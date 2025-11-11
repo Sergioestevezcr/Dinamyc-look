@@ -16,7 +16,7 @@ class Config:
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USERNAME = 'dinamycloock@gmail.com'
-    MAIL_PASSWORD = 'rprf tkea dmyi hunc'  # Use an app password for security
+    MAIL_PASSWORD = 'dhuu wofn rsnw hyvl'  # Use an app password for security
 
     # File Upload Configuration
     UPLOAD_FOLDER = os.path.join(os.path.dirname(

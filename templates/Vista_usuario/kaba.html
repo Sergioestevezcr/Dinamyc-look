@@ -137,21 +137,17 @@
 		<div class="carruseles" id="slider">
 			<!-- las section son las imagenes que va a ontener el carrusel -->
 			<section class="slider-section">
-				<img src="{{ url_for('static', filename= 'imagenes/img_referencia_1.jpg') }}"
+				<img src="{{ url_for('static', filename= '../../../../static/imagenes/Kaba/KABA 1.webp') }}"
 					alt="descripcion de la imagen ">
 			</section>
 
 			<section class="slider-section">
-				<img src="{{ url_for('static', filename= 'imagenes/img_referencia_2.jpg') }}"
+				<img src="{{ url_for('static', filename= '../../../../static/imagenes/Kaba/KABA 2.webp') }}"
 					alt="descripcion de la imagen ">
 			</section>
 
 			<section class="slider-section">
-				<img src="{{ url_for('static', filename= 'imagenes/img_referencia_3.jpg') }}">
-			</section>
-			<section class="slider-section">
-				<img src="{{ url_for('static', filename= 'imagenes/img_referencia_4.jpg') }}"
-					alt="descripcion de la imagen">
+				<img src="{{ url_for('static', filename= '../../../../static/imagenes/Kaba/KABA 3.webp') }}">
 			</section>
 		</div>
 		<!-- estas etiquetas son los botones para mover las imagenes hacia la derecha o izquierda -->
@@ -208,77 +204,7 @@
 			{% endfor %}
 		</div>
 	</section>
-	<!--------------------------------------- 6. Seccion Cuatro ------------------------------------------>
-	<section class="section4-product">
-		<!-- Título y subtítulo -->
-		<h1 id="t4">Productos EDA Cosméticos</h1>
-		<p id="p4">Belleza y cuidado para tu cabello</p>
-		<!-- Contenedor principal del carrusel -->
-		<div class="carousel-prd-container">
-			<!-- Botones de navegación FUERA del carousel-product4 -->
-			<button class="btn-left-prd">
-				<i class='bx bx-left-arrow-alt'></i>
-			</button>
-			<button class="btn-right-prd">
-				<i class='bx bx-right-arrow-alt'></i>
-			</button>
 
-			<!-- Área del carrusel donde se muestran los productos -->
-			<div class="carousel-product4">
-				{% for producto in productoskabalim %}
-				<div class="product-card4">
-					<a href="{{ url_for('client_bp.detallesproducto', id=producto[0]) }}">
-						<div class="image-container">
-							<!-- Botón favoritos -->
-							<button class="btn-fav" data-id="{{ producto[0] }}">
-								{% if producto[0] in favoritos %}
-								<i class="bx bxs-star fav-relleno"></i> <!-- RELLENA si ya es favorito -->
-								{% else %}
-								<i class="bx bx-star"></i> <!-- VACÍA si no -->
-								{% endif %}
-							</button>
-							<!-- Botón favoritos -->
-							<button class="btn-fav" data-id="{{ producto[0] }}">
-								{% if producto[0] in favoritos %}
-								<i class="bx bxs-star fav-relleno"></i> <!-- RELLENA si ya es favorito -->
-								{% else %}
-								<i class="bx bx-star"></i> <!-- VACÍA si no -->
-								{% endif %}
-							</button>
-							<img src="{{ url_for('static', filename='imagenes/' ~ producto[3]) }}" alt="Producto">
-						</div>
-						<div class="text-card4">
-							<h3>{{ producto[1] }}</h3>
-							<p id="text-marca2">{{ producto[4] }}</p>
-							<div class="text-cardown">
-								<p class="text-precio" id="text-precio2">
-									{% if producto[5] %} {# precio_final existe #}
-									<span class="precio-original">
-										${{ "{:,}".format(producto[2]).replace(",", ".") }}
-									</span><br>
-									<span class="precio-descuento">
-										${{ "{:,}".format(producto[5]|int).replace(",", ".") }}
-									</span>
-									{% else %}
-									${{ "{:,}".format(producto[2]).replace(",", ".") }}
-									{% endif %}
-								</p>
-								<button class="btn-add" id="btn-add4" type="button">
-									Agregar <i class='bx bx-shopping-bag'></i>
-								</button>
-							</div>
-						</div>
-					</a>
-				</div>
-				{% endfor %}
-			</div>
-
-			<!-- Contenedor de los puntos indicadores FUERA del carousel-product4 -->
-			<div class="carousel-dots">
-				<!-- Los puntos se generarán dinámicamente con JavaScript -->
-			</div>
-		</div>
-	</section>
 	<!---------------------------------------- Seccion Tres -------------------------------------------->
 	<section class="section2-product">
 		<div class="cp-container">
@@ -327,7 +253,7 @@
 	<!--------------------------------------- Seccion Cuatro ------------------------------------------>
 	<section class="section4-product2">
 		<!-- Título y subtítulo -->
-		<h1 id="t4">Productos EDA Cosméticos</h1>
+		<h1 id="t4">Productos Cosméticos</h1>
 		<p id="p4">Belleza y cuidado para tu cabello</p>
 		<!-- Contenedor principal del carrusel -->
 		<div class="carousel-prd-container">

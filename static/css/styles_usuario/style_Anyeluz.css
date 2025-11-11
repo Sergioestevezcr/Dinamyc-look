@@ -178,6 +178,14 @@
     background-color: rgba(223, 85, 125, 0.4);
 }
 
+.precio-original {
+    color: rgba(123, 32, 51, 0.6);
+}
+
+.precio-descuento {
+    color: #932138;
+}
+
 #text-marca {
     color: rgba(123, 32, 51, 0.6);
 }

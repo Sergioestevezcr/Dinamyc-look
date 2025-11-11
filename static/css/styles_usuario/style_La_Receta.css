@@ -191,7 +191,19 @@
     color: #F4F6EF; 
 }
 
-.text-card3 p {
+#text-marca3 {
+    color: #F4F6EF;
+}
+
+.descripcion-corta {
+    color: #F4F6EF;
+}
+
+.descripcion-completa {
+    color: #F4F6EF;
+}
+
+.descripcion-completa.mostrar {
     color: #F4F6EF;
 }
 
@@ -203,16 +215,12 @@
     box-shadow: 0 6px 12px rgba(25, 32, 19, 0.3); 
 }
 
-#btn-add3 {
+.ver-mas3 {
     background-color: #485935;
     color: #FFFFFF;
     box-shadow: 0 2px 5px rgba(25, 32, 19, 0.2); 
 }
 
-#btn-add3:hover {
-    background-color: #333E29;
-    box-shadow: 0 4px 8px rgba(25, 32, 19, 0.3); 
-}
 
 /*********************************** SECCION CUATRO (4) ***********************************/
 .section4-product {
@@ -310,6 +318,14 @@
 }
 
 .precio {
+    color: #3B472D;
+}
+
+.precio-original {
+    color: rgba(117, 142, 84, .3);
+}
+
+.precio-descuento {
     color: #3B472D;
 }
 

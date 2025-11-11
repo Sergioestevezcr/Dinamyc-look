@@ -1536,15 +1536,22 @@ button.btn-fav i.bx.bxs-leaf,
     color: #73283E;
     text-align: left;
     font-size: 26px;
-    margin-bottom: 10px;
-    font-weight: 600;
+    font-weight: 800;
 }
 
-#inverse {
+#text-marca3 {
+    position: relative;
+    top: -5px;
+    color: #73283E;
+    font-weight: 600;
+    padding-bottom: 10px;
+}
+
+.inverse {
     flex-direction: row-reverse;
 }
 
-#inverse-text {
+.inverse-text {
     padding: 20px 40px 20px 20px;
 }
 
@@ -1566,14 +1573,39 @@ button.btn-fav i.bx.bxs-leaf,
     box-shadow: 0 6px 12px rgba(69, 18, 33, 0.3);
 }
 
-.descrption {
-    padding: 20px 0;
-    line-height: 1.6;
+.descripcion-corta {
+    max-height: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-#btn-add3 {
-    background-color: #C1416D;
-    color: #FBFAF7;
+.descripcion-completa {
+    display: none;
+    margin-top: 5px;
+}
+
+.descripcion-completa.mostrar {
+    display: block;
+}
+
+.ver-mas-btn {
+    background: none;
+    border: none;
+    color: #a10055;
+    cursor: pointer;
+    font-weight: bold;
+    padding-bottom: 30px;
+    font-size: 14px;
+}
+
+.ver-mas-btn:hover {
+    text-decoration: underline;
+}
+
+.ver-mas3 {
+    text-align: center;
+    background-color: #7a003f;
+    color: #e5e7eb;
     border: none;
     border-radius: 30px;
     margin: 10px 0;
@@ -1585,12 +1617,7 @@ button.btn-fav i.bx.bxs-leaf,
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     box-shadow: 0 2px 5px rgba(69, 18, 33, 0.2);
-}
-
-#btn-add3:hover {
-    background-color: #A63055;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(69, 18, 33, 0.3);
+    min-width: 250px;
 }
 
 /*********************************** 7. SECCION CUATRO ***********************************/
@@ -2714,6 +2741,10 @@ button.btn-fav i.bx.bxs-leaf,
         margin-bottom: 0;
     }
 
+    #text-marca3 {
+        text-align: center;
+    }
+
     .text-card3 p {
         font-size: 15px;
     }
@@ -2727,9 +2758,8 @@ button.btn-fav i.bx.bxs-leaf,
         width: 40vw;
     }
 
-    #btn-add3 {
-        display: flex;
-        justify-content: center;
+    .ver-mas3 {
+        width: 100%;;
     }
 
     /***************** SECCION CUATRO **************/
@@ -2962,11 +2992,6 @@ button.btn-fav i.bx.bxs-leaf,
 
     .descrption {
         font-size: 15px;
-    }
-
-    #btn-add3 {
-        display: flex;
-        justify-content: center;
     }
 
     /**************** SECCION CUATRO ****************/
@@ -3315,7 +3340,15 @@ button.btn-fav i.bx.bxs-leaf,
         font-size: 15px;
     }
 
-    .descrption {
+    .descripcion-corta {
+        display: none;
+    }
+
+    .descripcion-completa {
+        display: none;
+    }
+
+    .ver-mas-btn {
         display: none;
     }
 
@@ -3328,13 +3361,6 @@ button.btn-fav i.bx.bxs-leaf,
         width: auto;
         border-radius: 10px;
     }
-
-    #btn-add3 {
-        padding: 10px 0;
-        text-align: center;
-        font-size: 15px;
-    }
-
     /************* SECCION cuatro ***************/
 
     #t4,
@@ -3561,7 +3587,14 @@ button.btn-fav i.bx.bxs-leaf,
         margin-bottom: 8px;
     }
 
-    .descripcion {
+    .descripcion-corta {
+        display: none;
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+
+    .descripcion-completa {
+        display: none;
         font-size: 12px;
         margin-bottom: 12px;
     }
