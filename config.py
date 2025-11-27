@@ -1,22 +1,23 @@
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class Config:
-    SECRET_KEY = os.environ.get(
-        'SECRET_KEY') or 'A_REALLY_SECRET_KEY_THAT_NO_ONE_KNOWS'
+    SECRET_KEY = os.getenv('SECRET_KEY') or 'A_REALLY_SECRET_KEY_THAT_NO_ONE_KNOWS'
 
     # MySQL Configuration
-    MYSQL_HOST = '3.131.159.165'
-    MYSQL_USER = 'admin1'
-    MYSQL_PASSWORD = 'Is41l0'
-    MYSQL_DB = 'dinamyc_look2'
+    MYSQL_HOST = os.getenv('MYSQL_HOST')
+    MYSQL_USER = os.getenv('MYSQL_USER')
+    MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
+    MYSQL_DB = os.getenv('MYSQL_DB')
 
     # Email Configuration
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
-    MAIL_USERNAME = 'dinamycloock@gmail.com'
-    MAIL_PASSWORD = 'dhuu wofn rsnw hyvl'  # Use an app password for security
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME')
+    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')  # Use an app password for security
 
     # File Upload Configuration
     UPLOAD_FOLDER = os.path.join(os.path.dirname(
@@ -29,10 +30,10 @@ class Config:
     # Debe ser un string plano SIN coma al final.
     # Ejemplo test: "TEST-1234..."
     # Ejemplo prod: "APP_USR-1234..."
-    MP_ACCESS_TOKEN = "APP_USR-3709518704049576-102719-94ed29cce6aa03c023cdbd42f1f0e1f2-91372455"
+    MP_ACCESS_TOKEN = os.getenv('MP_ACCESS_TOKEN')
 
     # Secreto para firmar/validar el webhook (puede ser token_hex(32))
-    MP_WEBHOOK_SECRET = "e3f10ba236d83cb15ca7482fd97dd0dcf6423daad060b7fe50d04160b1638216"
+    MP_WEBHOOK_SECRET = os.getenv('MP_WEBHOOK_SECRET')
 
     # URLs de redirección cuando Mercado Pago termina
     MP_SUCCESS_URL = "https://dinamyclook.com/pago/exitoso"

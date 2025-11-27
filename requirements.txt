@@ -3,3 +3,5 @@ flask-mysqldb
 fpdf
 werkzeug
 reportlab
+python-dotenv
+mercadopago
