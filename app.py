@@ -1,7 +1,7 @@
 # app.py
 from flask import Flask, render_template
 import os
-from database import mysql
+from database import init_app
 from config import Config
 
 
@@ -18,7 +18,7 @@ def create_app():
     flask_app.config.from_object(Config)
 
     # ---------------- Inicialización de extensiones ----------------
-    mysql.init_app(flask_app)
+    init_app(flask_app)
 
     # ---------------- Configuración uploads ----------------
     UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'imagenes')

@@ -88,6 +88,8 @@ class UserModel:
         cur.close()
         return ids
 
+from services.email_service import EmailService
+
     @staticmethod
     def send_password_reset_email(email):
         cur = mysql.connection.cursor()
@@ -105,27 +107,8 @@ class UserModel:
         mysql.connection.commit()
         cur.close()
 
-        msg = MIMEMultipart()
-        # Reemplazar con config
-        msg['From'] = formataddr(
-            ("Dinamyc Look", "vargasruizlauravalentina@gmail.com"))
-        msg['To'] = email
-        msg['Subject'] = 'Recuperación de contraseña - Dinamyc Look'
-        body = f"Hola {user[1]}, has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace para crear una nueva contraseña (válido por 1 hora): http://localhost:5000/reset_password/{token}"
-        msg.attach(MIMEText(body, 'plain'))
-
-        try:
-            # Reemplazar con config
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.starttls()
-            server.login("vargasruizlauravalentina@gmail.com",
-                         "rjvc vwsr mtuq phzt")  # Reemplazar con config
-            server.send_message(msg)
-            server.quit()
-            return True
-        except Exception as e:
-            print(f"Error al enviar el correo: {str(e)}")
-            return False
+        reset_url = f"http://localhost:5000/auth/reset_password/{token}"
+        return EmailService.send_password_reset_email(email, user[1], reset_url)
 
     @staticmethod
     def verify_reset_token(token):

@@ -11,6 +11,10 @@ class Config:
     MYSQL_USER = os.getenv('MYSQL_USER')
     MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
     MYSQL_DB = os.getenv('MYSQL_DB')
+    
+    # SQLAlchemy Configuration
+    SQLALCHEMY_DATABASE_URI = f"mysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DB}"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Email Configuration
     MAIL_SERVER = 'smtp.gmail.com'

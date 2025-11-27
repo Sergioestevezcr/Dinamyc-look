@@ -95,3 +95,98 @@ class ProductModel:
         resultados = cur.fetchall()
         cur.close()
         return resultados
+
+    @staticmethod
+    def get_all_products_admin():
+        cur = mysql.connection.cursor()
+        cur.execute('''
+            SELECT 
+                p.ID_Producto, 
+                p.Nombre, 
+                p.Descripcion, 
+                p.Imagen, 
+                p.Precio AS precio_original,
+                p.Stock, 
+                prov.Marca, 
+                p.Categoria,
+                pr.ID_Promocion,
+                pr.Descuento,
+                CASE
+                    WHEN pr.Fecha_Inicial <= CURDATE() 
+                        AND pr.Fecha_Final >= CURDATE()
+                        AND pr.Descuento IS NOT NULL
+                    THEN p.Precio - (p.Precio * pr.Descuento / 100)
+                    ELSE NULL
+                END AS precio_final
+            FROM productos p
+            LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
+            LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor
+        ''')
+        data = cur.fetchall()
+        cur.close()
+        return data
+
+    @staticmethod
+    def get_product_by_id(product_id):
+        cur = mysql.connection.cursor()
+        cur.execute('''
+            SELECT 
+                ID_Producto,
+                Nombre,
+                Descripcion,
+                Categoria,
+                Precio,
+                Stock,
+                ID_ProveedorFK,
+                ID_PromocionFK
+            FROM productos
+            WHERE ID_Producto = %s
+        ''', (product_id,))
+        data = cur.fetchone()
+        cur.close()
+        return data
+
+    @staticmethod
+    def add_product(nombre, descripcion, categoria, precio, stock, filename, idmarca, id_promocion):
+        cur = mysql.connection.cursor()
+        cur.execute(
+            '''INSERT INTO productos 
+               (Nombre, Descripcion, Categoria, Precio, Stock, Imagen, ID_ProveedorFK, ID_PromocionFK) 
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s)''',
+            (nombre, descripcion, categoria, precio, stock, filename, idmarca, id_promocion)
+        )
+        mysql.connection.commit()
+        cur.close()
+
+    @staticmethod
+    def update_product(product_id, nombre, descripcion, categoria, precio, stock, idmarca, id_promocion, filename=None):
+        cur = mysql.connection.cursor()
+        if filename:
+            cur.execute(
+                '''UPDATE productos 
+                   SET Nombre=%s,
+                       Descripcion=%s,
+                       Categoria=%s,
+                       Precio=%s,
+                       Stock=%s,
+                       Imagen=%s,
+                       ID_ProveedorFK=%s,
+                       ID_PromocionFK=%s
+                   WHERE ID_Producto=%s''',
+                (nombre, descripcion, categoria, precio, stock, filename, idmarca, id_promocion, product_id)
+            )
+        else:
+            cur.execute(
+                '''UPDATE productos 
+                   SET Nombre=%s,
+                       Descripcion=%s,
+                       Categoria=%s,
+                       Precio=%s,
+                       Stock=%s,
+                       ID_ProveedorFK=%s,
+                       ID_PromocionFK=%s
+                   WHERE ID_Producto=%s''',
+                (nombre, descripcion, categoria, precio, stock, idmarca, id_promocion, product_id)
+            )
+        mysql.connection.commit()
+        cur.close()

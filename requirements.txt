@@ -5,3 +5,5 @@ werkzeug
 reportlab
 python-dotenv
 mercadopago
+Flask-WTF
+Flask-SQLAlchemy

@@ -9,6 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from database import mysql # Importar decoradores y clase PDF
 from decorators import login_required, admin_required
 from flask import Blueprint, request, render_template, flash, redirect, url_for, session, current_app as app
+from services.email_service import EmailService
 
 auth_bp = Blueprint('auth_bp', __name__)
 
@@ -93,42 +94,19 @@ def forgot_password():
                 mysql.connection.commit()
 
                 # URL de recuperación en PRODUCCIÓN
+                # TODO: Use url_for properly when possible, or keep hardcoded if domain is fixed
                 reset_url = f"http://127.0.0.1:5000/auth/reset_password/{token}"
 
-                # Crear mensaje
-                msg = MIMEMultipart()
-                msg['From'] = formataddr(("Dinamyc Look", app.config['MAIL_USERNAME']))
-                msg['To'] = email
-                msg['Subject'] = 'Recuperación de contraseña - Dinamyc Look'
-                body = f"""
-                Hola {user[1]},
-
-                Has solicitado restablecer tu contraseña. 
-                Haz clic en el siguiente enlace para crear una nueva contraseña (válido por 1 hora):
-
-                {reset_url}
-
-                Si no solicitaste este cambio, puedes ignorar este mensaje.
-
-                Atentamente,  
-                El equipo de Dinamyc Look.
-                """
-                msg.attach(MIMEText(body, 'plain'))
-
-                try:
-                    server = smtplib.SMTP(app.config['MAIL_SERVER'], app.config['MAIL_PORT'])
-                    server.starttls()
-                    server.login(app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
-                    server.send_message(msg)
-                    server.quit()
+                if EmailService.send_password_reset_email(email, user[1], reset_url):
                     flash('Hemos enviado un enlace de recuperación a tu correo electrónico', 'success')
-                except smtplib.SMTPException:
+                else:
                     flash('No se pudo enviar el correo. Intenta más tarde.', 'error')
             else:
                 flash('Si el correo existe, recibirás un enlace de recuperación', 'info')
 
             cur.close()
-        except Exception:
+        except Exception as e:
+            print(f"Error: {e}")
             flash('Error en el sistema.', 'error')
 
     return render_template('Vista_usuario/clave_olvidada.html')
