@@ -7,3 +7,4 @@ python-dotenv
 mercadopago
 Flask-WTF
 Flask-SQLAlchemy
+email-validator

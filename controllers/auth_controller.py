@@ -10,15 +10,18 @@ from database import mysql # Importar decoradores y clase PDF
 from decorators import login_required, admin_required
 from flask import Blueprint, request, render_template, flash, redirect, url_for, session, current_app as app
 from services.email_service import EmailService
+from forms.auth_forms import LoginForm, RegisterForm, ForgotPasswordForm
 
 auth_bp = Blueprint('auth_bp', __name__)
 
 # -------------------------------------- LOGIN -----------------------------------------
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "POST":
-        correo = request.form["correo"]
-        clave = request.form["clave"]
+    form = LoginForm()
+    
+    if form.validate_on_submit():
+        correo = form.correo.data
+        clave = form.clave.data
 
         try:
             cur = mysql.connection.cursor()
@@ -30,24 +33,19 @@ def login():
             cur.close()
 
             if user:
-                #  CORRECCIÓN: user[5] es la Clave (hash)
                 clave_bd = user[5] or ""
                 
-                #  CORRECCIÓN: Orden correcto de argumentos
                 if check_password_hash(clave_bd, clave):
-                    # Guardar datos en sesión
-                    session["user_id"] = user[0]        # ID_Usuario
-                    session["user_name"] = user[1]      # Nombre
-                    session["user_lastname"] = user[2]  # Apellido
-                    session["user_email"] = user[4]     # Correo (índice 4)
-
-                    #  CORRECCIÓN: user[6] es el Rol
+                    session["user_id"] = user[0]
+                    session["user_name"] = user[1]
+                    session["user_lastname"] = user[2]
+                    session["user_email"] = user[4]
+                    
                     rol = user[6].strip().lower()
                     session["user_role"] = rol
 
                     flash(f"¡Bienvenido/a {user[1]}!", "success")
 
-                    # Redirigir según el rol
                     if rol == "admin":
                         return redirect(url_for("admin_bp.index"))
                     else:
@@ -59,7 +57,7 @@ def login():
         except Exception as e:
             flash(f"Error en el sistema: {e}", "error")
 
-    return render_template("Vista_usuario/login.html")
+    return render_template("Vista_usuario/login.html", form=form)
 # -------------------------------------- RECUPERAR CONTRASEÑA -----------------------------------------
 
 # Generador de token aleatorio
@@ -72,11 +70,10 @@ def generate_reset_token():
 
 @auth_bp.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
-    if request.method == 'POST':
-        email = request.form.get('email', '').strip().lower()
-        if not email:
-            flash('Por favor ingresa tu correo electrónico', 'error')
-            return render_template('Vista_usuario/clave_olvidada.html')
+    form = ForgotPasswordForm()
+    
+    if form.validate_on_submit():
+        email = form.email.data.strip().lower()
 
         try:
             cur = mysql.connection.cursor()
@@ -93,8 +90,6 @@ def forgot_password():
                             (user[0], token, expires_at, 'activo'))
                 mysql.connection.commit()
 
-                # URL de recuperación en PRODUCCIÓN
-                # TODO: Use url_for properly when possible, or keep hardcoded if domain is fixed
                 reset_url = f"http://127.0.0.1:5000/auth/reset_password/{token}"
 
                 if EmailService.send_password_reset_email(email, user[1], reset_url):
@@ -109,8 +104,7 @@ def forgot_password():
             print(f"Error: {e}")
             flash('Error en el sistema.', 'error')
 
-    return render_template('Vista_usuario/clave_olvidada.html')
-
+    return render_template('Vista_usuario/clave_olvidada.html', form=form)
 
 # -------------------------------------- RUTA: Reset Password ----------------------------------------
 
@@ -158,61 +152,21 @@ def reset_password(token):
 
 # -------------------------------------- REGISTRO -----------------------------------------
 
-
-@auth_bp.route('/registro', methods=['GET', 'POST'])
-def registro():
-    if request.method == 'POST':
-        nombre = request.form['Nombre']
-        apellido = request.form['Apellido']
-        documento = request.form['Documento']
-        correo = request.form['Correo']
-        confirmar_correo = request.form['Confirmar_correo']
-        telefono = request.form['Telefono']
-        direccion = request.form['Direccion']
-        ciudad = request.form['Ciudad']
-        clave = request.form['Clave']
-        confirmar_clave = request.form['Confirmar_clave']
-
-        if not all([nombre, apellido, correo, confirmar_correo, telefono, direccion, ciudad, clave, confirmar_clave]):
-            flash('Completa todos los campos', "info")
-            return render_template('Vista_usuario/register.html')
-
-        if correo != confirmar_correo:
-            flash('Los correos no coinciden', "error")
-            return render_template('Vista_usuario/register.html')
-
-        if clave != confirmar_clave:
-            flash('Las contraseñas no coinciden', "error")
-            return render_template('Vista_usuario/register.html')
-
-        if len(clave) < 6:
-            flash('Contraseña muy corta', "error")
-            return render_template('Vista_usuario/register.html')
-
-        if len(telefono) < 10 or len(telefono) >= 11:
-            flash('Telefono no valido', "error")
-            return render_template('Vista_usuario/register.html')
-
+@auth_bp.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    
+    if form.validate_on_submit():
+        # Toda la validación ya la hizo el form (passwords coinciden, email único, etc.)
         try:
             cur = mysql.connection.cursor()
-            cur.execute(
-                'SELECT ID_Usuario FROM usuarios WHERE Correo = %s', (correo,))
-            if cur.fetchone():
-                flash('Correo ya registrado', "error")
-                cur.close()
-                return render_template('Vista_usuario/register.html')
             
-            cur.execute(
-                'SELECT ID_Usuario FROM usuarios WHERE N_documento = %s', (documento,))
-            if cur.fetchone():
-                flash('Documento ya registrado', "error")
-                cur.close()
-                return render_template('Vista_usuario/register.html')
-
-            hashed_password = generate_password_hash(clave)
+            hashed_password = generate_password_hash(form.clave.data)
             cur.execute('''INSERT INTO usuarios (Nombre, Apellido, N_Documento, Correo, Telefono, Direccion, Ciudad, Clave, Rol, Estado) 
                             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''',
-                        (nombre, apellido, documento, correo, telefono, direccion, ciudad, hashed_password, 'Cliente', 'Activo'))
+                        (form.nombre.data, form.apellido.data, form.documento.data, 
+                         form.correo.data, form.telefono.data, form.direccion.data, 
+                         form.ciudad.data, hashed_password, 'Cliente', 'Activo'))
             mysql.connection.commit()
             cur.close()
 
@@ -221,7 +175,7 @@ def registro():
         except Exception as e:
             flash(f'Error: {str(e)}', "error")
 
-    return render_template('Vista_usuario/register.html')
+    return render_template('Vista_usuario/register.html', form=form)
 
 # -------------------------------------- LOGOUT -----------------------------------------
 

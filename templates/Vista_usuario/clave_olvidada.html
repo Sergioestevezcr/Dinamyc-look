@@ -40,8 +40,9 @@
         <nav class="navbar" id="nav">
             <ul class="nav-links">
                 <li class="house"><a href="{{ url_for('client_bp.index_cliente') }}"><i
-							class="fa-solid fa-house-chimney"></i></a></li>
-				<li class="house" title="Iniciar Sección"><a href="{{ url_for('auth_bp.login') }}"><i class="fa fa-user"></i></a></li>
+                            class="fa-solid fa-house-chimney"></i></a></li>
+                <li class="house" title="Iniciar Sección"><a href="{{ url_for('auth_bp.login') }}"><i
+                            class="fa fa-user"></i></a></li>
             </ul>
         </nav>
     </header>
@@ -83,6 +84,7 @@
                         recuperar tu contraseña</p>
 
                     <form class="form-iniciar-sesion" method="POST" action="{{ url_for('auth_bp.forgot_password') }}">
+                        {{ form.hidden_tag() }}
                         <label class="label-form-iniciar-sesion">
                             <i class='bx bx-envelope'></i>
                             <input type="email" name="email" required placeholder="Correo electrónico registrado"

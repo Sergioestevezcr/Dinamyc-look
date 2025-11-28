@@ -15,6 +15,10 @@ class Config:
     # SQLAlchemy Configuration
     SQLALCHEMY_DATABASE_URI = f"mysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DB}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+    # Flask-WTF CSRF Protection
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_TIME_LIMIT = None  # No expiration for CSRF tokens
 
     # Email Configuration
     MAIL_SERVER = 'smtp.gmail.com'

@@ -57,7 +57,8 @@
 			<ul class="nav-links">
 				<li class="house" title="Inicio"><a href="{{ url_for('client_bp.index_cliente') }}"><i
 							class="fa-solid fa-house-chimney"></i></a></li>
-				<li class="house" title="Iniciar Sección"><a href="{{ url_for('auth_bp.login') }}"><i class="fa fa-user"></i></a>
+				<li class="house" title="Iniciar Sección"><a href="{{ url_for('auth_bp.login') }}"><i
+							class="fa fa-user"></i></a>
 				</li>
 			</ul>
 		</nav>
@@ -75,7 +76,7 @@
 					<!--Parrafo que le da la bienvenida a los nuevos usuarios y les da la opcion de ir a la pagina de registro-->
 					<p class="texto-bienvenida">Si aun no tienes una cuenta registrate aqui</p>
 					<!--Boton que lleva a la pagina de registro -->
-					<a href="{{ url_for('auth_bp.registro') }}"><input type="button" value="Registrarse"
+					<a href="{{ url_for('auth_bp.register') }}"><input type="button" value="Registrarse"
 							class="boton-registrarse" id="sing-in"></a>
 				</div>
 			</div>
@@ -90,6 +91,7 @@
 
 					<!-- Formulario de login actualizado -->
 					<form class="form-iniciar-sesion" method="POST" action="{{ url_for('auth_bp.login') }}">
+						{{ form.hidden_tag() }}
 						<label class="label-form-iniciar-sesion">
 							<i class='bx bx-envelope'></i>
 							<!--input en el que se ingresa el email registrado anteriormente por el usuario-->

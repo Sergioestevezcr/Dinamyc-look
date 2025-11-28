@@ -59,7 +59,8 @@
 			<ul class="nav-links">
 				<li class="house"><a href="{{ url_for('client_bp.index_cliente') }}"><i
 							class="fa-solid fa-house-chimney"></i></a></li>
-				<li class="house" title="Iniciar Sección"><a href="{{ url_for('auth_bp.login') }}"><i class="fa fa-user"></i></a></li>
+				<li class="house" title="Iniciar Sección"><a href="{{ url_for('auth_bp.login') }}"><i
+							class="fa fa-user"></i></a></li>
 			</ul>
 		</nav>
 	</header>
@@ -84,7 +85,8 @@
 					<h2 class="crear-cuenta">Crear una cuenta</h2>
 					<!--parrafo que informa la otra manera de registrarse-->
 					<p class="text-crear-cuenta">o usa tu email para registrarte</p>
-					<form class="form-crear-cuenta" action="{{ url_for('auth_bp.registro') }}" method="POST">
+					<form class="form-crear-cuenta" action="{{ url_for('auth_bp.register') }}" method="POST">
+						{{ form.hidden_tag() }}
 						<div class="names">
 							<label class="label-form-crear-cuenta">
 								<i class='bx bx-user'></i>
@@ -175,8 +177,8 @@
 						<li><i class='bx bxl-tiktok'></i></li>
 					</a>
 					<a href="https://www.instagram.com/dinamyc_look/">
-							<li><i class='bx bxl-instagram'></i></li>
-						</a>
+						<li><i class='bx bxl-instagram'></i></li>
+					</a>
 					<a href="">
 						<li><i class='bx bxl-whatsapp'></i></li>
 					</a>
