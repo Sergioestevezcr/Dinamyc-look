@@ -1,35 +1,114 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8">
-  <title>Pago aprobado</title>
-  <style>
-    body {
-      font-family: system-ui, Roboto, sans-serif;
-      max-width: 500px;
-      margin: 3rem auto;
-      padding: 1rem;
-      text-align: center;
-      color: #2b2b2b;
-    }
-    h1 {
-      color: #6b1a30;
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin-bottom: .5rem;
-    }
-    p {
-      font-size: .95rem;
-      line-height: 1.4;
-      margin-bottom: .5rem;
-    }
-  </style>
-</head>
-<body>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pago Exitoso</title>
+  <link rel="stylesheet" href="../../static/css/styles_usuario/style_general.css">
+  <!-- Fuente de iconos Boxicons -->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-  <h1>¡Gracias! ✅</h1>
-  <p>Tu pago fue aprobado correctamente.</p>
-  <p>Estamos preparando tu pedido.</p>
+  <!-- Fuente de iconos FontAwesome -->
+  <script src="https://kit.fontawesome.com/be457a772f.js" crossorigin="anonymous"></script>
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="180x180"
+    href="{{ url_for('static', filename='imagenes/favicons/apple-touch-icon.ico') }}">
+  <link rel="icon" type="image/png" sizes="32x32"
+    href="{{ url_for('static', filename='imagenes/favicons/favicon-32x32.ico') }}">
+  <link rel="icon" type="image/png" sizes="16x16"
+    href="{{ url_for('static', filename='imagenes/favicons/favicon-16x16.ico') }}">
+  <link rel="manifest" href="{{ url_for('static', filename='imagenes/favicons/site.webmanifest') }}">
+  <link rel="mask-icon" href="{{ url_for('static', filename='imagenes/favicons/safari-pinned-tab.svg') }}"
+    color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+  <header class="header">
+    <div class="nombre-empresa">
+      <a href="{{ url_for('client_bp.index_cliente') }}">Dinamyc Look</a>
+    </div>
+
+    <div class="barra-de-busqueda">
+      <!-- Botón visible solo en pantallas pequeñas -->
+      <button type="button" class="toggle-search">
+        <i class="fas fa-search"></i>
+      </button>
+
+      <form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
+        <input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
+        <div class="btn-serch">
+          <button type="submit"><i class="fas fa-search"></i></button>
+        </div>
+      </form>
+    </div>
+
+    <nav class="navbar" id="nav">
+      <ul class="nav-links">
+        <li class="house" title="Inicio"><a href="{{ url_for('client_bp.index_cliente') }}"><i
+              class="fa-solid fa-house-chimney"></i></a></li>
+        <li title="Carrito"><a href="#"><i class='bx bxs-shopping-bags'></i></a></li>
+        {% if user %}
+        <!-- Icono de usuario cuando ha iniciado sesión -->
+        <li class="usuario-menu">
+          <a href="#" class="nombre-user">¡Hola, {{ nombre }}!</a>
+          <div class="usuario-dropdown">
+            <a href="{{ url_for('client_bp.favoritos') }}"><i class='bx bxs-star'></i><span>
+                Favoritos</span></a>
+            <a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
+                Compras</span></a>
+            <a href="{{ url_for('admin_bp.configuracion') }}" class="active"><i class='bx bxs-user'></i><span>
+                Perfil</span></a>
+            <a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
+              sesión</a>
+          </div>
+        </li>
+
+        {% else %}
+        <li class="house" title="Iniciar Sesión"><a href="{{ url_for('auth_bp.login') }}"><i class="fa fa-user"></i></a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </header>
+  <section class="barra-de-marcas">
+    <div class="scroll-container">
+      <div class="items-marcas"><a href="{{ url_for('client_bp.epa_colombia') }}"><img
+            src="{{ url_for('static', filename='imagenes/logos/epa colombia logo letra blanca.png') }}" alt=""></a>
+      </div>
+      <div class="items-marcas"><a href="{{ url_for('client_bp.anyeluz') }}"><img
+            src="{{ url_for('static', filename='imagenes/logos/anyeluz logo letra blanca.png') }}" alt=""></a></div>
+      <div class="items-marcas"><a href="{{ url_for('client_bp.milagros') }}"><img
+            src="{{ url_for('static', filename='imagenes/logos/milagros logo letra blanca.png') }}" alt=""></a></div>
+      <div class="items-marcas"><a href="{{ url_for('client_bp.dluchi') }}"><img
+            src="{{ url_for('static', filename='imagenes/logos/dluchi logo letra blanca.png') }}" alt=""></a></div>
+      <div class="items-marcas"><a href="{{ url_for('client_bp.kaba') }}"><img
+            src="{{ url_for('static', filename='imagenes/logos/kaba logo letra blanca.png') }}" width="auto" alt=""></a>
+      </div>
+      <div class="items-marcas"><a href="{{ url_for('client_bp.la_receta') }}"><img
+            src="{{ url_for('static', filename='imagenes/logos/la receta logo letra blanca.png') }}" alt=""></a></div>
+      <div class="items-marcas"><a href="{{ url_for('client_bp.magic_hair') }}"><img
+            src="{{ url_for('static', filename='imagenes/logos/magic hair logo letra blanca.png') }}" alt=""></a></div>
+      <div class="items-marcas"><a href="{{ url_for('client_bp.OMG') }}"><img
+            src="{{ url_for('static', filename='imagenes/logos/omg logo letra blaca.png') }}" width="auto" alt=""></a>
+      </div>
+      <div class="items-marcas"><a href="{{ url_for('client_bp.la_pocion') }}"><img
+            src="{{ url_for('static', filename='imagenes/logos/pocion logo letra blanca.png') }}" width="auto"
+            alt=""></a></div>
+    </div>
+  </section>
+
+  <section class="mensaje-estado">
+    <i class='bx bx-heart-circle'></i>
+    <h1>¡Gracias!</h1>
+    <p>Tu pago fue aprobado correctamente.</p>
+    <p>Estamos preparando tu pedido con mucho cuidado.</p>
+    <p><a href="">Sigue descubriendo más productos aquí</a></p> <!------------------ poner enlace ------------->
+  </section>
 
 </body>
+
 </html>

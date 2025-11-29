@@ -848,14 +848,17 @@ body:has(.usuario-menu) .toggle-search {
 
 
 /* Estilo base de la tabla de pedidos */
-.orders-table {
+.orders-table,
+.orders-table2 {
     width: 100%;
     border-collapse: collapse;
 }
 
 /* Espaciado y alineación de celdas de tabla */
 .orders-table th,
-.orders-table td {
+.orders-table td,
+.orders-table2 th,
+.orders-table2 td {
     padding: 16px;
     text-align: left;
 }
@@ -867,18 +870,24 @@ body:has(.usuario-menu) .toggle-search {
 }
 
 /* Encabezado de la tabla con fondo rosa suave */
-.orders-table thead {
+.orders-table thead,
+.orders-table2 thead {
     background-color: rgba(237, 180, 205, 0.6);
 }
 
 /* Líneas divisorias entre filas de la tabla */
-.orders-table tbody tr {
+.orders-table tbody tr,
+.orders-table2 tbody tr {
     border-bottom: 1px solid #eee;
 }
 
 /* Efecto al pasar el cursor sobre las filas de la tabla */
 .orders-table tbody tr:hover {
     background-color: #f9f9f9;
+}
+
+.orders-table2 tbody tr:hover {
+    background-color: #f1f0f0;
 }
 
 .btn-mas {
@@ -2098,6 +2107,227 @@ button.btn-fav i.bx.bxs-leaf,
     background-color: #000;
 }
 
+/**************************************** Pasarela Pago **********************************/
+.panel {
+    display: grid;
+    grid-template-columns: 1.4fr 0.6fr;
+}
+
+.list-cart {
+    margin: 20px;
+    padding: 20px;
+    background-color: #fafafa;
+    border-radius: 16px;
+}
+
+.list-cart h1 {
+    text-align: center;
+}
+
+.list-cart h1 i {
+    color: #892B47;
+}
+
+.total-box {
+    padding-left: 20px;
+    font-weight: 600;
+}
+
+.metodo-pago {
+    max-width: 700px;
+    margin: 20px 20px 20px 0;
+    padding: 20px 16px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
+}
+
+.metodo-pago h2 {
+    font-size: 28px;
+    color: #451221;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.metodo-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+    transition: box-shadow 0.3s ease;
+}
+
+.metodo-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.metodo-card h3 {
+    font-size: 20px;
+    color: rgba(69, 18, 33, .8);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.metodo-card h3 i {
+    color: #A63055;
+    font-size: 21px;
+}
+
+.metodo-card p {
+    color: #7f8c8d;
+    line-height: 1.6;
+    margin-bottom: 18px;
+}
+
+.metodo-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.metodo-card label {
+    font-weight: 600;
+    color: #451221;
+    margin-bottom: 4px;
+}
+
+.metodo-card input[type="text"] {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.metodo-card input[type="text"]:focus {
+    outline: none;
+    border-color: #C1416D;
+    box-shadow: 0 0 0 3px rgba(193, 65, 109, 0.1);
+}
+
+.metodo-card button {
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mercado-btn {
+    background: #A63055;
+    color: #fff;
+}
+
+.mercado-btn:hover {
+    background: #892b47;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(166, 48, 85, 0.6);
+}
+
+.cod-btn {
+    background: #A63055;
+    color: #fff;
+}
+
+.cod-btn:hover {
+    background: #892b47;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(166, 48, 85, 0.6);
+}
+
+.metodo-card button:active {
+    transform: translateY(0);
+}
+
+.btn-ped {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+    font-weight: 700;
+}
+
+.btn-ped a{
+    font-size: 18px;
+    text-decoration: underline;
+    color: #a10055;
+}
+
+.mensaje-estado {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 40px 24px;
+    text-align: center;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.mensaje-estado i {
+    font-size: 40px;
+    color: #A63055;
+}
+
+.mensaje-estado h1 {
+    font-size: 32px;
+    color: #7a003f;
+    margin-bottom: 16px;
+    font-weight: 700;
+}
+
+.mensaje-estado p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.ref-box {
+    background: #f8f9fa;
+    border: 2px dashed #a10055;
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin: 24px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+    letter-spacing: 0.5px;
+}
+
+.mensaje-estado a {
+    display: inline-block;
+    margin: 15px 0;
+    padding: 14px 32px;
+    background: #C1416D;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.mensaje-estado a:hover {
+    background: #A63055;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(166, 48, 85, 0.5);
+}
+
+.mensaje-estado a:active {
+    transform: translateY(0);
+}
+
+.mensaje-estado p:last-child {
+    font-size: 18px;
+    color: #7f8c8d;
+    margin-top: 20px;
+    margin-bottom: 0;
+    font-weight: 500;
+}
 
 /**************************************** Footer **********************************/
 .footer {
@@ -2759,7 +2989,8 @@ button.btn-fav i.bx.bxs-leaf,
     }
 
     .ver-mas3 {
-        width: 100%;;
+        width: 100%;
+        ;
     }
 
     /***************** SECCION CUATRO **************/
@@ -3361,6 +3592,7 @@ button.btn-fav i.bx.bxs-leaf,
         width: auto;
         border-radius: 10px;
     }
+
     /************* SECCION cuatro ***************/
 
     #t4,
