@@ -46,7 +46,7 @@ def index():
     productosT = cur.fetchone()[0] or 0
 
     cur.execute(
-        'SELECT Nombre , Marca, Total_Vendido FROM mas_vendidos ORDER BY mas_vendidos.Total_Vendido DESC LIMIT 10')
+        'SELECT Nombre , Marca, Total_Vendido FROM masvendido ORDER BY masvendido.Total_Vendido DESC LIMIT 10')
     mas_vendidos = cur.fetchall()
 
     cur.execute(

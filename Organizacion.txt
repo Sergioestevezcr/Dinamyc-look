@@ -1,147 +1,115 @@
 Dinamyc-look/
-├── app.py                  # Archivo principal de la aplicación:
-│                           # - Instancia de Flask
-│                           # - Carga de configuración (desde config.py)
-│                           # - Inicialización de MySQL
-│                           # - Definición de decoradores de autenticación (login_required, admin_required, cliente_required)
-│                           # - Registro de Blueprints de los controladores
-│                           # - Punto de entrada (if __name__ == '__main__': app.run())
+├── app.py
+│     # Archivo principal de la aplicación Flask
+│     # Inicializa la app, registra los blueprints y configura la conexión con MySQL.
 │
-├── config.py               # Archivo de Configuración:
-│                           # - MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB
-│                           # - MAIL_SERVER, MAIL_PORT, MAIL_USE_TLS, MAIL_USERNAME, MAIL_PASSWORD
-│                           # - UPLOAD_FOLDER, ALLOWED_EXTENSIONS
-│                           # - SECRET_KEY
+├── config.py
+│     # Configuración general: Base de datos, correo, claves, rutas de subida, etc.
 │
-├── models/                 # Carpeta para los Modelos (Lógica de negocio y DB):
-│   ├── __init__.py         # Archivo vacío para que Python trate 'models' como un paquete
-│   ├── user_model.py       # Modelo para la tabla 'usuarios' y 'tokens':
-│   │   # - Métodos para CRUD de usuarios (find_by_email, create_user, update_user, get_user_by_id, get_all_users)
-│   │   # - Métodos para tokens de recuperación (generate_reset_token, create_token, get_active_token, deactivate_token, get_all_tokens_status)
-│   ├── product_model.py    # Modelo para las tablas 'productos' y 'promociones' (relacionadas con productos):
-│   │   # - Métodos para CRUD de productos (get_all_products, get_limited_products, get_products_by_brand, get_product_details, get_related_products, get_random_products, add_product, get_product_by_id, update_product, search_products, get_products_for_promo_selection, update_product_stock)
-│   │   # - Métodos para promociones (get_promotions, get_future_promotions, add_promotion, get_promotion_by_id, update_promotion, assign_promotion_to_products)
-│   │   # - Función allowed_file
-│   ├── cart_model.py       # Modelo para las tablas 'carrito_temp' y 'favoritos':
-│   │   # - Métodos para el carrito (get_user_cart_items, add_or_update_cart_item, update_cart_item_quantity, remove_cart_item, clear_user_cart)
-│   │   # - Métodos para favoritos (get_user_favorites, toggle_favorite, get_favorite_products_details)
-│   ├── sale_model.py       # Modelo para las tablas 'pedidos', 'detalles_venta' y vistas de reporte:
-│   │   # - Métodos para dashboard admin (get_monthly_summary, get_top_selling_products, get_products_running_low)
-│   │   # - Métodos para pedidos (get_sales_by_month, get_all_sales_summary, get_clients_for_sales, get_products_for_sales, process_new_sale, get_sale_details_for_invoice)
-│   │   # - Métodos para reportes (get_all_reports, generate_and_save_report, get_report_file)
-│   └── __init__.py         # Puedes dejarlo vacío o usarlo para importar modelos aquí para facilitar el acceso
+├── controllers/           # Controladores (Blueprints)
+│   ├── __init__.py
+│   ├── admin_controller.py       # Rutas del panel administrador
+│   ├── auth_controller.py        # Login, registro, recuperación de contraseña
+│   ├── client_controller.py      # Rutas del cliente y navegación de productos
+│   ├── diagnostic_controller.py  # Verificación de templates y estáticos
+│   └── payment_controller.py     # (Si está en uso) Gestión de pagos
 │
-├── controllers/            # Carpeta para los Controladores (Manejo de rutas y lógica de flujo):
-│   ├── __init__.py         # Archivo vacío para que Python trate 'controllers' como un paquete
-│   ├── auth_controller.py      # Blueprint para autenticación (rutas bajo '/')
-│   │   # - /login (GET, POST)
-│   │   # - /registro (GET, POST)
-│   │   # - /logout
-│   │   # - /forgot_password (GET, POST)
-│   │   # - /reset_password/<token> (GET, POST)
-│   ├── client_controller.py    # Blueprint para las vistas de cliente (rutas bajo '/')
-│   │   # - /index_cliente
-│   │   # - /epa_colombia
-│   │   # - /anyeluz
-│   │   # - /milagros
-│   │   # - /dluchi
-│   │   # - /kaba
-│   │   # - /la_receta
-│   │   # - /magic_hair
-│   │   # - /OMG
-│   │   # - /la_pocion
-│   │   # - /conocenos
-│   │   # - /toggle_favorito/<int:producto_id>
-│   │   # - /detallesproducto/<int:id>
-│   │   # - /carrito_get
-│   │   # - /carrito_agregar (POST)
-│   │   # - /carrito_actualizar (POST)
-│   │   # - /carrito_eliminar/<item_id> (POST)
-│   │   # - /carrito_finalizar (POST)
-│   │   # - /compras
-│   │   # - /fovoritos
-│   │   # - /buscar (GET)
-│   │   # - /configuracion (para cliente)
-│   │   # - /actualizar_usuario/<int:id> (para cliente)
-│   │   # - /factura/<id_venta> (para cliente)
-│   ├── admin_controller.py     # Blueprint para las vistas de administrador (rutas bajo '/admin')
-│   │   # - / (redireccionado desde app.py a /admin o directamente en /admin)
-│   │   # - /token_status
-│   │   # - /pedidos_por_mes (API para gráfica)
-│   │   # - /productos
-│   │   # - /add_producto (POST)
-│   │   # - /edit_producto/<id>
-│   │   # - /update_producto/<id> (POST)
-│   │   # - /promociones
-│   │   # - /add_promocion (POST)
-│   │   # - /edit_promocion/<id>
-│   │   # - /update_promocion/<id> (POST)
-│   │   # - /asignar_promocion (POST)
-│   │   # - /usuarios
-│   │   # - /add_usuario (POST)
-│   │   # - /edit_usuario/<id>
-│   │   # - /update_usuario/<id> (POST)
-│   │   # - /pedidos
-│   │   # - /add_venta (POST)
-│   │   # - /factura/<id_venta> (para admin)
-│   │   # - /configuracion (para admin)
-│   │   # - /actualizar_usuario/<int:id> (para admin)
-│   │   # - /reportes
-│   │   # - /generar_reporte (POST)
-│   │   # - /descargar_reporte/<int:id>
-│   │   # - /ver_reporte/<int:id>
-│   └── diagnostic_controller.py # Blueprint para diagnóstico
-│       # - /verificar_templates (antiguo /diagnostico)
-│       # - /verificar_static
+├── forms/
+│   ├── __init__.py
+│   ├── admin_form.py      # Formularios usados por el admin
+│   └── auth_forms.py       # Formularios de autenticación
 │
-├── views/                  # Carpeta para las Vistas (Plantillas HTML):
-│   ├── Vista_usuario/      # Contiene todas las plantillas para la interfaz del cliente
-│   │   ├── anyeluz.html
-│   │   ├── buscar.html
-│   │   ├── clave_nueva.html
-│   │   ├── clave_olvidada.html
-│   │   ├── compras.html
-│   │   ├── conocenos.html
-│   │   ├── dluchi.html
-│   │   ├── epa-colombia.html
-│   │   ├── factura.html    # Factura para el cliente
-│   │   ├── favoritos.html
+├── models/                # Modelos (interacción con MySQL)
+│   ├── __init__.py
+│   ├── user_model.py      # Usuarios y manejo de tokens
+│   ├── product_model.py   # Productos y promociones
+│   ├── sale_model.py      # Ventas, reportes, facturación
+│   └── entity.py          # Clases base o entidades (si aplica)
+│
+├── services/
+│   ├── __init__.py
+│   └── email_service.py   # Servicio de envío de correos
+│
+├── static/
+│   ├── css/               # Hojas de estilo
+│   │   ├── style_admin.css
+│   │   ├── style_index_admin.css
+│   │   ├── style_lareceta.css
+│   │   ├── style_Anyeluz.css
+│   │   ├── style_Dluchi.css
+│   │   ├── style_EPA_Colombia.css
+│   │   ├── style_Kaba.css
+│   │   ├── style_Magic-Hair.css
+│   │   ├── style_Milagros.css
+│   │   ├── style_OMG.css
+│   │   └── (demás archivos CSS por marca)
+│   │
+│   ├── js/                # Scripts JavaScript
+│   │   ├── script_alert.js
+│   │   ├── script_carrito.js
+│   │   ├── script_carrusel_productos.js
+│   │   └── (otros scripts)
+│   │
+│   └── imagenes/          # Imágenes organizadas por marcas
+│       ├── Anyeluz/
+│       ├── Dluchi/
+│       ├── EPA Colombia/
+│       ├── Kaba/
+│       ├── La Receta/
+│       ├── Magic Hair/
+│       ├── Milagros/
+│       ├── OMG/
+│       ├── La Pocion/
+│       └── Logo dinamyc sin fondo.png
+│
+├── templates/
+│   ├── errors/            # Páginas de error
+│   │   ├── 404.html
+│   │   └── 500.html
+│   │
+│   ├── paginas/           # Páginas generales (landing, etc.)
+│   │   ├── chaceux.html
+│   │   ├── pag_entrega.html
+│   │   ├── pag_datos.html
+│   │   ├── pag_pedidorealizado.html
+│   │   └── (otras páginas generales)
+│   │
+│   ├── Vista_usuario/     # Plantillas del cliente
 │   │   ├── index.html
-│   │   ├── info_producto.html
-│   │   ├── kaba.html
-│   │   ├── la-pocion.html
-│   │   ├── lareceta.html
 │   │   ├── login.html
-│   │   ├── magic-hair.html
+│   │   ├── register.html
+│   │   ├── perfil.html
+│   │   ├── factura.html
+│   │   ├── compras.html
+│   │   ├── favoritos.html
+│   │   ├── buscar.html
+│   │   ├── info_producto.html
+│   │   ├── anyeluz.html
+│   │   ├── dluchi.html
 │   │   ├── milagros.html
+│   │   ├── epa-colombia.html
+│   │   ├── kaba.html
+│   │   ├── lareceta.html
+│   │   ├── la-pocion.html
+│   │   ├── magic-hair.html
 │   │   ├── OMG.html
-│   │   ├── perfil.html     # Perfil del cliente (antiguo configuracion de cliente)
-│   │   └── register.html
-│   └── Vistas_admin/       # Contiene todas las plantillas para la interfaz de administración
-│       ├── administradores.html # (Si existe una vista separada para administrar administradores)
-│       ├── configuracion.html # Configuración del administrador (antiguo configuracion de admin)
-│       ├── descuentos.html
-│       ├── factura.html    # Factura para el administrador
+│   │   └── clave_olvidada.html / clave_nueva.html
+│   │
+│   └── Vistas_admin/      # Plantillas del panel admin
 │       ├── index-admin.html
 │       ├── productos.html
-│       ├── reportes.html
+│       ├── ventas.html
 │       ├── usuarios.html
-│       ├── pedidos.html
-│       └── token_status.html # Mover esta también aquí
+│       ├── reportes.html
+│       ├── descuentos.html
+│       ├── configuracion.html
+│       ├── factura.html
+│       └── token_status.html
 │
-├── static/                 # Carpeta para archivos estáticos:
-│   ├── css/                # Archivos de hojas de estilo
-│   ├── js/                 # Archivos JavaScript
-│   └── imagenes/           # Imágenes organizadas por marcas o categorías
-│       ├── EPA_Colombia/
-│       ├── Anyeluz/
-│       ├── Milagros/
-│       ├── D’Luchi/
-│       ├── Kaba/
-│       ├── La_Receta/
-│       ├── Magic_Hair/
-│       ├── OMG/
-│       ├── La_Pocion/
-│       └── ... (otras carpetas de imágenes según tus marcas)
+├── venv/                  # Entorno virtual (no se sube a GitHub)
 │
-└── .flaskenv               # (Opcional) Archivo para configurar variables de entorno de Flask
+├── database.py            # Conexión a la base de datos (si separado)
+├── decorators.py          # Decoradores: login_required, admin_required…
+├── requirements.txt       # Dependencias del proyecto
+├── Organizacion.txt       # Este archivo
+└── run.py                 # Archivo alternativo de ejecución
