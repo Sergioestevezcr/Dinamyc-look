@@ -79,7 +79,7 @@ def usuarios_productos_por_mes():
             COUNT(ID_Usuario) AS nuevos_usuarios
         FROM usuarios
         WHERE YEAR(Fecha_registro) = YEAR(CURDATE())
-        GROUP BY MONTH(Fecha_registro)
+        GROUP BY MONTH(Fecha_registro), mes
         ORDER BY MONTH(Fecha_registro);
     ''')
     data_usuarios = cur.fetchall()
@@ -92,7 +92,7 @@ def usuarios_productos_por_mes():
         FROM pedidos
         JOIN detalles_venta ON pedidos.ID_Venta = detalles_venta.ID_VentaFK
         WHERE YEAR(pedidos.Fecha) = YEAR(CURDATE())
-        GROUP BY MONTH(pedidos.Fecha)
+        GROUP BY MONTH(pedidos.Fecha), mes
         ORDER BY MONTH(pedidos.Fecha);
     ''')
     data_productos = cur.fetchall()
