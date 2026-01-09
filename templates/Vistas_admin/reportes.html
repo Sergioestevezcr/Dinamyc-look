@@ -117,6 +117,7 @@
             <h2 class="modal-header">Generar Nuevo Reporte</h2>
 
             <form id="addForm" action="{{ url_for('admin_bp.generar_reporte') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <!-- Fecha inicio -->
                 <div class="form-group">
