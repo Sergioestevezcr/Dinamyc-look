@@ -155,28 +155,121 @@ Dependiendo de la configuración del proyecto, iniciar el servidor correspondien
 # Estructura del Proyecto
 
 ```
-Dinamyc-look
+Dinamyc-look/
+├── app.py
+│     # Archivo principal de la aplicación Flask
+│     # Inicializa la app, registra los blueprints y configura la conexión con MySQL.
 │
-├── frontend
-│   ├── html
-│   ├── css
-│   └── javascript
+├── config.py
+│     # Configuración general: Base de datos, correo, claves, rutas de subida, etc.
 │
-├── backend
-│   ├── lógica del sistema
-│   └── control de operaciones
+├── controllers/           # Controladores (Blueprints)
+│   ├── __init__.py
+│   ├── admin_controller.py       # Rutas del panel administrador
+│   ├── auth_controller.py        # Login, registro, recuperación de contraseña
+│   ├── client_controller.py      # Rutas del cliente y navegación de productos
+│   ├── diagnostic_controller.py  # Verificación de templates y estáticos
+│   └── payment_controller.py     # (Si está en uso) Gestión de pagos
 │
-├── database
-│   └── estructura de datos
+├── forms/
+│   ├── __init__.py
+│   ├── admin_form.py      # Formularios usados por el admin
+│   └── auth_forms.py       # Formularios de autenticación
 │
-├── assets
-│   ├── imágenes
-│   └── recursos visuales
+├── models/                # Modelos (interacción con MySQL)
+│   ├── __init__.py
+│   ├── user_model.py      # Usuarios y manejo de tokens
+│   ├── product_model.py   # Productos y promociones
+│   ├── sale_model.py      # Ventas, reportes, facturación
+│   └── entity.py          # Clases base o entidades (si aplica)
 │
-└── documentation
-    └── archivos del proyecto
-```
-
+├── services/
+│   ├── __init__.py
+│   └── email_service.py   # Servicio de envío de correos
+│
+├── static/
+│   ├── css/               # Hojas de estilo
+│   │   ├── style_admin.css
+│   │   ├── style_index_admin.css
+│   │   ├── style_lareceta.css
+│   │   ├── style_Anyeluz.css
+│   │   ├── style_Dluchi.css
+│   │   ├── style_EPA_Colombia.css
+│   │   ├── style_Kaba.css
+│   │   ├── style_Magic-Hair.css
+│   │   ├── style_Milagros.css
+│   │   ├── style_OMG.css
+│   │   └── (demás archivos CSS por marca)
+│   │
+│   ├── js/                # Scripts JavaScript
+│   │   ├── script_alert.js
+│   │   ├── script_carrito.js
+│   │   ├── script_carrusel_productos.js
+│   │   └── (otros scripts)
+│   │
+│   └── imagenes/          # Imágenes organizadas por marcas
+│       ├── Anyeluz/
+│       ├── Dluchi/
+│       ├── EPA Colombia/
+│       ├── Kaba/
+│       ├── La Receta/
+│       ├── Magic Hair/
+│       ├── Milagros/
+│       ├── OMG/
+│       ├── La Pocion/
+│       └── Logo dinamyc sin fondo.png
+│
+├── templates/
+│   ├── errors/            # Páginas de error
+│   │   ├── 404.html
+│   │   └── 500.html
+│   │
+│   ├── paginas/           # Páginas generales (landing, etc.)
+│   │   ├── chaceux.html
+│   │   ├── pag_entrega.html
+│   │   ├── pag_datos.html
+│   │   ├── pag_pedidorealizado.html
+│   │   └── (otras páginas generales)
+│   │
+│   ├── Vista_usuario/     # Plantillas del cliente
+│   │   ├── index.html
+│   │   ├── login.html
+│   │   ├── register.html
+│   │   ├── perfil.html
+│   │   ├── factura.html
+│   │   ├── compras.html
+│   │   ├── favoritos.html
+│   │   ├── buscar.html
+│   │   ├── info_producto.html
+│   │   ├── anyeluz.html
+│   │   ├── dluchi.html
+│   │   ├── milagros.html
+│   │   ├── epa-colombia.html
+│   │   ├── kaba.html
+│   │   ├── lareceta.html
+│   │   ├── la-pocion.html
+│   │   ├── magic-hair.html
+│   │   ├── OMG.html
+│   │   └── clave_olvidada.html / clave_nueva.html
+│   │
+│   └── Vistas_admin/      # Plantillas del panel admin
+│       ├── index-admin.html
+│       ├── productos.html
+│       ├── ventas.html
+│       ├── usuarios.html
+│       ├── reportes.html
+│       ├── descuentos.html
+│       ├── configuracion.html
+│       ├── factura.html
+│       └── token_status.html
+│
+├── venv/                  # Entorno virtual (no se sube a GitHub)
+│
+├── database.py            # Conexión a la base de datos (si separado)
+├── decorators.py          # Decoradores: login_required, admin_required…
+├── requirements.txt       # Dependencias del proyecto
+├── Organizacion.txt       # Este archivo
+└── run.py                 # Archivo alternativo de ejecución
 ---
 
 # Contexto Académico
