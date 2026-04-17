@@ -1,9 +1,20 @@
 class TablePagination {
     constructor(tableSelector, options = {}) {
-        this.table = document.querySelector(tableSelector);
+        this.table = typeof tableSelector === 'string'
+            ? document.querySelector(tableSelector)
+            : tableSelector;
+
+        if (!this.table) {
+            return;
+        }
+
         this.tbody = this.table.querySelector('tbody');
+        if (!this.tbody) {
+            return;
+        }
+
         this.originalRows = Array.from(this.tbody.querySelectorAll('tr'));
-        
+
         // Configuración por defecto
         this.config = {
             itemsPerPage: options.itemsPerPage || 10,
@@ -14,58 +25,80 @@ class TablePagination {
             searchSelector: options.searchSelector || null,
             noDataMessage: options.noDataMessage || 'No hay datos disponibles'
         };
-        
+
         this.currentPage = 1;
         this.filteredRows = [...this.originalRows];
-        
+        this.paginationContainer = null;
+        this.itemsPerPageSelect = null;
+        this.paginationShowing = null;
+        this.firstBtn = null;
+        this.prevBtn = null;
+        this.nextBtn = null;
+        this.lastBtn = null;
+        this.pageNumbersContainer = null;
+
         this.init();
     }
-    
+
     init() {
         this.createPaginationContainer();
         this.bindSearchFunctionality();
         this.updateDisplay();
     }
-    
+
     createPaginationContainer() {
         // Crear el contenedor de paginación
         const paginationHTML = `
             <div class="pagination-container">
                 <div class="pagination-info">
                     <div class="items-info">
-                        <span id="pagination-showing">Mostrando 0 a 0 de 0 elementos</span>
+                        <span class="pagination-showing">Mostrando 0 a 0 de 0 elementos</span>
                     </div>
                     <div class="items-per-page">
-                        <label for="items-per-page">Elementos por página:</label>
-                        <select id="items-per-page">
-                            ${this.config.itemsPerPageOptions.map(option => 
-                                `<option value="${option}" ${option === this.config.itemsPerPage ? 'selected' : ''}>${option}</option>`
-                            ).join('')}
+                        <label>Elementos por página:</label>
+                        <select class="items-per-page-select">
+                            ${this.config.itemsPerPageOptions.map(option =>
+            `<option value="${option}" ${option === this.config.itemsPerPage ? 'selected' : ''}>${option}</option>`
+        ).join('')}
                         </select>
                     </div>
                 </div>
                 <div class="pagination-controls">
-                    <button class="pagination-btn" id="first-page" title="Primera página">«</button>
-                    <button class="pagination-btn" id="prev-page" title="Página anterior">‹</button>
-                    <div class="page-numbers" id="page-numbers"></div>
-                    <button class="pagination-btn" id="next-page" title="Página siguiente">›</button>
-                    <button class="pagination-btn" id="last-page" title="Última página">»</button>
+                    <button class="pagination-btn first-page" title="Primera página">«</button>
+                    <button class="pagination-btn prev-page" title="Página anterior">‹</button>
+                    <div class="page-numbers"></div>
+                    <button class="pagination-btn next-page" title="Página siguiente">›</button>
+                    <button class="pagination-btn last-page" title="Última página">»</button>
                 </div>
             </div>
         `;
-        
+
         // Insertar después de la tabla
         this.table.insertAdjacentHTML('afterend', paginationHTML);
-        
+
+        this.paginationContainer = this.table.nextElementSibling;
+        this.itemsPerPageSelect = this.paginationContainer.querySelector('.items-per-page-select');
+        this.paginationShowing = this.paginationContainer.querySelector('.pagination-showing');
+        this.firstBtn = this.paginationContainer.querySelector('.first-page');
+        this.prevBtn = this.paginationContainer.querySelector('.prev-page');
+        this.nextBtn = this.paginationContainer.querySelector('.next-page');
+        this.lastBtn = this.paginationContainer.querySelector('.last-page');
+        this.pageNumbersContainer = this.paginationContainer.querySelector('.page-numbers');
+
         // Agregar estilos CSS
         this.addPaginationStyles();
-        
+
         // Bind eventos
         this.bindPaginationEvents();
     }
-    
+
     addPaginationStyles() {
+        if (document.getElementById('table-pagination-styles')) {
+            return;
+        }
+
         const style = document.createElement('style');
+        style.id = 'table-pagination-styles';
         style.textContent = `
             .pagination-container {
                 display: flex;
@@ -99,7 +132,7 @@ class TablePagination {
                 font-weight: 500;
             }
             
-            #items-per-page {
+            .items-per-page-select {
                 padding: 8px 12px;
                 border: 1px solid #ddd;
                 border-radius: 6px;
@@ -109,7 +142,7 @@ class TablePagination {
                 color: #333;
             }
             
-            #items-per-page:focus {
+            .items-per-page-select:focus {
                 outline: none;
                 border-color: #A63054;
                 box-shadow: 0 0 0 2px rgba(166, 48, 84, 0.2);
@@ -197,7 +230,7 @@ class TablePagination {
                     min-width: 35px;
                 }
                 
-                #items-per-page {
+                .items-per-page-select {
                     padding: 6px 10px;
                     font-size: 12px;
                 }
@@ -205,43 +238,43 @@ class TablePagination {
         `;
         document.head.appendChild(style);
     }
-    
+
     bindPaginationEvents() {
         // Selector de elementos por página
-        document.getElementById('items-per-page').addEventListener('change', (e) => {
+        this.itemsPerPageSelect.addEventListener('change', (e) => {
             this.config.itemsPerPage = parseInt(e.target.value);
             this.currentPage = 1;
             this.updateDisplay();
         });
-        
+
         // Botones de navegación
-        document.getElementById('first-page').addEventListener('click', () => {
+        this.firstBtn.addEventListener('click', () => {
             this.currentPage = 1;
             this.updateDisplay();
         });
-        
-        document.getElementById('prev-page').addEventListener('click', () => {
+
+        this.prevBtn.addEventListener('click', () => {
             if (this.currentPage > 1) {
                 this.currentPage--;
                 this.updateDisplay();
             }
         });
-        
-        document.getElementById('next-page').addEventListener('click', () => {
+
+        this.nextBtn.addEventListener('click', () => {
             const totalPages = Math.ceil(this.filteredRows.length / this.config.itemsPerPage);
             if (this.currentPage < totalPages) {
                 this.currentPage++;
                 this.updateDisplay();
             }
         });
-        
-        document.getElementById('last-page').addEventListener('click', () => {
+
+        this.lastBtn.addEventListener('click', () => {
             const totalPages = Math.ceil(this.filteredRows.length / this.config.itemsPerPage);
             this.currentPage = totalPages;
             this.updateDisplay();
         });
     }
-    
+
     bindSearchFunctionality() {
         if (this.config.searchSelector) {
             const searchInput = document.querySelector(this.config.searchSelector);
@@ -252,10 +285,10 @@ class TablePagination {
             }
         }
     }
-    
+
     filterRows(searchTerm) {
         const term = searchTerm.toLowerCase().trim();
-        
+
         if (term === '') {
             this.filteredRows = [...this.originalRows];
         } else {
@@ -264,34 +297,34 @@ class TablePagination {
                 return text.includes(term);
             });
         }
-        
+
         this.currentPage = 1;
         this.updateDisplay();
     }
-    
+
     updateDisplay() {
         const totalItems = this.filteredRows.length;
         const totalPages = Math.ceil(totalItems / this.config.itemsPerPage);
-        
+
         // Asegurar que currentPage esté en rango válido
         if (this.currentPage > totalPages && totalPages > 0) {
             this.currentPage = totalPages;
         }
-        
+
         // Mostrar filas de la página actual
         this.displayCurrentPageRows();
-        
+
         // Actualizar información de paginación
         this.updatePaginationInfo(totalItems);
-        
+
         // Actualizar controles de paginación
         this.updatePaginationControls(totalPages);
     }
-    
+
     displayCurrentPageRows() {
         // Limpiar tbody
         this.tbody.innerHTML = '';
-        
+
         if (this.filteredRows.length === 0) {
             // Mostrar mensaje de no datos
             const colCount = this.table.querySelector('thead tr').children.length;
@@ -300,21 +333,21 @@ class TablePagination {
             this.tbody.appendChild(noDataRow);
             return;
         }
-        
+
         // Calcular índices de inicio y fin
         const startIndex = (this.currentPage - 1) * this.config.itemsPerPage;
         const endIndex = startIndex + this.config.itemsPerPage;
-        
+
         // Mostrar filas de la página actual
         const currentPageRows = this.filteredRows.slice(startIndex, endIndex);
         currentPageRows.forEach(row => {
             this.tbody.appendChild(row.cloneNode(true));
         });
-        
+
         // CRÍTICO: Restaurar eventos en las filas clonadas
         this.restoreRowEvents();
     }
-    
+
     restoreRowEvents() {
         // Restaurar eventos para los enlaces "Ver Más" en la columna btn-mas
         const verMasLinks = this.tbody.querySelectorAll('.btn-mas a');
@@ -340,63 +373,57 @@ class TablePagination {
             });
         });
     }
-    
+
     updatePaginationInfo(totalItems) {
         const startItem = totalItems === 0 ? 0 : (this.currentPage - 1) * this.config.itemsPerPage + 1;
         const endItem = Math.min(this.currentPage * this.config.itemsPerPage, totalItems);
-        
+
         const infoText = `Mostrando ${startItem} a ${endItem} de ${totalItems} elementos`;
-        document.getElementById('pagination-showing').textContent = infoText;
+        this.paginationShowing.textContent = infoText;
     }
-    
+
     updatePaginationControls(totalPages) {
-        const firstBtn = document.getElementById('first-page');
-        const prevBtn = document.getElementById('prev-page');
-        const nextBtn = document.getElementById('next-page');
-        const lastBtn = document.getElementById('last-page');
-        
         // Habilitar/deshabilitar botones
-        firstBtn.disabled = this.currentPage === 1;
-        prevBtn.disabled = this.currentPage === 1;
-        nextBtn.disabled = this.currentPage === totalPages || totalPages === 0;
-        lastBtn.disabled = this.currentPage === totalPages || totalPages === 0;
-        
+        this.firstBtn.disabled = this.currentPage === 1;
+        this.prevBtn.disabled = this.currentPage === 1;
+        this.nextBtn.disabled = this.currentPage === totalPages || totalPages === 0;
+        this.lastBtn.disabled = this.currentPage === totalPages || totalPages === 0;
+
         // Generar números de página
         this.generatePageNumbers(totalPages);
     }
-    
+
     generatePageNumbers(totalPages) {
-        const pageNumbersContainer = document.getElementById('page-numbers');
-        pageNumbersContainer.innerHTML = '';
-        
+        this.pageNumbersContainer.innerHTML = '';
+
         if (totalPages <= 1) return;
-        
+
         const maxVisible = this.config.maxVisiblePages;
         let startPage = Math.max(1, this.currentPage - Math.floor(maxVisible / 2));
         let endPage = Math.min(totalPages, startPage + maxVisible - 1);
-        
+
         // Ajustar el rango si es necesario
         if (endPage - startPage + 1 < maxVisible) {
             startPage = Math.max(1, endPage - maxVisible + 1);
         }
-        
+
         // Agregar puntos suspensivos al inicio si es necesario
         if (startPage > 1) {
-            this.createPageButton(1, pageNumbersContainer);
+            this.createPageButton(1, this.pageNumbersContainer);
             if (startPage > 2) {
                 const dots = document.createElement('span');
                 dots.textContent = '...';
                 dots.style.padding = '8px 4px';
                 dots.style.color = '#666';
-                pageNumbersContainer.appendChild(dots);
+                this.pageNumbersContainer.appendChild(dots);
             }
         }
-        
+
         // Agregar números de página
         for (let i = startPage; i <= endPage; i++) {
-            this.createPageButton(i, pageNumbersContainer);
+            this.createPageButton(i, this.pageNumbersContainer);
         }
-        
+
         // Agregar puntos suspensivos al final si es necesario
         if (endPage < totalPages) {
             if (endPage < totalPages - 1) {
@@ -404,29 +431,29 @@ class TablePagination {
                 dots.textContent = '...';
                 dots.style.padding = '8px 4px';
                 dots.style.color = '#666';
-                pageNumbersContainer.appendChild(dots);
+                this.pageNumbersContainer.appendChild(dots);
             }
-            this.createPageButton(totalPages, pageNumbersContainer);
+            this.createPageButton(totalPages, this.pageNumbersContainer);
         }
     }
-    
+
     createPageButton(pageNumber, container) {
         const button = document.createElement('button');
         button.className = 'pagination-btn';
         button.textContent = pageNumber;
-        
+
         if (pageNumber === this.currentPage) {
             button.classList.add('active');
         }
-        
+
         button.addEventListener('click', () => {
             this.currentPage = pageNumber;
             this.updateDisplay();
         });
-        
+
         container.appendChild(button);
     }
-    
+
     // Métodos públicos para interactuar con la paginación
     goToPage(page) {
         const totalPages = Math.ceil(this.filteredRows.length / this.config.itemsPerPage);
@@ -435,20 +462,19 @@ class TablePagination {
             this.updateDisplay();
         }
     }
-    
+
     refresh() {
         this.originalRows = Array.from(this.tbody.querySelectorAll('tr'));
         this.filteredRows = [...this.originalRows];
         this.currentPage = 1;
         this.updateDisplay();
     }
-    
+
     destroy() {
-        const paginationContainer = document.querySelector('.pagination-container');
-        if (paginationContainer) {
-            paginationContainer.remove();
+        if (this.paginationContainer) {
+            this.paginationContainer.remove();
         }
-        
+
         // Restaurar todas las filas originales
         this.tbody.innerHTML = '';
         this.originalRows.forEach(row => {
@@ -458,23 +484,12 @@ class TablePagination {
 }
 
 // Inicialización automática cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Buscar todas las tablas con clase 'orders-table' y aplicar paginación
-    const tables = document.querySelectorAll('.orders-table');
-    const tables2 = document.querySelectorAll('.orders-table2');
-    
-    tables.forEach(table => {
-        new TablePagination(`.orders-table`, {
-            itemsPerPage: 10,
-            maxVisiblePages: 5,
-            itemsPerPageOptions: [5, 10, 25, 50],
-            searchSelector: '.buscar',
-            noDataMessage: 'No se encontraron resultados'
-        });
-    });
+    const tables = document.querySelectorAll('.orders-table, .orders-table2');
 
-    tables2.forEach(table => {
-        new TablePagination(`.orders-table2`, {
+    tables.forEach(table => {
+        new TablePagination(table, {
             itemsPerPage: 10,
             maxVisiblePages: 5,
             itemsPerPageOptions: [5, 10, 25, 50],
@@ -485,9 +500,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Escuchar eventos de edición para mantener la funcionalidad existente
-document.addEventListener('rowEdit', function(e) {
+document.addEventListener('rowEdit', function (e) {
     const { button, data } = e.detail;
-    
+
     // Simular clic en el botón original para mantener la funcionalidad
     if (window.openEditModal) {
         window.openEditModal(data);

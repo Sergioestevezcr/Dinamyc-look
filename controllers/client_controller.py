@@ -1,7 +1,57 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, session, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, session
 from database import mysql
 from decorators import login_required, cliente_required
+from app import csrf
 client_bp = Blueprint('client_bp', __name__)
+
+
+def _ensure_home_content_tables_client():
+    cur = mysql.connection.cursor()
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS home_product_config (
+            product_id BIGINT(20) NOT NULL,
+            section_name VARCHAR(30) NOT NULL DEFAULT 'ninguno',
+            sort_order INT NOT NULL DEFAULT 999,
+            enabled TINYINT(1) NOT NULL DEFAULT 0,
+            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (product_id),
+            CONSTRAINT fk_home_product_config_producto
+                FOREIGN KEY (product_id) REFERENCES productos(ID_Producto)
+                ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+    ''')
+
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS home_banners (
+            id BIGINT(20) NOT NULL AUTO_INCREMENT,
+            title VARCHAR(100) DEFAULT NULL,
+            desktop_image VARCHAR(255) DEFAULT NULL,
+            mobile_image VARCHAR(255) DEFAULT NULL,
+            sort_order INT NOT NULL DEFAULT 0,
+            enabled TINYINT(1) NOT NULL DEFAULT 1,
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+    ''')
+
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS brand_banners (
+            id BIGINT(20) NOT NULL AUTO_INCREMENT,
+            brand_name VARCHAR(100) NOT NULL,
+            title VARCHAR(100) DEFAULT NULL,
+            desktop_image VARCHAR(255) DEFAULT NULL,
+            mobile_image VARCHAR(255) DEFAULT NULL,
+            sort_order INT NOT NULL DEFAULT 0,
+            enabled TINYINT(1) NOT NULL DEFAULT 1,
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY idx_brand_enabled_order (brand_name, enabled, sort_order)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+    ''')
+    mysql.connection.commit()
+    cur.close()
 
 # -------------------------------------------------------------------------------------------------------
 #                                      CONEXIÓN VISTAS DEL CLIENTE
@@ -10,11 +60,37 @@ client_bp = Blueprint('client_bp', __name__)
 
 @client_bp.route('/')
 def index_cliente():
+    _ensure_home_content_tables_client()
     user_id = session.get("user_id")   # ID del usuario en sesión
     user_name = session.get("user_name")
 
     cur = mysql.connection.cursor()
-    cur.execute('''SELECT
+    cur.execute('''
+        SELECT
+            p.ID_Producto,
+            p.Nombre,
+            p.Precio AS precio_original,
+            p.Imagen,
+            prov.Marca AS Marca,
+            CASE
+                WHEN pr.Fecha_Inicial <= CURDATE()
+                    AND pr.Fecha_Final >= CURDATE()
+                    AND pr.Descuento IS NOT NULL
+                THEN p.Precio - (p.Precio * pr.Descuento / 100)
+                ELSE NULL
+            END AS precio_final
+        FROM home_product_config hpc
+        JOIN productos p ON p.ID_Producto = hpc.product_id
+        LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
+        LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor
+        WHERE hpc.enabled = 1 AND hpc.section_name = 'destacado'
+        ORDER BY hpc.sort_order ASC, p.ID_Producto DESC
+        LIMIT 12
+    ''')
+    data = cur.fetchall()
+
+    if not data:
+        cur.execute('''SELECT
     	p.ID_Producto, 
         p.Nombre,
         p.Precio AS precio_original,
@@ -30,9 +106,35 @@ def index_cliente():
       FROM productos p
       LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
       LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor LIMIT 8''')
-    data = cur.fetchall()
-    
-    cur.execute('''SELECT 
+        data = cur.fetchall()
+
+    cur.execute('''
+        SELECT
+            p.ID_Producto,
+            p.Nombre,
+            p.Descripcion,
+            p.Precio AS precio_original,
+            p.Imagen,
+            prov.Marca AS Marca,
+            CASE
+                WHEN pr.Fecha_Inicial <= CURDATE()
+                    AND pr.Fecha_Final >= CURDATE()
+                    AND pr.Descuento IS NOT NULL
+                THEN p.Precio - (p.Precio * pr.Descuento / 100)
+                ELSE NULL
+            END AS precio_final
+        FROM home_product_config hpc
+        JOIN productos p ON p.ID_Producto = hpc.product_id
+        LEFT JOIN promociones pr ON p.ID_PromocionFK = pr.ID_Promocion
+        LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor
+        WHERE hpc.enabled = 1 AND hpc.section_name = 'combo'
+        ORDER BY hpc.sort_order ASC, p.ID_Producto DESC
+        LIMIT 8
+    ''')
+    productosect = cur.fetchall()
+
+    if not productosect:
+        cur.execute('''SELECT 
         p.ID_Producto, 
         p.Nombre,
         p.Descripcion,
@@ -51,7 +153,24 @@ def index_cliente():
     LEFT JOIN proveedores prov ON p.ID_ProveedorFK = prov.ID_Proveedor
     WHERE p.Nombre LIKE %s
         OR p.Nombre LIKE %s LIMIT 3''', ('%%combo%%', "%%kit%%"))
-    productosect = cur.fetchall()
+        productosect = cur.fetchall()
+
+    cur.execute('''
+        SELECT id, title, desktop_image, mobile_image
+        FROM home_banners
+        WHERE enabled = 1
+        ORDER BY sort_order ASC, id ASC
+    ''')
+    banners_raw = cur.fetchall()
+    banners = [
+        {
+            'id': b[0],
+            'title': b[1] or '',
+            'desktop_image': b[2],
+            'mobile_image': b[3],
+        }
+        for b in banners_raw
+    ]
 
     favoritos_list = []
     nombre = None
@@ -71,6 +190,7 @@ def index_cliente():
     return render_template('Vista_usuario/index_usuario.html',
                            productos2=data,
                            productosect=productosect,
+                           banners=banners,
                            user=user_name,
                            favoritos=favoritos_list,
                            nombre=nombre)
@@ -132,11 +252,12 @@ def conocenos():
 
 
 @client_bp.route("/toggle_favorito/<int:producto_id>", methods=["POST"])
+@csrf.exempt
 @login_required
 def toggle_favorito(producto_id):
     user_id = session.get("user_id")
 
-    if not user_id: 
+    if not user_id:
         return jsonify({"success": False, "error": "No autenticado"}), 401
 
     cursor = mysql.connection.cursor()
@@ -278,7 +399,7 @@ def detallesproducto(id):
 
     nombre = None
     detalles_favoritos = []
-    
+
     if user_id:
         # Nombre del usuario
         cur.execute(
@@ -289,7 +410,7 @@ def detallesproducto(id):
         # Favoritos (IDs)
         cur.execute(
             "SELECT ID_ProductoFK FROM favoritos WHERE ID_UsuarioFK = %s", (user_id,))
-        detalles_favoritos= [row[0] for row in cur.fetchall()]
+        detalles_favoritos = [row[0] for row in cur.fetchall()]
 
     cur.close()
 
@@ -327,6 +448,7 @@ def carrito_get():
 
 
 @client_bp.route("/carrito_agregar", methods=["POST"])
+@csrf.exempt
 def carrito_agregar():
     data = request.form
     producto = data["nombre"]
@@ -366,6 +488,7 @@ def carrito_agregar():
 
 
 @client_bp.route("/carrito_actualizar", methods=["POST"])
+@csrf.exempt
 def carrito_actualizar():
     data = request.form
     item_id = data.get("id")
@@ -389,6 +512,7 @@ def carrito_actualizar():
 
 
 @client_bp.route("/carrito_eliminar/<item_id>", methods=["POST"])
+@csrf.exempt
 def carrito_eliminar(item_id):
     user_id = session.get("user_id")
     if user_id:
@@ -484,6 +608,8 @@ def compras():
                            nombre=nombre)
 
 # -------------------------------------- BUSCAR -----------------------------------------
+
+
 @client_bp.route('/buscar', methods=['GET'])
 def buscar():
     user_id = session.get("user_id")
@@ -550,7 +676,8 @@ def buscar():
             where_conditions.append("p.Precio <= %s")
             filtros.append(precio_max)
 
-        where_clause = " WHERE " + " AND ".join(where_conditions) if where_conditions else ""
+        where_clause = " WHERE " + \
+            " AND ".join(where_conditions) if where_conditions else ""
 
         if query:
             final_sql = f"{base_sql} {where_clause} ORDER BY CASE WHEN LOWER(p.Nombre) LIKE %s THEN 1 ELSE 2 END, p.Precio ASC"
@@ -572,11 +699,13 @@ def buscar():
         productobusf = []
         nombre = None
         if user_id:
-            cur.execute("SELECT Nombre FROM usuarios WHERE ID_Usuario = %s", (user_id,))
+            cur.execute(
+                "SELECT Nombre FROM usuarios WHERE ID_Usuario = %s", (user_id,))
             row = cur.fetchone()
             nombre = row[0] if row else None
 
-            cur.execute("SELECT ID_ProductoFK FROM favoritos WHERE ID_UsuarioFK = %s", (user_id,))
+            cur.execute(
+                "SELECT ID_ProductoFK FROM favoritos WHERE ID_UsuarioFK = %s", (user_id,))
             productobusf = [row[0] for row in cur.fetchall()]
 
         return render_template(
@@ -605,6 +734,7 @@ def buscar():
 
 
 def render_marca(nombre_marca, template, var_name, var_name_lim=None):
+    _ensure_home_content_tables_client()
     user_id = session.get("user_id")
     user_name = session.get("user_name")
     cur = mysql.connection.cursor()
@@ -686,16 +816,35 @@ def render_marca(nombre_marca, template, var_name, var_name_lim=None):
         )
         combos_kits = cur.fetchall()
 
+    cur.execute('''
+        SELECT id, title, desktop_image, mobile_image
+        FROM brand_banners
+        WHERE enabled = 1 AND brand_name = %s
+        ORDER BY sort_order ASC, id ASC
+    ''', (nombre_marca,))
+    brand_banners_raw = cur.fetchall()
+    brand_banners = [
+        {
+            'id': b[0],
+            'title': b[1] or '',
+            'desktop_image': b[2],
+            'mobile_image': b[3]
+        }
+        for b in brand_banners_raw
+    ]
+
     # ----------- FAVORITOS Y USUARIO -----------
     favoritos_marca = []
     nombre = None
 
     if user_id:
-        cur.execute("SELECT Nombre FROM usuarios WHERE ID_Usuario = %s", (user_id,))
+        cur.execute(
+            "SELECT Nombre FROM usuarios WHERE ID_Usuario = %s", (user_id,))
         row = cur.fetchone()
         nombre = row[0] if row else None
 
-        cur.execute("SELECT ID_ProductoFK FROM favoritos WHERE ID_UsuarioFK = %s", (user_id,))
+        cur.execute(
+            "SELECT ID_ProductoFK FROM favoritos WHERE ID_UsuarioFK = %s", (user_id,))
         favoritos_marca = [row[0] for row in cur.fetchall()]
 
     cur.close()
@@ -709,5 +858,7 @@ def render_marca(nombre_marca, template, var_name, var_name_lim=None):
         user=user_name,
         favoritos=favoritos_marca,
         nombre=nombre,
+        brand_banners=brand_banners,
+        marca_nombre=nombre_marca,
         data=data
     )

@@ -63,13 +63,15 @@
                                 class="fa-solid fa-user"></i><span>Clientes</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.admin') }}">
-                        <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
+                            <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.pedidos_view') }}"><i
                                 class='bx bxs-dollar-circle'></i><span>Pedidos</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.productos') }}"><i
                                 class="fas fa-tags"></i><span>Productos</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.banners') }}"><i
+                                class="fa-regular fa-images"></i><span>Banners</span></a></li>
                     <li><a href="{{ url_for('admin_bp.promociones') }}"><i
                                 class="fas fa-percent"></i><span>Promociones</span></a></li>
                     <li><a href="{{ url_for('admin_bp.reportes') }}"><i
@@ -92,7 +94,10 @@
                 <button class="menu-toggle" id="open_btn"><i class='bx bx-menu'></i></button>
                 <h1>Configuraciones</h1>
             </header>
-            <form action="{{ url_for('admin_bp.actualizar_usuario', id=usuario.id_usuario) }}" method="POST">
+            <form action="{{ url_for('admin_bp.actualizar_usuario', user_id=usuario.id_usuario) }}" method="POST">
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                 <div class="container-config">
                     <div class="form-group ddos1">
                         <div class="label-form-config">

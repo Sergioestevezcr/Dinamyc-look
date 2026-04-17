@@ -66,13 +66,15 @@
                     <li><a href="{{ url_for('admin_bp.usuarios') }}"><i
                                 class="fa-solid fa-user"></i><span>Clientes</span></a></li>
                     <li><a href="{{ url_for('admin_bp.admin') }}" class="active">
-                        <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
+                            <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.pedidos_view') }}"><i
                                 class='bx bxs-dollar-circle'></i><span>Pedidos</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.productos') }}"><i
                                 class="fas fa-tags"></i><span>Productos</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.banners') }}"><i
+                                class="fa-regular fa-images"></i><span>Banners</span></a></li>
                     <li><a href="{{ url_for('admin_bp.promociones') }}"><i
                                 class="fas fa-percent"></i><span>Promociones</span></a></li>
                     <li><a href="{{ url_for('admin_bp.reportes') }}"><i
@@ -127,66 +129,61 @@
                                 <th></th>
                             </tr>
                         </thead>
-                            <tbody>
-                                {% for admin in admins %}
-                                <tr>
-                                    <!-- Nombre + Apellido -->
-                                    <td>{{ admin[1] }} {{ admin[2] }}</td>
-                                    <!-- Documento -->
-                                     <td>{{ admin[3]}}</td>
-                                    <!-- Correo -->
-                                    <td class="correo-desbordado">
-                                        {{ admin[4]|replace("@","<wbr>@<wbr>")|replace(".", ".<wbr>")|safe }}
-                                    </td>
-                                    <!-- Teléfono -->
-                                    <td>{{ admin[5] }}</td>
-                                    <!-- Dirección -->
-                                    <td>{{ admin[6] }}</td>
-                                    <!-- Ciudad -->
-                                    <td>{{ admin[7] }}</td>
+                        <tbody>
+                            {% for admin in admins %}
+                            <tr>
+                                <!-- Nombre + Apellido -->
+                                <td>{{ admin[1] }} {{ admin[2] }}</td>
+                                <!-- Documento -->
+                                <td>{{ admin[3]}}</td>
+                                <!-- Correo -->
+                                <td class="correo-desbordado">
+                                    {{ admin[4]|replace("@","<wbr>@<wbr>")|replace(".", ".<wbr>")|safe }}
+                                </td>
+                                <!-- Teléfono -->
+                                <td>{{ admin[5] }}</td>
+                                <!-- Dirección -->
+                                <td>{{ admin[6] }}</td>
+                                <!-- Ciudad -->
+                                <td>{{ admin[7] }}</td>
 
-                                    <!-- Acciones -->
-                                    <td class="edit-icon">
-                                        {% if admin[10] == "Activo" %}
-                                        <!-- Botón para editar -->
-                                        <a href="#" 
-                                        data-id="{{ admin[0] }}" 
-                                        data-nombre="{{ admin[1] }}"
-                                        data-apellido="{{ admin[2] }}" 
-                                        data-documento="{{ admin[3] }}"
-                                        data-correo="{{ admin[4] }}" 
-                                        data-telefono="{{ admin[5] }}"
-                                        data-direccion="{{ admin[6] }}" 
-                                        data-ciudad="{{ admin[7] }}"
-                                        data-password="{{ admin[8] }}"
-                                        class="edit-btn">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        {% else %}
-                                        <button class="btn-delete disabled" disabled>
-                                            <i class="fas fa-ban"></i>
-                                        </button>
-                                        {% endif %}
-                                    </td>
+                                <!-- Acciones -->
+                                <td class="edit-icon">
+                                    {% if admin[10] == "Activo" %}
+                                    <!-- Botón para editar -->
+                                    <a href="#" data-id="{{ admin[0] }}" data-nombre="{{ admin[1] }}"
+                                        data-apellido="{{ admin[2] }}" data-documento="{{ admin[3] }}"
+                                        data-correo="{{ admin[4] }}" data-telefono="{{ admin[5] }}"
+                                        data-direccion="{{ admin[6] }}" data-ciudad="{{ admin[7] }}"
+                                        data-password="{{ admin[8] }}" class="edit-btn">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    {% else %}
+                                    <button class="btn-delete disabled" disabled>
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                    {% endif %}
+                                </td>
 
-                                    <!-- Botón eliminar/inactivar -->
-                                    <td>
-                                        {% if admin[10] == "Activo" %}
-                                        <form action="{{ url_for('admin_bp.delete_admin', id=admin[0]) }}" method="POST"
-                                            onsubmit="return confirm('¿Estás seguro de que deseas inactivar este admin?');">
-                                            <button type="submit" class="btn-delete">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </form>
-                                        {% else %}
-                                        <button class="btn-delete disabled" disabled>
-                                            <i class="fas fa-ban"></i>
+                                <!-- Botón eliminar/inactivar -->
+                                <td>
+                                    {% if admin[10] == "Activo" %}
+                                    <form action="{{ url_for('admin_bp.delete_admin', admin_id=admin[0]) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('¿Estás seguro de que deseas inactivar este admin?');">
+                                        <button type="submit" class="btn-delete">
+                                            <i class="fas fa-trash-alt"></i>
                                         </button>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
+                                    </form>
+                                    {% else %}
+                                    <button class="btn-delete disabled" disabled>
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
                     </table>
                 </div>
             </section>
@@ -200,6 +197,8 @@
             <!-- Formulario de agregado -->
             <form id="addForm" action="{{ url_for('admin_bp.add_admin') }}" method="POST"
                 data-required-fields='["nombre", "apellido", "documento", "correo", "telefono", "direccion", "ciudad", "password"]'>
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <div class="ddos">
                     <div class="form-group">
@@ -283,8 +282,11 @@
         <div class="modal-content">
             <h2 class="modal-header">Editar Admin</h2>
             <!-- Formulario de edición -->
-           <form id="editForm" method="POST" data-base-action="{{ url_for('admin_bp.update_admin', id=0)[:-1] }}"  data-entity-type="admin"
+            <form id="editForm" method="POST" data-base-action="{{ url_for('admin_bp.update_admin', admin_id=0)[:-1] }}"
+                data-entity-type="admin"
                 data-required-fields='["nombre", "apellido", "documento", "correo", "telefono", "direccion", "ciudad", "password"]'>
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <div class="ddos">
                     <div class="form-group">

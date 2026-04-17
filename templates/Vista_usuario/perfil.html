@@ -44,18 +44,18 @@
         </div>
 
         <div class="barra-de-busqueda">
-			<!-- Botón visible solo en pantallas pequeñas -->
-			<button type="button" class="toggle-search">
-				<i class="fas fa-search"></i>
-			</button>
+            <!-- Botón visible solo en pantallas pequeñas -->
+            <button type="button" class="toggle-search">
+                <i class="fas fa-search"></i>
+            </button>
 
-			<form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
-				<input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
-				<div class="btn-serch">
-					<button type="submit"><i class="fas fa-search"></i></button>
-				</div>
-			</form>
-		</div>
+            <form method="get" action="{{ url_for('client_bp.buscar') }}" style="display: flex; width: 100%;">
+                <input class="buscar" type="text" name="q" placeholder="Buscar productos..." value="{{ query }}">
+                <div class="btn-serch">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+        </div>
 
         <nav class="navbar" id="nav">
             <ul class="nav-links">
@@ -116,7 +116,7 @@
         </ul>
     </section>
     <main class="main-content">
-        <form action="{{ url_for('admin_bp.actualizar_usuario', id=usuario.id_usuario) }}" method="POST">
+        <form action="{{ url_for('admin_bp.actualizar_usuario', user_id=usuario.id_usuario) }}" method="POST">
             <div class="container-config">
                 <h1>Perfil</h1>
                 <div class="form-group-config ddos1">
@@ -188,7 +188,7 @@
     <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_carrito.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
 </body>
 
 </html>

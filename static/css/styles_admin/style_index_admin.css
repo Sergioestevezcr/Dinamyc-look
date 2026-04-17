@@ -43,22 +43,22 @@ body {
 }
 
 .sidebar::-webkit-scrollbar {
-    width: 6px;
-    /* Altura de la barra de scroll horizontal */
+  width: 6px;
+  /* Altura de la barra de scroll horizontal */
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-    background-color: #DF7DA6;
-    border-radius: 10px;
-    /* Bordes redondeados */
+  background-color: #DF7DA6;
+  border-radius: 10px;
+  /* Bordes redondeados */
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
-    background-color: #C1416D;
+  background-color: #C1416D;
 }
 
 .sidebar::-webkit-scrollbar-track {
-    background-color: #F5D5E4;
+  background-color: #F5D5E4;
 }
 
 /* Encabezado del panel lateral con logo y botón de cierre */
@@ -86,6 +86,7 @@ body {
   font-size: 20px;
   cursor: pointer;
   display: none;
+  cursor: pointer;
 }
 
 /* Elimina viñetas de la lista de navegación */
@@ -105,11 +106,11 @@ body {
 
 /* Posiciona el último elemento del menú al fondo del panel */
 .sidebar-nav li:last-child {
-    position: relative;
-    width: 100%;
-    margin-top: 40px;
-    bottom: auto;
-  }
+  position: relative;
+  width: 100%;
+  margin-top: 40px;
+  bottom: auto;
+}
 
 /* Efecto al pasar el cursor sobre los elementos del menú */
 .sidebar-nav a:hover {
@@ -141,28 +142,41 @@ body {
   padding: .4rem .6rem;
   border-radius: .5rem;
   text-transform: capitalize;
-  white-space: nowrap;  
+  white-space: nowrap;
 }
+
 .estado-pagado {
-  background: #d1fae5;        /* verde claro */
-  color: #065f46;             /* verde oscuro */
+  background: #d1fae5;
+  /* verde claro */
+  color: #065f46;
+  /* verde oscuro */
   border: 1px solid #10b981;
 }
+
 .estado-pendiente {
-  background: #fef3c7;        /* amarillo claro */
-  color: #92400e;             /* café/ámbar */
+  background: #fef3c7;
+  /* amarillo claro */
+  color: #92400e;
+  /* café/ámbar */
   border: 1px solid #f59e0b;
 }
+
 .estado-rechazado {
-  background: #fee2e2;        /* rojo claro */
-  color: #991b1b;             /* rojo oscuro */
+  background: #fee2e2;
+  /* rojo claro */
+  color: #991b1b;
+  /* rojo oscuro */
   border: 1px solid #ef4444;
 }
+
 .estado-contraentrega {
-  background: #e5e7eb;        /* gris claro */
-  color: #1f2937;             /* gris oscuro */
+  background: #e5e7eb;
+  /* gris claro */
+  color: #1f2937;
+  /* gris oscuro */
   border: 1px solid #6b7280;
 }
+
 /* Área principal de contenido */
 .main-content {
   flex: 1;
@@ -191,7 +205,7 @@ body {
 
 .dash1 {
   display: flex;
-  gap:30px;
+  gap: 30px;
   justify-content: space-evenly;
 }
 
@@ -251,7 +265,7 @@ body {
   width: 35%;
 }
 
-.graf-up canvas{
+.graf-up canvas {
   height: 210px !important;
 }
 
@@ -297,7 +311,8 @@ body {
   margin-right: 20px;
 }
 
-.stat-card.imp .stat-icon, .stat-card.imp .stat-info h3{
+.stat-card.imp .stat-icon,
+.stat-card.imp .stat-info h3 {
   color: white;
 }
 
@@ -343,18 +358,21 @@ body {
   align-items: center;
   font-weight: 600;
   color: #A63055;
+  cursor: pointer;
 }
 
 /* Icono del botón de agregar */
 .add-btn i {
   font-size: 22px;
   padding-right: 6px;
+  cursor: pointer;
 }
 
 /* Icono para la acción de editar */
 .edit-icon a {
   font-size: 20px;
   color: #A63055;
+  cursor: pointer;
 }
 
 /* Icono para la acción de eliminar */
@@ -365,16 +383,19 @@ body {
   color: #e74c3c;
   /* rojo para eliminar */
   font-size: 20px;
+  cursor: pointer;
 }
 
 .btn-delete:hover {
   color: #c0392b;
+  cursor: pointer;
 }
 
 /* Icono para cuando esta desactivado */
 .btn-delete.disabled {
   color: #aaa;
   cursor: not-allowed;
+  cursor: pointer;
 }
 
 /* Contenedor con scroll horizontal para tablas */
@@ -767,19 +788,19 @@ body {
 }
 
 .preview-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    max-width: auto;
-    height: 100px;
-    border: 2px dashed #ccc;
-    border-radius: 10px;
-    overflow: hidden;
-    cursor: pointer;
-    text-align: start;
-    background: #f9f9f9;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  max-width: auto;
+  height: 100px;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: start;
+  background: #f9f9f9;
 }
 
 .preview-container span {
@@ -787,24 +808,26 @@ body {
 }
 
 .preview-container input[type="file"] {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    opacity: 0; /* ocultar el input real */
-    cursor: pointer;
-    z-index: 2;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  /* ocultar el input real */
+  cursor: pointer;
+  z-index: 2;
 }
 
 .preview-container .preview {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* que la imagen se ajuste bien */
-    display: none;
-    z-index: 1;
-    background: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* que la imagen se ajuste bien */
+  display: none;
+  z-index: 1;
+  background: #fff;
 }
 
 .form-group .month {
@@ -1415,4 +1438,3 @@ body {
     top: 10px;
   }
 }
-

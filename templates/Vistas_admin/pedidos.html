@@ -22,6 +22,162 @@
     <link rel="manifest" href="{{ url_for('static', filename='imagenes/favicons/site.webmanifest') }}">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
+
+    <style>
+        .pedidos-filtros {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+            align-items: center;
+        }
+
+        .pedidos-filtros input,
+        .pedidos-filtros select {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px 12px;
+            min-width: 180px;
+        }
+
+        .pedidos-resumen {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .pedidos-card {
+            background: white;
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
+        }
+
+        .pedidos-card .label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .pedidos-card .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #A63054;
+        }
+
+        .tools-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-tools {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: white;
+            background: #A63054;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-tools.sec {
+            background: #4f5963;
+        }
+
+        .estado-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid transparent;
+            display: inline-block;
+        }
+
+        .estado-select {
+            min-width: 190px;
+            appearance: auto;
+        }
+
+        .estado-en-transito {
+            background: #2CFF00;
+            color: #0b3d00;
+        }
+
+        .estado-despachado {
+            background: #5F3D8E;
+            color: #ffffff;
+        }
+
+        .estado-entregado {
+            background: #1C7A4A;
+            color: #ffffff;
+        }
+
+        .estado-pendiente-confirmar {
+            background: #E3D6EC;
+            color: #6A3FA0;
+        }
+
+        .estado-confirmado {
+            background: #E3D6EC;
+            color: #6A3FA0;
+        }
+
+        .estado-en-novedad {
+            background: #1C5EAA;
+            color: #ffffff;
+        }
+
+        .estado-en-devolucion {
+            background: #FF00E1;
+            color: #1f1f1f;
+        }
+
+        .estado-devuelto-bodega {
+            background: #F3DE99;
+            color: #6E5300;
+        }
+
+        .estado-anulado {
+            background: #B40000;
+            color: #ffffff;
+        }
+
+        .estado-cancelado {
+            background: #FF1D1D;
+            color: #111111;
+        }
+
+        .pedidos-dia {
+            margin-top: 20px;
+        }
+
+        .pedidos-dia details {
+            background: #fff;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
+            overflow: hidden;
+        }
+
+        .pedidos-dia summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 12px;
+            background: #f5e8ee;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pedidos-dia .contenido {
+            padding: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -81,6 +237,12 @@
                     </li>
 
                     <li>
+                        <a href="{{ url_for('admin_bp.banners') }}">
+                            <i class="fa-regular fa-images"></i><span>Banners</span>
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="{{ url_for('admin_bp.promociones') }}">
                             <i class="fas fa-percent"></i><span>Promociones</span>
                         </a>
@@ -114,12 +276,75 @@
                 <h1>Pedidos</h1>
             </header>
 
-            <!-- Buscador -->
-            <div class="barra-de-busqueda">
-                <input class="buscar" type="text" placeholder="Buscar Pedidos">
-                <div class="btn">
-                    <button type="submit"><i class='bx bx-search'></i></button>
+            <form method="GET" action="{{ url_for('admin_bp.pedidos_view') }}" class="pedidos-filtros">
+                <input class="buscar" type="text" name="q" placeholder="Buscar por pedido, cliente, teléfono..."
+                    value="{{ filtros.q }}">
+
+                <select name="estado">
+                    <option value="TODOS" {% if filtros.estado=='TODOS' %}selected{% endif %}>Todos los estados</option>
+                    {% for estado in estados_pedido %}
+                    <option value="{{ estado }}" {% if filtros.estado==estado %}selected{% endif %}>{{ estado }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <input type="date" name="fecha" value="{{ filtros.fecha }}">
+                <button type="submit" class="btn-tools">Filtrar</button>
+                <a href="{{ url_for('admin_bp.pedidos_view') }}" class="btn-tools sec"
+                    style="text-decoration:none;display:inline-flex;align-items:center;">Limpiar</a>
+            </form>
+
+            <div class="pedidos-resumen">
+                <div class="pedidos-card">
+                    <div class="label">Pedidos</div>
+                    <div class="value">{{ resumen.total_pedidos }}</div>
                 </div>
+                <div class="pedidos-card">
+                    <div class="label">Ingresos</div>
+                    <div class="value">${{ "{:,}".format(resumen.total_ingresos|int).replace(",", ".") }}</div>
+                </div>
+                <div class="pedidos-card">
+                    <div class="label">Pendientes</div>
+                    <div class="value">{{ resumen.pendientes }}</div>
+                </div>
+                <div class="pedidos-card">
+                    <div class="label">Confirmados</div>
+                    <div class="value">{{ resumen.confirmados }}</div>
+                </div>
+                <div class="pedidos-card">
+                    <div class="label">En Tránsito</div>
+                    <div class="value">{{ resumen.en_transito }}</div>
+                </div>
+                <div class="pedidos-card">
+                    <div class="label">Entregados</div>
+                    <div class="value">{{ resumen.entregados }}</div>
+                </div>
+                <div class="pedidos-card">
+                    <div class="label">Anulados / Cancelados</div>
+                    <div class="value">{{ resumen.anulados }}</div>
+                </div>
+            </div>
+
+            <div class="tools-row">
+                <form id="form-export-selected" method="POST"
+                    action="{{ url_for('admin_bp.descargar_resumen_pedidos_pdf') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="export_type" value="selected">
+                    <input type="hidden" name="selected_ids" id="selected_ids">
+                    <input type="hidden" name="estado" value="{{ filtros.estado }}">
+                    <input type="hidden" name="fecha" value="{{ filtros.fecha }}">
+                    <input type="hidden" name="q" value="{{ filtros.q }}">
+                    <button type="submit" class="btn-tools sec">Descargar seleccionados (PDF)</button>
+                </form>
+
+                <form method="POST" action="{{ url_for('admin_bp.descargar_resumen_pedidos_pdf') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="export_type" value="day">
+                    <input type="hidden" name="estado" value="{{ filtros.estado }}">
+                    <input type="hidden" name="fecha" value="{{ filtros.fecha }}">
+                    <input type="hidden" name="q" value="{{ filtros.q }}">
+                    <button type="submit" class="btn-tools sec">Descargar resumen del día (PDF)</button>
+                </form>
             </div>
 
             <!-- Tabla Pedidos -->
@@ -134,9 +359,11 @@
                     <table class="orders-table">
                         <thead>
                             <tr>
+                                <th><input type="checkbox" id="select_all"></th>
                                 <th>No. Venta</th>
                                 <th>Fecha</th>
                                 <th>Cliente</th>
+                                <th>Teléfono</th>
                                 <th>Total Comprado</th>
                                 <th>Total Productos</th>
                                 <th>Estado</th>
@@ -146,55 +373,54 @@
 
                         <tbody>
                             {% for row in reportes %}
-                            {# 
-                                row[0] = ID_Venta / No. Venta
-                                row[1] = Fecha
-                                row[2] = Nombre cliente
-                                row[3] = Apellido cliente
-                                row[4] = TotalCompra $
-                                row[5] = TotalProductos (cantidad de ítems)
-                                row[6] = estado interno del pago ("APPROVED", "PENDING", "COD_PENDIENTE_ENVIO", "REJECTED"...)
-                                row[7] = metodo de pago ("MP" para Mercado Pago, "COD" para contraentrega)
-                            #}
-
                             <tr>
+                                <td><input type="checkbox" class="pedido-checkbox" value="{{ row.id }}"></td>
+
                                 <!-- No. Venta -->
-                                <td>{{ row[0] }}</td>
+                                <td>{{ row.id }}</td>
 
                                 <!-- Fecha -->
-                                <td>{{ row[1] }}</td>
+                                <td>{{ row.fecha_label }}</td>
 
                                 <!-- Cliente -->
-                                <td>{{ row[2] }} {{ row[3] }}</td>
+                                <td>
+                                    {{ row.cliente }}<br>
+                                    <small>{{ row.correo }}</small>
+                                </td>
+
+                                <td>{{ row.telefono }}</td>
 
                                 <!-- Total comprado -->
-                                <td>${{ "{:,}".format(row[4]).replace(",", ".") }}</td>
+                                <td>${{ "{:,}".format(row.total|int).replace(",", ".") }}</td>
 
                                 <!-- Total productos -->
-                                <td>{{ row[5] }}</td>
+                                <td>{{ row.total_productos }}</td>
 
                                 <!-- Estado -->
                                 <td>
-                                    {% if row[7] == 'COD' %}
-                                        <span class="estado-badge estado-contraentrega">Contraentrega</span>
+                                    <form method="POST"
+                                        action="{{ url_for('admin_bp.actualizar_estado_pedido', venta_id=row.id) }}"
+                                        style="display:flex; gap:6px; align-items:center;">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <input type="hidden" name="estado_filtro" value="{{ filtros.estado }}">
+                                        <input type="hidden" name="fecha_filtro" value="{{ filtros.fecha }}">
+                                        <input type="hidden" name="q_filtro" value="{{ filtros.q }}">
 
-                                    {% elif row[6] == 'APPROVED' %}
-                                        <span class="estado-badge estado-pagado">Pagado</span>
-
-                                    {% elif row[6] in ['PENDING', 'PENDING_MP', 'COD_PENDIENTE_ENVIO'] %}
-                                        <span class="estado-badge estado-pendiente">Pendiente</span>
-
-                                    {% elif row[6] == 'REJECTED' %}
-                                        <span class="estado-badge estado-rechazado">Rechazado</span>
-
-                                    {% else %}
-                                        <span class="estado-badge estado-pendiente">{{ row[6] }}</span>
-                                    {% endif %}
+                                        <select name="estado" class="estado-badge estado-select {{ row.estado_clase }}"
+                                            style="border:1px solid #ddd; border-radius:8px; padding:4px 8px;">
+                                            {% for estado in estados_pedido %}
+                                            <option value="{{ estado }}" {% if row.estado_display==estado %}selected{%
+                                                endif %}>{{ estado }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="submit" class="btn-tools sec"
+                                            style="padding:6px 10px;">OK</button>
+                                    </form>
                                 </td>
 
                                 <!-- Acción -->
                                 <td class="btn-mas">
-                                    <a href="{{ url_for('admin_bp.factura', id_venta=row[0]) }}">Ver Más</a>
+                                    <a href="{{ url_for('admin_bp.factura', id_venta=row.id) }}">Ver Más</a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -202,6 +428,50 @@
 
                     </table>
                 </div>
+            </section>
+
+            <section class="pedidos-dia">
+                <h2 style="margin: 16px 0 10px 0;">Pedidos por Día</h2>
+                {% if pedidos_por_dia %}
+                {% for grupo in pedidos_por_dia %}
+                <details>
+                    <summary>
+                        <span>{{ grupo.fecha_label }}</span>
+                        <span>{{ grupo.cantidad }} pedidos | ${{ "{:,}".format(grupo.total|int).replace(",", ".")
+                            }}</span>
+                    </summary>
+                    <div class="contenido">
+                        <table class="orders-table" style="margin-bottom: 0;">
+                            <thead>
+                                <tr>
+                                    <th>Sel.</th>
+                                    <th>No. Venta</th>
+                                    <th>Cliente</th>
+                                    <th>Teléfono</th>
+                                    <th>Estado</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for pedido in grupo.pedidos %}
+                                <tr>
+                                    <td><input type="checkbox" class="pedido-checkbox" value="{{ pedido.id }}"></td>
+                                    <td>{{ pedido.id }}</td>
+                                    <td>{{ pedido.cliente }}</td>
+                                    <td>{{ pedido.telefono }}</td>
+                                    <td><span class="estado-badge {{ pedido.estado_clase }}">{{ pedido.estado_display
+                                            }}</span></td>
+                                    <td>${{ "{:,}".format(pedido.total|int).replace(",", ".") }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </details>
+                {% endfor %}
+                {% else %}
+                <div class="pedidos-card">No hay pedidos para los filtros seleccionados.</div>
+                {% endif %}
             </section>
         </main>
     </div>
@@ -212,22 +482,24 @@
             <h2 class="modal-header">Registrar Nuevo Pedido</h2>
 
             <form id="addForm" action="{{ url_for('admin_bp.add_venta') }}" method="POST">
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                 <!-- Cliente -->
                 <div class="form-group">
                     <div class="label-form">
                         <i class="fa-solid fa-user"></i>
 
                         <!-- Lo que el admin escribe/busca -->
-                        <input list="usuarios-list" id="usuario-nombre" class="input-form" placeholder="Cliente" required>
+                        <input list="usuarios-list" id="usuario-nombre" class="input-form" placeholder="Cliente"
+                            required>
 
                         <!-- Lo que realmente mandamos al backend -->
                         <input type="hidden" name="ID_Usuario" id="usuario-id">
 
                         <datalist id="usuarios-list">
                             {% for usuario in usuarios %}
-                            <option
-                                value="{{ usuario[1] }} {{ usuario[2] }}"
-                                data-id="{{ usuario[0] }}">
+                            <option value="{{ usuario[1] }} {{ usuario[2] }}" data-id="{{ usuario[0] }}">
                             </option>
                             {% endfor %}
                         </datalist>
@@ -249,9 +521,8 @@
                                     <datalist id="productos-list">
                                         {% for producto in productos %}
                                         <option value="{{ producto[1] }} - ${{ producto[2] | int }}"
-                                            data-precio="{{ producto[2] }}"
-                                            data-descuento="{{ producto[3] }}">
-                                        {% endfor %}
+                                            data-precio="{{ producto[2] }}" data-descuento="{{ producto[3] }}">
+                                            {% endfor %}
                                     </datalist>
                                 </div>
                             </div>
@@ -277,7 +548,8 @@
                             <div class="form-group">
                                 <div class="label-form">
                                     <i class="fas fa-calculator"></i>
-                                    <input type="text" class="input-form subtotal-display" placeholder="Subtotal" readonly>
+                                    <input type="text" class="input-form subtotal-display" placeholder="Subtotal"
+                                        readonly>
                                 </div>
                             </div>
 
@@ -299,8 +571,8 @@
                     <div class="form-group">
                         <div class="label-form">
                             <i class="fas fa-money-bill-wave"></i>
-                            <input type="text" id="total-venta" class="input-form"
-                                placeholder="Total de la Venta" readonly>
+                            <input type="text" id="total-venta" class="input-form" placeholder="Total de la Venta"
+                                readonly>
                         </div>
                     </div>
                 </div>
@@ -323,7 +595,68 @@
     <script src="{{ url_for('static', filename='js/script_pop-up.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_pedidos.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/script_paginacion_tabla.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectAll = document.getElementById('select_all');
+            const checkboxes = document.querySelectorAll('.pedido-checkbox');
+            const formSelected = document.getElementById('form-export-selected');
+            const selectedIdsInput = document.getElementById('selected_ids');
+
+            const estadoClassMap = {
+                'EN TRÁNSITO': 'estado-en-transito',
+                'DESPACHADO': 'estado-despachado',
+                'ENTREGADO': 'estado-entregado',
+                'PENDIENTE CONFIRMAR': 'estado-pendiente-confirmar',
+                'CONFIRMADO': 'estado-confirmado',
+                'EN NOVEDAD': 'estado-en-novedad',
+                'EN DEVOLUCIÓN': 'estado-en-devolucion',
+                'DEVUELTO A BODEGA': 'estado-devuelto-bodega',
+                'ANULADO': 'estado-anulado',
+                'CANCELADO': 'estado-cancelado'
+            };
+
+            const estadoClasses = Object.values(estadoClassMap);
+
+            function aplicarColorEstado(select) {
+                if (!select) return;
+                estadoClasses.forEach(cls => select.classList.remove(cls));
+                const estado = (select.value || '').trim().toUpperCase();
+                if (estadoClassMap[estado]) {
+                    select.classList.add(estadoClassMap[estado]);
+                }
+            }
+
+            document.querySelectorAll('select[name="estado"].estado-select').forEach(select => {
+                aplicarColorEstado(select);
+                select.addEventListener('change', function () {
+                    aplicarColorEstado(select);
+                });
+            });
+
+            if (selectAll) {
+                selectAll.addEventListener('change', function () {
+                    checkboxes.forEach(cb => { cb.checked = selectAll.checked; });
+                });
+            }
+
+            if (formSelected) {
+                formSelected.addEventListener('submit', function (e) {
+                    const ids = Array.from(document.querySelectorAll('.pedido-checkbox:checked'))
+                        .map(cb => cb.value)
+                        .filter(v => !!v);
+                    const uniqueIds = [...new Set(ids)];
+
+                    if (uniqueIds.length === 0) {
+                        e.preventDefault();
+                        alert('Selecciona al menos un pedido para exportar.');
+                        return;
+                    }
+
+                    selectedIdsInput.value = uniqueIds.join(',');
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

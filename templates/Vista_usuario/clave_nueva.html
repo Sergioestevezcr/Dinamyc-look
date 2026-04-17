@@ -40,8 +40,9 @@
         <nav class="navbar" id="nav">
             <ul class="nav-links">
                 <li class="house"><a href="{{ url_for('client_bp.index_cliente') }}"><i
-							class="fa-solid fa-house-chimney"></i></a></li>
-				<li class="house" title="Iniciar Sección"><a href="{{ url_for('auth_bp.login') }}"><i class="fa fa-user"></i></a></li>
+                            class="fa-solid fa-house-chimney"></i></a></li>
+                <li class="house" title="Iniciar Sección"><a href="{{ url_for('auth_bp.login') }}"><i
+                            class="fa fa-user"></i></a></li>
             </ul>
         </nav>
     </header>
@@ -141,6 +142,7 @@
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script_password_peek_hold.js') }}"></script>
 
     <script>
         // Validar que las contraseñas coincidan

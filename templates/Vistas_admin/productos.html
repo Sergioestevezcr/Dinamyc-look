@@ -60,13 +60,15 @@
                                 class="fa-solid fa-user"></i><span>Clientes</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.admin') }}">
-                        <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
+                            <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.pedidos_view') }}"><i
                                 class='bx bxs-dollar-circle'></i><span>Pedidos</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.productos') }}" class="active"><i
                                 class="fas fa-tags"></i><span>Productos</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.banners') }}"><i
+                                class="fa-regular fa-images"></i><span>Banners</span></a></li>
                     <li><a href="{{ url_for('admin_bp.promociones') }}"><i
                                 class="fas fa-percent"></i><span>Promociones</span></a></li>
                     <li><a href="{{ url_for('admin_bp.reportes') }}"><i
@@ -96,6 +98,109 @@
                 <div class="btn"><button type="submit"><i class='bx bx-search'></i></button></div>
             </div>
 
+            <section class="recent-orders" style="margin-bottom: 16px;">
+                <div class="section-header">
+                    <h2>Gestión de Categorías</h2>
+                </div>
+
+                <div
+                    style="background:#fff8e8;border:1px solid #ffe2a8;border-radius:10px;padding:12px;margin-bottom:12px;">
+                    <strong style="display:block;margin-bottom:6px;">¿Dónde se agrega una categoría nueva?</strong>
+                    <p style="margin:0;color:#6a5a32;line-height:1.4;">
+                        1) Escribe el nombre en <b>Crear categoría nueva</b> (abajo) y pulsa <b>Usar en nuevo
+                            producto</b>.<br>
+                        2) Se abrirá el modal <b>Agregar Producto</b> con esa categoría ya escrita.<br>
+                        3) Al guardar el producto, la categoría quedará registrada y aparecerá en el listado.
+                    </p>
+                </div>
+
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px;">
+                    <div
+                        style="display:grid;gap:8px;background:#fff;padding:12px;border-radius:10px;border:1px solid #eee;">
+                        <strong>Crear categoría nueva</strong>
+                        <input type="text" id="quick-new-category" class="input-form"
+                            placeholder="Ej: Tratamientos, Maquillaje, Uñas">
+                        <button type="button" id="btn-open-add-with-category" class="btn-modal submit-button">Usar en
+                            nuevo producto</button>
+                        <small style="color:#666;font-size:12px;">Tip: la categoría se crea definitivamente al guardar
+                            el
+                            producto.</small>
+                    </div>
+
+                    <form action="{{ url_for('admin_bp.renombrar_categoria_producto') }}" method="POST"
+                        style="display:grid;gap:8px;background:#fff;padding:12px;border-radius:10px;border:1px solid #eee;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <strong>Renombrar categoría</strong>
+                        <select name="categoria_actual" class="input-form" required>
+                            <option value="">Categoría actual</option>
+                            {% for categoria in categorias %}
+                            <option value="{{ categoria }}">{{ categoria }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="text" name="categoria_nueva" class="input-form"
+                            placeholder="Nuevo nombre de categoría" required>
+                        <button type="submit" class="btn-modal submit-button">Renombrar</button>
+                    </form>
+
+                    <form action="{{ url_for('admin_bp.eliminar_categoria_producto') }}" method="POST"
+                        style="display:grid;gap:8px;background:#fff;padding:12px;border-radius:10px;border:1px solid #eee;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <strong>Eliminar categoría (migrar productos)</strong>
+                        <select name="categoria_origen" class="input-form" required>
+                            <option value="">Categoría a eliminar</option>
+                            {% for categoria in categorias %}
+                            <option value="{{ categoria }}">{{ categoria }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="text" name="categoria_destino" class="input-form"
+                            placeholder="Categoría destino (ej: Sin categoría)" value="Sin categoría" required>
+                        <button type="submit" class="btn-modal cancel-button"
+                            onclick="return confirm('Se moverán todos los productos de esa categoría al destino indicado. ¿Continuar?')">Eliminar
+                            categoría</button>
+                    </form>
+
+                    <form action="{{ url_for('admin_bp.fusionar_categorias_producto') }}" method="POST"
+                        style="display:grid;gap:8px;background:#fff;padding:12px;border-radius:10px;border:1px solid #eee;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <strong>Fusionar categorías</strong>
+                        <select name="categorias_origen[]" class="input-form" multiple required
+                            style="min-height:120px;">
+                            {% for categoria in categorias %}
+                            <option value="{{ categoria }}">{{ categoria }}</option>
+                            {% endfor %}
+                        </select>
+                        <small style="color:#666;font-size:12px;">Ctrl + clic para seleccionar varias
+                            categorías.</small>
+                        <input type="text" name="categoria_destino" class="input-form"
+                            placeholder="Categoría final (ej: Cuidado capilar)" required>
+                        <button type="submit" class="btn-modal submit-button"
+                            onclick="return confirm('Se unificarán las categorías seleccionadas en la categoría final. ¿Continuar?')">Fusionar
+                            categorías</button>
+                    </form>
+                </div>
+
+                {% if categorias_resumen %}
+                <div class="table-container" style="margin-top:12px;">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Categoría</th>
+                                <th>Total productos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in categorias_resumen %}
+                            <tr>
+                                <td>{{ c[0] }}</td>
+                                <td>{{ c[1] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            </section>
+
             <!-- Sección productos -->
             <section class="recent-orders">
                 <div class="section-header">
@@ -111,6 +216,8 @@
                                 <th>Descripción</th>
                                 <th>Marca</th>
                                 <th>Categoria</th>
+                                <th>Inicio</th>
+                                <th>Orden</th>
                                 <th>Stock</th>
                                 <th>Valor</th>
                                 <th></th>
@@ -141,14 +248,22 @@
                                 </td>
                                 <td>{{ producto[6] }}</td>
                                 <td>{{ producto[7] }}</td>
+                                <td>
+                                    {% if producto[12] == 1 and producto[10] != 'ninguno' %}
+                                    {{ producto[10]|capitalize }}
+                                    {% else %}
+                                    No mostrar
+                                    {% endif %}
+                                </td>
+                                <td>{{ producto[11] }}</td>
                                 <td>{{ producto[5] }}</td>
                                 <td>
-                                    {% if producto[10] %} {# precio_final existe #}
+                                    {% if producto[13] %} {# precio_final existe #}
                                     <span class="precio-original">
                                         ${{ "{:,}".format(producto[4]).replace(",", ".") }}
                                     </span><br>
                                     <span class="precio-descuento">
-                                        ${{ "{:,}".format(producto[10]|int).replace(",", ".") }}
+                                        ${{ "{:,}".format(producto[13]|int).replace(",", ".") }}
                                     </span>
                                     {% else %}
                                     ${{ "{:,}".format(producto[4]).replace(",", ".") }}
@@ -159,7 +274,8 @@
                                         data-descripcion="{{ producto[2] }}" data-precio="{{ producto[4] }}"
                                         data-stock="{{ producto[5] }}" data-marca="{{ producto[6] }}"
                                         data-categoria="{{ producto[7] }}" data-promocion="{{ producto[8] }}"
-                                        class="edit-btn">
+                                        data-home-section="{{ producto[10] }}" data-home-order="{{ producto[11] }}"
+                                        data-home-enabled="{{ producto[12] }}" class="edit-btn">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
                                 </td>
@@ -177,7 +293,9 @@
         <div class="modal-content">
             <h2 class="modal-header">Agregar Nuevo Producto</h2>
             <form id="addForm" action="{{ url_for('admin_bp.add_producto') }}" method="POST"
-                enctype="multipart/form-data">
+                enctype="multipart/form-data" data-required-fields='["Nombre","Descripcion","Precio","Marca","Stock"]'>
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <!-- Nombre -->
                 <div class="form-group">
@@ -208,10 +326,37 @@
                 <!-- Categoria -->
                 <div class="form-group">
                     <div class="label-form"><i class='bx bx-category'></i>
-                        <select name="Categoria" class="input-form" required>
-                            <option value="">-- Selecciona una categoria --</option>
-                            <option value="Cuidado capilar">Cuidado capilar</option>
-                            <option value="Cuidado de la piel">Cuidado de la piel</option>
+                        <input type="text" name="Categoria" class="input-form" list="categorias-list"
+                            placeholder="Categoría o sección del producto" required>
+                    </div>
+                    <small style="display:block;color:#666;font-size:12px;margin-top:6px;">Puedes escribir una categoría
+                        nueva aunque no aparezca en la lista.</small>
+                </div>
+
+                <div class="ddos">
+                    <div class="form-group">
+                        <div class="label-form"><i class="fa-solid fa-layer-group"></i>
+                            <select name="HomeSection" class="input-form">
+                                <option value="ninguno" selected>No mostrar en inicio</option>
+                                <option value="destacado">Producto destacado</option>
+                                <option value="combo">Combo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="label-form"><i class="fa-solid fa-list-ol"></i>
+                            <input type="number" name="HomeOrder" class="input-form" value="999" min="1"
+                                placeholder="Orden en sección">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-eye"></i>
+                        <select name="HomeEnabled" class="input-form">
+                            <option value="1">Mostrar en inicio</option>
+                            <option value="0" selected>No mostrar</option>
                         </select>
                     </div>
                 </div>
@@ -272,9 +417,10 @@
         <div class="modal-content">
             <h2 class="modal-header">Editar Producto</h2>
             <form id="editForm" method="POST" enctype="multipart/form-data"
-                data-base-action="{{ url_for('admin_bp.update_producto', id=0)[:-1] }}" data-entity-type="producto"
-                data-required-fields='["Nombre","Descripcion","Precio","Marca","Stock"]'>
+                data-base-action="{{ url_for('admin_bp.update_producto', product_id=0)[:-1] }}"
+                data-entity-type="producto" data-required-fields='["Nombre","Descripcion","Precio","Marca","Stock"]'>
 
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <!-- Nombre -->
                 <div class="form-group">
@@ -305,10 +451,37 @@
                 <!-- Categoria -->
                 <div class="form-group">
                     <div class="label-form"><i class='bx bx-category'></i>
-                        <select name="Categoria" class="input-form" required>
-                            <option value="">-- Selecciona una categoria --</option>
-                            <option value="Cuidado capilar">Cuidado capilar</option>
-                            <option value="Cuidado de la piel">Cuidado de la piel</option>
+                        <input type="text" id="edit-categoria" name="Categoria" class="input-form"
+                            list="categorias-list" placeholder="Categoría o sección del producto" required>
+                    </div>
+                    <small style="display:block;color:#666;font-size:12px;margin-top:6px;">También puedes cambiarla por
+                        una
+                        categoría nueva.</small>
+                </div>
+
+                <div class="ddos">
+                    <div class="form-group">
+                        <div class="label-form"><i class="fa-solid fa-layer-group"></i>
+                            <select id="edit-home-section" name="HomeSection" class="input-form">
+                                <option value="ninguno">No mostrar en inicio</option>
+                                <option value="destacado">Producto destacado</option>
+                                <option value="combo">Combo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="label-form"><i class="fa-solid fa-list-ol"></i>
+                            <input type="number" id="edit-home-order" name="HomeOrder" class="input-form" min="1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-form"><i class="fa-solid fa-eye"></i>
+                        <select id="edit-home-enabled" name="HomeEnabled" class="input-form">
+                            <option value="1">Mostrar en inicio</option>
+                            <option value="0">No mostrar</option>
                         </select>
                     </div>
                 </div>
@@ -361,9 +534,14 @@
     </div>
 
     <!-- Pie -->
+    <datalist id="categorias-list">
+        {% for categoria in categorias %}
+        <option value="{{ categoria }}"></option>
+        {% endfor %}
+    </datalist>
+
     <footer class="footer">
-        <p>&copy; 2024 DinamycLook® | Todos los derechos reservados | BY: Laura vargas , Sergio Soriano. </p>vargas ,
-        Sergio Soriano </p>
+        <p>&copy; 2024 DinamycLook® | Todos los derechos reservados | BY: Laura vargas , Sergio Soriano.</p>
     </footer>
 
     <!-- Scripts -->

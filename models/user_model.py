@@ -3,10 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 import secrets
 import string
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from email.utils import formataddr
+from services.email_service import EmailService
 
 
 class UserModel:
@@ -87,8 +84,6 @@ class UserModel:
         ids = [row[0] for row in cur.fetchall()]
         cur.close()
         return ids
-
-from services.email_service import EmailService
 
     @staticmethod
     def send_password_reset_email(email):

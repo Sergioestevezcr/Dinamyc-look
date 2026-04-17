@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var editForm = document.getElementById('editForm'); // Formulario de editar
     var promoForm = document.getElementById('promoForm'); // Formulario de asignar promociones
     var selectProdBtn = document.querySelectorAll('.add-btn')[1]; // Segundo botón "Agregar", usado para asignar productos
+    var quickNewCategoryInput = document.getElementById('quick-new-category');
+    var openAddWithCategoryBtn = document.getElementById('btn-open-add-with-category');
 
     // --- FUNCIONES DE UTILIDAD ---
     function getFormFields(form) {
@@ -22,6 +24,8 @@ document.addEventListener('DOMContentLoaded', function () {
         for (var i = 0; i < inputs.length; i++) {
             var input = inputs[i];
             if (input.type === 'submit' || input.type === 'button') continue; // Omite botones
+            // Nunca incluir el token CSRF en el auto-rellenado del modal.
+            if ((input.name || '').toLowerCase() === 'csrf_token') continue;
             var raw = input.id || input.name || ''; // Usa id o name como referencia
             var fieldName = raw.replace(/^(add-|edit-)/, ''); // Limpia prefijos "add-" o "edit-"
             fields[fieldName] = input; // Guarda el campo en el objeto
@@ -136,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var key = keys[i];
             var field = fields[key];
             if (!field) continue;
+            if ((field.name || '').toLowerCase() === 'csrf_token') continue;
 
             // Posibles claves relacionadas al campo
             var candKeys = [
@@ -200,6 +205,27 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- APERTURA Y CIERRE DE OTROS MODALES ---
     if (addBtn) addBtn.addEventListener('click', function () { addModal.style.display = 'flex'; });
     if (selectProdBtn) selectProdBtn.addEventListener('click', function () { asigModal.style.display = 'flex'; });
+
+    if (openAddWithCategoryBtn && addModal && addForm) {
+        openAddWithCategoryBtn.addEventListener('click', function () {
+            var nuevaCategoria = quickNewCategoryInput ? String(quickNewCategoryInput.value || '').trim() : '';
+            if (!nuevaCategoria) {
+                alert('Escribe primero el nombre de la categoría nueva.');
+                if (quickNewCategoryInput) quickNewCategoryInput.focus();
+                return;
+            }
+
+            var categoriaInput = addForm.querySelector("input[name='Categoria']");
+            if (categoriaInput) {
+                categoriaInput.value = nuevaCategoria;
+            }
+
+            addModal.style.display = 'flex';
+
+            var nombreInput = addForm.querySelector("input[name='Nombre']");
+            if (nombreInput) nombreInput.focus();
+        });
+    }
 
     function closeModal(modal, form) {
         // Cierra un modal y resetea su formulario
@@ -287,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-        // --- VER MÁS / VER MENOS EN DESCRIPCIONES ---
+    // --- VER MÁS / VER MENOS EN DESCRIPCIONES ---
     const botonesVerMas = document.querySelectorAll('.ver-mas-btn');
 
     botonesVerMas.forEach((btn) => {

@@ -1,7 +1,6 @@
 # decorators.py
 from functools import wraps
 from flask import session, redirect, url_for, flash
-from fpdf import FPDF, HTMLMixin
 
 
 # -------------------------------------- DECORADORES -----------------------------------------
@@ -35,4 +34,3 @@ def admin_required(f):
             return redirect(url_for("client_bp.index_cliente"))
         return f(*args, **kwargs)
     return decorated_function
-

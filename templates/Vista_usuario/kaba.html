@@ -80,7 +80,8 @@
 								Favoritos</span></a>
 						<a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
 								Compras</span></a>
-						<a href="{{ url_for('admin_bp.configuracion') }}" class="active"><i class='bx bxs-user'></i><span>
+						<a href="{{ url_for('admin_bp.configuracion') }}" class="active"><i
+								class='bx bxs-user'></i><span>
 								Perfil</span></a>
 						<a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
 							sesión</a>
@@ -135,6 +136,21 @@
 	<div class="container-carrusel">
 		<!--esta etiqueta representa el container que se mueve para mostrar las imagenes en patalla-->
 		<div class="carruseles" id="slider">
+			{% if brand_banners and brand_banners|length > 0 %}
+			{% for banner in brand_banners %}
+			{% set desktop_src = banner.desktop_image if banner.desktop_image else banner.mobile_image %}
+			<section class="slider-section">
+				<picture>
+					{% if banner.mobile_image %}
+					<source media="(max-width: 768px)"
+						srcset="{{ url_for('static', filename='imagenes/' ~ banner.mobile_image.lstrip('/')) }}">
+					{% endif %}
+					<img src="{{ url_for('static', filename='imagenes/' ~ desktop_src.lstrip('/')) }}"
+						alt="{{ banner.title or ('Banner de ' ~ marca_nombre) }}">
+				</picture>
+			</section>
+			{% endfor %}
+			{% else %}
 			<!-- las section son las imagenes que va a ontener el carrusel -->
 			<section class="slider-section">
 				<img src="{{ url_for('static', filename= '../../../../static/imagenes/Kaba/KABA 1.webp') }}"
@@ -149,6 +165,7 @@
 			<section class="slider-section">
 				<img src="{{ url_for('static', filename= '../../../../static/imagenes/Kaba/KABA 3.webp') }}">
 			</section>
+			{% endif %}
 		</div>
 		<!-- estas etiquetas son los botones para mover las imagenes hacia la derecha o izquierda -->
 		<div class="btn-right">

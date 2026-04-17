@@ -63,13 +63,15 @@
                                 class="fa-solid fa-user"></i><span>Clientes</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.admin') }}">
-                        <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
+                            <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.pedidos_view') }}"><i
                                 class='bx bxs-dollar-circle'></i><span>Pedidos</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.productos') }}"><i
                                 class="fas fa-tags"></i><span>Productos</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.banners') }}"><i
+                                class="fa-regular fa-images"></i><span>Banners</span></a></li>
                     <li><a href="{{ url_for('admin_bp.promociones') }}" class="active"><i
                                 class="fas fa-percent"></i><span>Promociones</span></a></li>
                     <li><a href="{{ url_for('admin_bp.reportes') }}"><i
@@ -107,6 +109,7 @@
                     <table class="orders-table">
                         <thead>
                             <tr>
+                                <th>Nombre</th>
                                 <th>Descuento (%)</th>
                                 <th>Fecha Inicial</th>
                                 <th>Fecha Final</th>
@@ -116,13 +119,15 @@
                         <tbody>
                             {% for promo in promocionesp %}
                             <tr>
-                                <td>{{ promo[1] }}%</td>
-                                <td>{{ promo[2] }}</td>
-                                <td>{{ promo[3] }}</td>
+                                <td>{{ promo.nombre }}</td>
+                                <td>{{ promo.descuento }}%</td>
+                                <td>{{ promo.fecha_inicial_fmt }}</td>
+                                <td>{{ promo.fecha_final_fmt }}</td>
                                 <td class="edit-icon">
-                                    <a href="#" data-id="{{ promo[0] }}" data-descuento="{{ promo[1] }}"
-                                        data-fecha-inicial="{{ promo[2] }}" data-fecha-final="{{ promo[3] }}"
-                                        class="edit-btn">
+                                    <a href="#" data-id="{{ promo.id }}" data-nombre="{{ promo.nombre }}"
+                                        data-descuento="{{ promo.descuento }}"
+                                        data-fecha-inicial="{{ promo.fecha_inicial_iso }}"
+                                        data-fecha-final="{{ promo.fecha_final_iso }}" class="edit-btn">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
                                 </td>
@@ -140,7 +145,17 @@
         <div class="modal-content">
             <h2 class="modal-header">Agregar Nueva Promoción</h2>
             <form id="addForm" action="{{ url_for('admin_bp.add_promocion') }}" method="POST"
-                data-required-fields='["descuento", "fecha_inicial", "fecha_final"]'>
+                data-required-fields='["nombre", "descuento", "fecha_inicial", "fecha_final"]'>
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-tag"></i>
+                        <input type="text" id="add-nombre" class="input-form" name="Nombre"
+                            placeholder="Nombre de la promoción" maxlength="100" required>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <div class="label-form">
@@ -178,8 +193,20 @@
     <div id="editModal" class="modal-background">
         <div class="modal-content">
             <h2 class="modal-header">Editar Promoción</h2>
-            <form id="editForm" method="POST" data-base-action="{{ url_for('admin_bp.update_promocion', id=0)[:-1] }}" data-entity-type="promocion"
-                data-required-fields='["descuento", "fecha_inicial", "fecha_final"]'>
+            <form id="editForm" method="POST"
+                data-base-action="{{ url_for('admin_bp.update_promocion', promo_id=0)[:-1] }}"
+                data-entity-type="promocion"
+                data-required-fields='["nombre", "descuento", "fecha_inicial", "fecha_final"]'>
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="form-group">
+                    <div class="label-form">
+                        <i class="fa-solid fa-tag"></i>
+                        <input type="text" id="edit-nombre" class="input-form" name="Nombre"
+                            placeholder="Nombre de la promoción" maxlength="100" required>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <div class="label-form">
@@ -218,13 +245,17 @@
         <div class="modal-content">
             <h2 class="modal-header">Asignar Promoción</h2>
             <form action="{{ url_for('admin_bp.asignar_promocion') }}" method="POST" id="promoForm">
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                 <!-- Selección de promoción -->
                 <div class="form-group">
                     <div class="label-form"><i class="fa-solid fa-percent"></i>
                         <select id="edit-promocion" name="ID_PromocionFK" class="input-form">
                             <option value="">-- Sin Promoción --</option>
                             {% for promo in promocionesf %}
-                            <option value="{{ promo[0] }}">{{ promo[1] }}% ({{ promo[2] }} - {{ promo[3] }})</option>
+                            <option value="{{ promo.id }}">{{ promo.nombre }} - {{ promo.descuento }}% ({{
+                                promo.fecha_inicial_fmt }} - {{ promo.fecha_final_fmt }})</option>
                             {% endfor %}
                         </select>
                     </div>

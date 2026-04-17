@@ -80,7 +80,8 @@
 								Favoritos</span></a>
 						<a href="{{ url_for('client_bp.compras') }}"><i class='bx bxs-shopping-bags'></i><span>
 								Compras</span></a>
-						<a href="{{ url_for('admin_bp.configuracion') }}" class="active"><i class='bx bxs-user'></i><span>
+						<a href="{{ url_for('admin_bp.configuracion') }}" class="active"><i
+								class='bx bxs-user'></i><span>
 								Perfil</span></a>
 						<a href="{{ url_for('auth_bp.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar
 							sesión</a>
@@ -135,6 +136,21 @@
 	<div class="container-carrusel">
 		<!--esta etiqueta representa el container que se mueve para mostrar las imagenes en patalla-->
 		<div class="carruseles" id="slider">
+			{% if brand_banners and brand_banners|length > 0 %}
+			{% for banner in brand_banners %}
+			{% set desktop_src = banner.desktop_image if banner.desktop_image else banner.mobile_image %}
+			<section class="slider-section">
+				<picture>
+					{% if banner.mobile_image %}
+					<source media="(max-width: 768px)"
+						srcset="{{ url_for('static', filename='imagenes/' ~ banner.mobile_image.lstrip('/')) }}">
+					{% endif %}
+					<img src="{{ url_for('static', filename='imagenes/' ~ desktop_src.lstrip('/')) }}"
+						alt="{{ banner.title or ('Banner de ' ~ marca_nombre) }}">
+				</picture>
+			</section>
+			{% endfor %}
+			{% else %}
 			<!-- las section son las imagenes que va a ontener el carrusel -->
 			<section class="slider-section">
 				<img src="{{ url_for('static', filename= '../../../../static/imagenes/La_Receta/La receta 1.webp') }}"
@@ -149,6 +165,7 @@
 			<section class="slider-section">
 				<img src="{{ url_for('static', filename= '../../../../static/imagenes/La_Receta/La receta 3.webp') }}">
 			</section>
+			{% endif %}
 		</div>
 		<!-- estas etiquetas son los botones para mover las imagenes hacia la derecha o izquierda -->
 		<div class="btn-right">
@@ -210,33 +227,34 @@
 		<h1 id="t3">Combos Top</h1>
 		<p id="p3">para que brilles sin stop</p>
 		<div class="container-product-cards3">
-				{% for producto in productosectm %}
-				<div class="product-card3 {% if loop.index is even %}inverse{% endif %}">
-					<div class="image-container3">
-						<img src="{{ url_for('static', filename='imagenes/' ~ producto[4]) }}" alt="Producto">
+			{% for producto in productosectm %}
+			<div class="product-card3 {% if loop.index is even %}inverse{% endif %}">
+				<div class="image-container3">
+					<img src="{{ url_for('static', filename='imagenes/' ~ producto[4]) }}" alt="Producto">
+				</div>
+				<div class="text-card3 {% if loop.index is even %}inverse-text{% endif %}">
+					<h3>{{ producto[1] }}</h3>
+					<p id="text-marca3">{{ producto[5] }}</p>
+					<div class="descripcion-corta">
+						{{ producto[2][:400] }}...
 					</div>
-					<div class="text-card3 {% if loop.index is even %}inverse-text{% endif %}">
-						<h3>{{ producto[1] }}</h3>
-						<p id="text-marca3">{{ producto[5] }}</p>
-						<div class="descripcion-corta">
-							{{ producto[2][:400] }}...
-						</div>
-						<div class="descripcion-completa ocultar">
-							{{ producto[2] }}
-						</div>
-						<button class="ver-mas-btn">Ver más</button>
-						<div>
-							<a href="{{ url_for('client_bp.detallesproducto', id=producto[0]) }}" class="ver-mas3">Más Detalles</a>
-						</div>
+					<div class="descripcion-completa ocultar">
+						{{ producto[2] }}
+					</div>
+					<button class="ver-mas-btn">Ver más</button>
+					<div>
+						<a href="{{ url_for('client_bp.detallesproducto', id=producto[0]) }}" class="ver-mas3">Más
+							Detalles</a>
 					</div>
 				</div>
-				{% endfor %}
 			</div>
+			{% endfor %}
+		</div>
 	</section>
 	<!--------------------------------------- 6. Seccion Cuatro ------------------------------------------>
 	<section class="section4-product">
 		<!-- Título y subtítulo -->
-		<h1 id="t4">Productos EDA Cosméticos</h1>
+		<h1 id="t4">Productos EPA Cosméticos</h1>
 		<p id="p4">Belleza y cuidado para tu cabello</p>
 		<!-- Contenedor principal del carrusel -->
 		<div class="carousel-prd-container">
@@ -336,29 +354,29 @@
 	<script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
 	<script>
-        // --- VER MÁS / VER MENOS EN DESCRIPCIONES ---
-        document.addEventListener("DOMContentLoaded", function () {
-            const botones = document.querySelectorAll(".ver-mas-btn");
+		// --- VER MÁS / VER MENOS EN DESCRIPCIONES ---
+		document.addEventListener("DOMContentLoaded", function () {
+			const botones = document.querySelectorAll(".ver-mas-btn");
 
-            botones.forEach((btn) => {
-                btn.addEventListener("click", function () {
-                    const descripcionCompleta = this.previousElementSibling;
-                    const corta = descripcionCompleta.previousElementSibling;
+			botones.forEach((btn) => {
+				btn.addEventListener("click", function () {
+					const descripcionCompleta = this.previousElementSibling;
+					const corta = descripcionCompleta.previousElementSibling;
 
-                    if (descripcionCompleta.classList.contains("mostrar")) {
-                        descripcionCompleta.classList.remove("mostrar");
-                        corta.style.display = "block";
-                        this.textContent = "Ver más";
-                    } else {
-                        descripcionCompleta.classList.add("mostrar");
-                        corta.style.display = "none";
-                        this.textContent = "Ver menos";
-                    }
-                });
-            });
-        });
+					if (descripcionCompleta.classList.contains("mostrar")) {
+						descripcionCompleta.classList.remove("mostrar");
+						corta.style.display = "block";
+						this.textContent = "Ver más";
+					} else {
+						descripcionCompleta.classList.add("mostrar");
+						corta.style.display = "none";
+						this.textContent = "Ver menos";
+					}
+				});
+			});
+		});
 
-    </script>
+	</script>
 </body>
 
 </html>

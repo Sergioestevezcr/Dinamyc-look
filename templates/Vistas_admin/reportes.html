@@ -42,13 +42,15 @@
                                 class="fa-solid fa-user"></i><span>Clientes</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.admin') }}">
-                        <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
+                            <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.pedidos_view') }}"><i
                                 class='bx bxs-dollar-circle'></i><span>Pedidos</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.productos') }}"><i
                                 class="fas fa-tags"></i><span>Productos</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.banners') }}"><i
+                                class="fa-regular fa-images"></i><span>Banners</span></a></li>
                     <li><a href="{{ url_for('admin_bp.promociones') }}"><i
                                 class="fas fa-percent"></i><span>Promociones</span></a></li>
                     <li><a href="{{ url_for('admin_bp.reportes') }}" class="active"><i
@@ -94,11 +96,12 @@
                                 <td>{{ reporte.1 }}</td>
                                 <td>De {{ reporte.2 }} a {{ reporte.3 }}</td>
                                 <td class="acciones-rep">
-                                    <a href="{{ url_for('admin_bp.descargar_reporte', id=reporte[0]) }}">
+                                    <a href="{{ url_for('admin_bp.descargar_reporte', report_id=reporte[0]) }}">
                                         <i class="fa-solid fa-download"></i> Descargar
                                     </a>
 
-                                    <a href="{{ url_for('admin_bp.ver_reporte', id=reporte[0]) }}" target="_blank">
+                                    <a href="{{ url_for('admin_bp.ver_reporte', report_id=reporte[0]) }}"
+                                        target="_blank">
                                         <i class="fa-solid fa-eye"></i> Ver
                                     </a>
                                 </td>
@@ -145,8 +148,7 @@
     </div>
 
     <footer class="footer">
-        <p>&copy; 2024 DinamycLook® | Todos los derechos reservados | BY: Laura vargas , Sergio Soriano. </p>vargas ,
-        Sergio Soriano </p>
+        <p>&copy; 2024 DinamycLook® | Todos los derechos reservados | BY: Laura vargas , Sergio Soriano.</p>
     </footer>
 
     <script src="{{ url_for('static', filename='js/script_sidebar.js') }}"></script>

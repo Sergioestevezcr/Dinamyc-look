@@ -89,6 +89,35 @@
 	</header>
 
 	<section class="container-banner">
+		{% if banners and banners|length > 0 %}
+		<div class="home-banner-slider" id="home-banner-slider">
+			{% for banner in banners %}
+			{% set desktop_src = banner.desktop_image if banner.desktop_image else banner.mobile_image %}
+			<div class="home-banner-slide {% if loop.first %}active{% endif %}">
+				<picture class="home-banner-media">
+					{% if banner.mobile_image %}
+					<source media="(max-width: 768px)"
+						srcset="{{ url_for('static', filename='imagenes/' ~ banner.mobile_image.lstrip('/')) }}">
+					{% endif %}
+					{% if desktop_src %}
+					<img src="{{ url_for('static', filename='imagenes/' ~ desktop_src.lstrip('/')) }}"
+						alt="{{ banner.title or 'Banner principal' }}" class="home-banner-img">
+					{% endif %}
+				</picture>
+			</div>
+			{% endfor %}
+
+			{% if banners|length > 1 %}
+			<button type="button" class="home-banner-nav prev" id="home-banner-prev" aria-label="Anterior">
+				<i class='bx bx-chevron-left'></i>
+			</button>
+			<button type="button" class="home-banner-nav next" id="home-banner-next" aria-label="Siguiente">
+				<i class='bx bx-chevron-right'></i>
+			</button>
+			<div class="home-banner-dots" id="home-banner-dots"></div>
+			{% endif %}
+		</div>
+		{% endif %}
 		<div class="inf-banner">
 			<h1>TU CABELLO MERECE DE LO MEJOR EN <span>BOGOTÁ</span></h1>
 			<p>Productos capilares efectivos diseñados para cada tipo de necesidad.</p>
@@ -241,7 +270,8 @@
 						</div>
 						<button class="ver-mas-btn">Ver más</button>
 						<div>
-							<a href="{{ url_for('client_bp.detallesproducto', id=producto[0]) }}" class="ver-mas3">Más Detalles</a>
+							<a href="{{ url_for('client_bp.detallesproducto', id=producto[0]) }}" class="ver-mas3">Más
+								Detalles</a>
 						</div>
 					</div>
 				</div>
@@ -251,7 +281,7 @@
 
 		<!-- Sección 4 -->
 		<section class="section4-product">
-			<h1 id="t4">Productos EDA Cosméticos</h1>
+			<h1 id="t4">Productos EPA Cosméticos</h1>
 			<p id="p4">Belleza y cuidado para tu cabello</p>
 			<div class="carousel-prd-container">
 				<button class="btn-left-prd"><i class='bx bx-left-arrow-alt'></i></button>
@@ -340,29 +370,117 @@
 	<script src="{{ url_for('static', filename='js/script_favoritos.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_paginacionbus.js') }}"></script>
 	<script>
-        // --- VER MÁS / VER MENOS EN DESCRIPCIONES ---
-        document.addEventListener("DOMContentLoaded", function () {
-            const botones = document.querySelectorAll(".ver-mas-btn");
+		// --- VER MÁS / VER MENOS EN DESCRIPCIONES ---
+		document.addEventListener("DOMContentLoaded", function () {
+			const slider = document.getElementById("home-banner-slider");
+			if (slider) {
+				const slides = Array.from(slider.querySelectorAll(".home-banner-slide"));
+				const prevBtn = document.getElementById("home-banner-prev");
+				const nextBtn = document.getElementById("home-banner-next");
+				const dotsContainer = document.getElementById("home-banner-dots");
 
-            botones.forEach((btn) => {
-                btn.addEventListener("click", function () {
-                    const descripcionCompleta = this.previousElementSibling;
-                    const corta = descripcionCompleta.previousElementSibling;
+				if (slides.length > 1 && dotsContainer) {
+					let current = 0;
+					let timer = null;
+					let touchStartX = 0;
+					let touchEndX = 0;
+					const swipeThreshold = 40;
 
-                    if (descripcionCompleta.classList.contains("mostrar")) {
-                        descripcionCompleta.classList.remove("mostrar");
-                        corta.style.display = "block";
-                        this.textContent = "Ver más";
-                    } else {
-                        descripcionCompleta.classList.add("mostrar");
-                        corta.style.display = "none";
-                        this.textContent = "Ver menos";
-                    }
-                });
-            });
-        });
+					function renderDots() {
+						dotsContainer.innerHTML = "";
+						slides.forEach((_, idx) => {
+							const dot = document.createElement("button");
+							dot.type = "button";
+							dot.className = "home-banner-dot" + (idx === current ? " active" : "");
+							dot.addEventListener("click", () => goTo(idx));
+							dotsContainer.appendChild(dot);
+						});
+					}
 
-    </script>
+					function renderSlides() {
+						slides.forEach((s, idx) => {
+							s.classList.toggle("active", idx === current);
+						});
+						renderDots();
+					}
+
+					function goTo(idx) {
+						current = (idx + slides.length) % slides.length;
+						renderSlides();
+					}
+
+					function next() {
+						goTo(current + 1);
+					}
+
+					function restartAutoplay() {
+						if (timer) clearInterval(timer);
+						timer = setInterval(next, 6000);
+					}
+
+					function handleSwipe() {
+						const deltaX = touchEndX - touchStartX;
+						if (Math.abs(deltaX) < swipeThreshold) return;
+
+						if (deltaX < 0) {
+							next();
+						} else {
+							goTo(current - 1);
+						}
+						restartAutoplay();
+					}
+
+					if (prevBtn) {
+						prevBtn.addEventListener("click", () => {
+							goTo(current - 1);
+							restartAutoplay();
+						});
+					}
+
+					if (nextBtn) {
+						nextBtn.addEventListener("click", () => {
+							next();
+							restartAutoplay();
+						});
+					}
+
+					slider.addEventListener("touchstart", (e) => {
+						if (!e.changedTouches || !e.changedTouches[0]) return;
+						touchStartX = e.changedTouches[0].screenX;
+					}, { passive: true });
+
+					slider.addEventListener("touchend", (e) => {
+						if (!e.changedTouches || !e.changedTouches[0]) return;
+						touchEndX = e.changedTouches[0].screenX;
+						handleSwipe();
+					}, { passive: true });
+
+					renderSlides();
+					restartAutoplay();
+				}
+			}
+
+			const botones = document.querySelectorAll(".ver-mas-btn");
+
+			botones.forEach((btn) => {
+				btn.addEventListener("click", function () {
+					const descripcionCompleta = this.previousElementSibling;
+					const corta = descripcionCompleta.previousElementSibling;
+
+					if (descripcionCompleta.classList.contains("mostrar")) {
+						descripcionCompleta.classList.remove("mostrar");
+						corta.style.display = "block";
+						this.textContent = "Ver más";
+					} else {
+						descripcionCompleta.classList.add("mostrar");
+						corta.style.display = "none";
+						this.textContent = "Ver menos";
+					}
+				});
+			});
+		});
+
+	</script>
 </body>
 
 </html>

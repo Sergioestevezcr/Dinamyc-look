@@ -144,3 +144,19 @@ cython_debug/
 # System files
 .DS_Store
 Thumbs.db
+
+# Project generated artifacts
+static/reportes/
+base_de_datos_backup_*.sql
+
+# Local helper/cache folders
+scripts/__pycache__/
+sql/__pycache__/
+
+# Local diagnostics/docs (optional, not for deploy commits)
+ANALISIS_EXHAUSTIVO_PROBLEMAS.md
+RESUMEN_EJECUTIVO.md
+SOLUCIONES_APLICABLES.md
+debug_login.py
+fix_admin_password.py
+base_de_datos.sql

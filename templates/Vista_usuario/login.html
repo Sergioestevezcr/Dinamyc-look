@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!-- Título de la pestaña -->
-	<title>Dinamyc-loock-Iniciar sesion</title>
+	<title>Dinamyc Look - Iniciar sesión</title>
 
 	<!-- Estilos CSS de la página -->
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles_usuario/style_general.css') }}">
@@ -84,10 +84,10 @@
 			<div class="form-information">
 				<div class="form-information-childs">
 					<!--Titulo de iniciar sesion-->
-					<h2 class="iniciar-sesion">Iniciar sesion</h2>
+					<h2 class="iniciar-sesion">Iniciar sesión</h2>
 
 					<!--parrafo que informa la otra manera de iniciar sesion-->
-					<p class="text-iniciar-sesion">o usa tu email para iniciar sesion</p>
+					<p class="text-iniciar-sesion">o usa tu email para iniciar sesión</p>
 
 					<!-- Formulario de login actualizado -->
 					<form class="form-iniciar-sesion" method="POST" action="{{ url_for('auth_bp.login') }}">
@@ -105,7 +105,7 @@
 								class="input-form-iniciar-sesion">
 						</label>
 						<!--Boton para ingresar al sistema-->
-						<input type="submit" value="Iniciar sesion" class="boton-iniciar-sesion">
+						<input type="submit" value="Iniciar sesión" class="boton-iniciar-sesion">
 					</form>
 
 					<!-- Enlaces adicionales -->
@@ -154,6 +154,7 @@
 	<!--java del carrusel de imagenes-->
 	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_password_peek_hold.js') }}"></script>
 
 </body>
 

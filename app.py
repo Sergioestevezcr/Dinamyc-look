@@ -7,6 +7,8 @@ from flask_wtf.csrf import CSRFProtect
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+csrf = CSRFProtect()
+
 
 def create_app():
     flask_app = Flask(
@@ -20,9 +22,9 @@ def create_app():
 
     # ---------------- Inicialización de extensiones ----------------
     init_app(flask_app)
-    
+
     # Initialize CSRF Protection
-    csrf = CSRFProtect(flask_app)
+    csrf.init_app(flask_app)
 
     # ---------------- Configuración uploads ----------------
     UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'imagenes')

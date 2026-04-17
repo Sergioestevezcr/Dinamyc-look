@@ -66,13 +66,15 @@
                     <li><a href="{{ url_for('admin_bp.usuarios') }}" class="active"><i
                                 class="fa-solid fa-user"></i><span>Clientes</span></a></li>
                     <li><a href="{{ url_for('admin_bp.admin') }}">
-                        <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
+                            <i class="fa-solid fa-user-gear"></i><span>Admin</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.pedidos_view') }}"><i
                                 class='bx bxs-dollar-circle'></i><span>Pedidos</span></a>
                     </li>
                     <li><a href="{{ url_for('admin_bp.productos') }}"><i
                                 class="fas fa-tags"></i><span>Productos</span></a></li>
+                    <li><a href="{{ url_for('admin_bp.banners') }}"><i
+                                class="fa-regular fa-images"></i><span>Banners</span></a></li>
                     <li><a href="{{ url_for('admin_bp.promociones') }}"><i
                                 class="fas fa-percent"></i><span>Promociones</span></a></li>
                     <li><a href="{{ url_for('admin_bp.reportes') }}"><i
@@ -127,66 +129,62 @@
                                 <th></th>
                             </tr>
                         </thead>
-                            <tbody>
-                                {% for usuario in usuarios %}
-                                <tr>
-                                    <!-- Nombre + Apellido -->
-                                    <td>{{ usuario[1] }} {{ usuario[2] }}</td>
-                                    <!-- Documento -->
-                                     <td>{{ usuario[3]}}</td>
-                                    <!-- Correo -->
-                                    <td class="correo-desbordado">
-                                        {{ usuario[4]|replace("@","<wbr>@<wbr>")|replace(".", ".<wbr>")|safe }}
-                                    </td>
-                                    <!-- Teléfono -->
-                                    <td>{{ usuario[5] }}</td>
-                                    <!-- Dirección -->
-                                    <td>{{ usuario[6] }}</td>
-                                    <!-- Ciudad -->
-                                    <td>{{ usuario[7] }}</td>
+                        <tbody>
+                            {% for usuario in usuarios %}
+                            <tr>
+                                <!-- Nombre + Apellido -->
+                                <td>{{ usuario[1] }} {{ usuario[2] }}</td>
+                                <!-- Documento -->
+                                <td>{{ usuario[3]}}</td>
+                                <!-- Correo -->
+                                <td class="correo-desbordado">
+                                    {{ usuario[4]|replace("@","<wbr>@<wbr>")|replace(".", ".<wbr>")|safe }}
+                                </td>
+                                <!-- Teléfono -->
+                                <td>{{ usuario[5] }}</td>
+                                <!-- Dirección -->
+                                <td>{{ usuario[6] }}</td>
+                                <!-- Ciudad -->
+                                <td>{{ usuario[7] }}</td>
 
-                                    <!-- Acciones -->
-                                    <td class="edit-icon">
-                                        {% if usuario[10] == "Activo" %}
-                                        <!-- Botón para editar -->
-                                        <a href="#" 
-                                        data-id="{{ usuario[0] }}" 
-                                        data-nombre="{{ usuario[1] }}"
-                                        data-apellido="{{ usuario[2] }}" 
-                                        data-documento="{{ usuario[3] }}"
-                                        data-correo="{{ usuario[4] }}" 
-                                        data-telefono="{{ usuario[5] }}"
-                                        data-direccion="{{ usuario[6] }}" 
-                                        data-ciudad="{{ usuario[7] }}"
-                                        data-password="{{ usuario[8] }}"
-                                        class="edit-btn">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        {% else %}
-                                        <button class="btn-delete disabled" disabled>
-                                            <i class="fas fa-ban"></i>
-                                        </button>
-                                        {% endif %}
-                                    </td>
+                                <!-- Acciones -->
+                                <td class="edit-icon">
+                                    {% if usuario[10] == "Activo" %}
+                                    <!-- Botón para editar -->
+                                    <a href="#" data-id="{{ usuario[0] }}" data-nombre="{{ usuario[1] }}"
+                                        data-apellido="{{ usuario[2] }}" data-documento="{{ usuario[3] }}"
+                                        data-correo="{{ usuario[4] }}" data-telefono="{{ usuario[5] }}"
+                                        data-direccion="{{ usuario[6] }}" data-ciudad="{{ usuario[7] }}"
+                                        data-password="{{ usuario[8] }}" class="edit-btn">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    {% else %}
+                                    <button class="btn-delete disabled" disabled>
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                    {% endif %}
+                                </td>
 
-                                    <!-- Botón eliminar/inactivar -->
-                                    <td>
-                                        {% if usuario[10] == "Activo" %}
-                                        <form action="{{ url_for('admin_bp.delete_usuario', id=usuario[0]) }}" method="POST"
-                                            onsubmit="return confirm('¿Estás seguro de que deseas inactivar este usuario?');">
-                                            <button type="submit" class="btn-delete">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </form>
-                                        {% else %}
-                                        <button class="btn-delete disabled" disabled>
-                                            <i class="fas fa-ban"></i>
+                                <!-- Botón eliminar/inactivar -->
+                                <td>
+                                    {% if usuario[10] == "Activo" %}
+                                    <form action="{{ url_for('admin_bp.delete_usuario', user_id=usuario[0]) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('¿Estás seguro de que deseas inactivar este usuario?');">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn-delete">
+                                            <i class="fas fa-trash-alt"></i>
                                         </button>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
+                                    </form>
+                                    {% else %}
+                                    <button class="btn-delete disabled" disabled>
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
                     </table>
                 </div>
             </section>
@@ -200,6 +198,9 @@
             <!-- Formulario de agregado -->
             <form id="addForm" action="{{ url_for('admin_bp.add_usuario') }}" method="POST"
                 data-required-fields='["nombre", "apellido", "documento", "correo", "telefono", "direccion", "ciudad", "password"]'>
+
+                <!-- CSRF Token -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <div class="ddos">
                     <div class="form-group">
@@ -283,8 +284,12 @@
         <div class="modal-content">
             <h2 class="modal-header">Editar Cliente</h2>
             <!-- Formulario de edición -->
-           <form id="editForm" method="POST" data-base-action="{{ url_for('admin_bp.update_usuario', id=0)[:-1] }}"  data-entity-type="usuario"
+            <form id="editForm" method="POST"
+                data-base-action="{{ url_for('admin_bp.update_usuario', user_id=0)[:-1] }}" data-entity-type="usuario"
                 data-required-fields='["nombre", "apellido", "documento", "correo", "telefono", "direccion", "ciudad", "password"]'>
+
+                <!-- CSRF Token -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <div class="ddos">
                     <div class="form-group">

@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!-- Título de la pestaña -->
-	<title>Dinamyc-loock-Iniciar sesion</title>
+	<title>Dinamyc Look - Iniciar sesión</title>
 
 	<!-- Estilos CSS de la página -->
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles_usuario/style_general.css') }}">
@@ -73,9 +73,9 @@
 					<!--Titulo que le da bienvenida a los usuarios nuevos-->
 					<h2 class="titulo-bienvenida">Bienvenido</h2>
 					<!--Texto que le informa a los clientes nuevos la importancia de iniciar sesion o registrarse-->
-					<p class="texto-bienvenida">Para realizar una compra más sencilla inicia sesion con nosotros</p>
+					<p class="texto-bienvenida">Para realizar una compra más sencilla inicia sesión con nosotros</p>
 					<!--Boton que dirige a la pagina para iniciar sesion si ya esta registrado-->
-					<a href="{{ url_for('auth_bp.login') }}"><input type="button" value="iniciar sesion"
+					<a href="{{ url_for('auth_bp.login') }}"><input type="button" value="Iniciar sesión"
 							class="boton-iniciar-sesion" id="sing-in"></a>
 				</div>
 			</div>
@@ -91,26 +91,26 @@
 							<label class="label-form-crear-cuenta">
 								<i class='bx bx-user'></i>
 								<!--input que le permite ingresar el nombre para registrarse al usuario-->
-								<input required type="text" placeholder="Nombre(s)" name="Nombre"
+								<input required type="text" placeholder="Nombre(s)" name="nombre"
 									class="input-form-crear-cuenta">
 							</label>
 							<label class="label-form-crear-cuenta">
 								<i class='bx bx-user'></i>
 								<!--Input que le permite ingresar los apellidos a el usuario para rregistrarse-->
-								<input required type="text" placeholder="Apellidos" name="Apellido"
+								<input required type="text" placeholder="Apellidos" name="apellido"
 									class="input-form-crear-cuenta">
 							</label>
 						</div>
 						<label class="label-form-crear-cuenta">
 							<i class="fas fa-id-card"></i>
 							<!--Input que permite ingresar el documento que quiere registrar el ususario-->
-							<input required type="number" placeholder="Número de Documento" name="Documento"
+							<input required type="number" placeholder="Número de Documento" name="documento"
 								class="input-form-crear-cuenta">
 						</label>
 						<label class="label-form-crear-cuenta">
 							<i class='bx bx-envelope'></i>
 							<!--Input que permite ingresar el email que quiere registrar el ususario-->
-							<input required type="email" placeholder="Correo electronico" name="Correo"
+							<input required type="email" placeholder="Correo electronico" name="correo"
 								class="input-form-crear-cuenta">
 						</label>
 						<label class="label-form-crear-cuenta">
@@ -122,33 +122,33 @@
 						<label class="label-form-crear-cuenta">
 							<i class='bx bx-phone'></i>
 							<!--input que le permite ingresar el numero de telefono al usuario-->
-							<input required type="tel" placeholder="Numero de telefono" name="Telefono"
+							<input required type="tel" placeholder="Numero de telefono" name="telefono"
 								class="input-form-crear-cuenta" maxlength="11">
 						</label>
 						<div class="names">
 							<label class="label-form-crear-cuenta">
 								<i class="material-symbols-outlined">location_on</i>
 								<!--Input que le permite ingresar la direccion que desea registrar el usuario-->
-								<input required type="text" placeholder="Direccion" name="Direccion"
+								<input required type="text" placeholder="Direccion" name="direccion"
 									class="input-form-crear-cuenta">
 							</label>
 							<label class="label-form-crear-cuenta">
 								<i class="material-symbols-outlined">location_on</i>
 								<!--Input que le permite ingresar la ciudad que desea registrar el usuario-->
-								<input required type="text" placeholder="Ciudad" name="Ciudad"
+								<input required type="text" placeholder="Ciudad" name="ciudad"
 									class="input-form-crear-cuenta" value="Bogotá">
 							</label>
 						</div>
 						<label class="label-form-crear-cuenta">
 							<i class='bx bx-lock-alt'></i>
 							<!--Input que le permite ingresar la contraseña que desea registrar el usuario-->
-							<input required type="password" placeholder="Contraseña" name="Clave"
+							<input required type="password" placeholder="Contraseña" name="clave"
 								class="input-form-crear-cuenta">
 						</label>
 						<label class="label-form-crear-cuenta">
 							<i class='bx bx-lock-alt'></i>
 							<!--Input que le permite ingresar la confirmacion de la contraseña que desea registra el usuario-->
-							<input required type="password" placeholder="Confirme la contraseña" name="Confirmar_clave"
+							<input required type="password" placeholder="Confirme la contraseña" name="confirmar_clave"
 								class="input-form-crear-cuenta">
 						</label>
 						<input type="submit" value="Crear Cuenta" class="boton-registrarse">
@@ -192,6 +192,7 @@
 	<!--java del carrusel de imagenes-->
 	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script_alert.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script_password_peek_hold.js') }}"></script>
 </body>
 
 </html>

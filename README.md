@@ -150,6 +150,31 @@ cd Dinamyc-look
 
 Dependiendo de la configuración del proyecto, iniciar el servidor correspondiente.
 
+## 4 Configuración rápida en servidor (Linux)
+
+```bash
+# 1) Clonar
+git clone https://github.com/Sergioestevezcr/Dinamyc-look.git
+cd Dinamyc-look
+
+# 2) Entorno virtual
+python3 -m venv .venv
+source .venv/bin/activate
+
+# 3) Dependencias
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# 4) Variables de entorno
+cp .env.example .env
+# Editar .env con credenciales reales de MySQL, SMTP y claves
+
+# 5) Ejecucion
+python run.py
+```
+
+Para produccion con WSGI, usar el archivo `wsgi.py` como punto de entrada.
+
 ---
 
 # Estructura del Proyecto
